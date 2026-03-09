@@ -1,0 +1,347 @@
+/* FOOTER */
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 3rem 5% 2rem;
+  box-sizing: border-box;
+  min-height: 388px;
+  background: #244A89;
+  }
+  
+  .frame-123 {
+   
+    width: 1189px;
+    height: 230.45px;
+    left: 125px;
+    top: 58px;
+  }
+  
+  .frame-156 {
+   
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 18px;
+    width: 30%;
+    height: 210.45px;
+  }
+  
+  /* Frame 155 - Logo and company name */
+  .frame-155 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 22.17px;
+    width: 377px;
+    height: 152.45px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+  
+  /* Logo white */
+  .logo-white {
+    width: 162.12px;
+    height: 107px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+  }
+  
+  .logo-white img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Frame 124 - Company name container */
+  .frame-124 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 7.76px;
+    width: 377px;
+    height: 23.28px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+  
+  /* Company name text */
+  .company-name {
+    width: 377px;
+    height: 23.28px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #FFFFFF;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0;
+  }
+  
+  /* Company address text */
+  .company-address {
+    width: 342px;
+    height: 40px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #F1F1F1;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0;
+  }
+  
+  /* Frame 125 - Navigation links section */
+  .frame-125 {
+   
+    left: 500px; /* Positioned in the middle */
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
+    width: 30%;
+    height: 204px;
+  }
+  
+  /* Footer heading (COMPANY, CONTACT INFO) */
+  .footer-heading {
+    width: 100%;
+    height: 21px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
+    color: #FFFFFF;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0 0 7px 0;
+  }
+  
+  /* Underline for headings */
+  .outline {
+    width: 84px;
+    height: 6px;
+    background: #FFFFFF;
+    border-radius: 3px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+  
+  /* Frame 38 - Navigation links container */
+  .frame-38 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 5px;
+    width: 190px;
+    height: 160px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+    margin-top: 15px;
+  }
+  
+  /* Navigation links */
+  .footer-link {
+    width: 190px;
+    height: 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 20px;
+    color: #F1F1F1;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-link:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+  }
+  
+  /* Frame 161 - Contact info section */
+  .frame-161 {
+   
+    right: 0; /* Positioned on the right */
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 89px;
+    width: 30%;
+    height: 202px;
+  }
+  
+  
+  /* Frame 127 - Contact details container */
+  .frame-127 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+    width: 298px;
+    height: 89px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+  
+  /* Frame 126 - Contact info heading container */
+  .frame-126 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    width: 298px;
+    height: 34px;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+  
+  /* Frame 40 - Phone number container */
+  .frame-40 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 17px;
+    width: 298px;
+    height: 21px;
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+  
+  /* Phone number text */
+  .contact-phone {
+    width: 298px;
+    height: 21px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 20px;
+    color: #F1F1F1;
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: 0;
+  }
+  
+  /* Social Icons container */
+  .social-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 25px;
+    width: 228px;
+    height: 24px;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+  
+  /* Individual social icon */
+  .social-icon {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    flex-grow: 0;
+    transition: transform 0.3s ease;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Social icon images */
+ /* Social icon images */
+.insta-icon,
+.fb-icon,
+.linkedin-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: block; /* Ensure proper display */
+}
+  
+  /* Responsive Styles */
+  @media (max-width: 1440px) {
+    .footer {
+      width: 100%;
+      left: 0;
+    }
+    
+    .frame-123 {
+      width: 90%;
+      left: 5%;
+      gap: 50px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .footer {
+      height: 600px;
+    }
+    
+    .frame-123 {
+      flex-direction: column;
+      height: auto;
+      top: 30px;
+      gap: 40px;
+    }
+    
+    .frame-156,
+    .frame-125,
+    .frame-161 {
+      width: 90%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .company-name,
+    .company-address,
+    .contact-phone {
+      width: 100%;
+    }
+  }

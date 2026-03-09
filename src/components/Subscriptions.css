@@ -1,0 +1,1551 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.subscription-container{
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background: white;
+
+}
+
+/* Side Menu Styles */
+.side-menu {
+    position: relative;
+    width: 236px;
+    height: 1024px;
+    background: #21409A;
+    color: #E5E7E6;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logo {
+    padding: 34px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo-image {
+    width: 106px;
+    height: 60px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  
+  .menu-items {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+  }
+  
+  .menu-item {
+    position: relative;
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding-left: 50px;
+    cursor: pointer;
+  }
+  
+  .menu-item:hover {
+      background-color: rgba(228, 246, 247, 0.2); 
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+
+    .menu-item.active:hover {
+      background: #E4F6F7;
+    }
+  
+  .menu-item.active {
+    background: #E4F6F7;
+    color: #000000;
+  }
+  
+  .active-indicator {
+    position: absolute;
+    width: 6px;
+    height: 56px;
+    right: 0;
+    top: 0;
+    background: #92B6AA;
+  }
+  
+  .menu-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  .grid-icon {
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z'/%3E%3C/svg%3E") no-repeat center;
+  }
+  
+  .wifi-icon {
+    background-color: #E5E7E6;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 6C8.62 6 5.5 7.12 3 9L1.2 6.6C4.21 4.34 7.95 3 12 3C16.05 3 19.79 4.34 22.8 6.6L21 9C18.5 7.12 15.38 6 12 6zM16.84 13.41C17.18 13.07 17.18 12.53 16.84 12.19C16.5 11.85 15.96 11.85 15.62 12.19L12.71 15.1L11.03 13.41C10.69 13.07 10.15 13.07 9.81 13.41C9.47 13.75 9.47 14.29 9.81 14.63L11.97 16.79C12.31 17.13 12.84 17.13 13.18 16.79L16.84 13.41zM17.5 10.5C17.11 10.5 16.8 10.39 16.55 10.14C16.31 9.9 16.2 9.59 16.2 9.2C16.2 8.81 16.31 8.5 16.55 8.25C16.8 8.01 17.11 7.9 17.5 7.9C17.89 7.9 18.19 8.01 18.45 8.25C18.7 8.5 18.8 8.81 18.8 9.2C18.8 9.59 18.7 9.9 18.45 10.14C18.19 10.39 17.89 10.5 17.5 10.5z'/%3E%3C/svg%3E") no-repeat center;
+  }
+  
+  .trending-icon {
+    background-color: #E5E7E6;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 18L18.29 15.71L13.41 10.83L9.41 14.83L2 7.41L3.41 6L9.41 12L13.41 8L19.71 14.29L22 12V18H16Z'/%3E%3C/svg%3E") no-repeat center;
+  }
+  
+  .chevron-icon {
+    position: absolute;
+    right: 50px;
+    width: 24px;
+    height: 24px;
+    background-color: #FFFFFF;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E") no-repeat center;
+  }
+  
+  .bottom-menu-items {
+      margin-top: auto;
+      margin-bottom: 20px;
+      position: absolute;
+      bottom: 250px; 
+      width: 100%;
+  
+  }
+  
+  .support-icon {
+    background-color: #E5E7E6;
+    width: 17px;
+    height: 14px;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,1C7,1 3,5 3,10V17A3,3 0 0,0 6,20H9V12H5V10A7,7 0 0,1 12,3A7,7 0 0,1 19,10V12H15V20H18A3,3 0 0,0 21,17V10C21,5 17,1 12,1Z'/%3E%3C/svg%3E") no-repeat center;
+    margin-right: 10px;
+  }
+  
+  .logout-icon {
+    background-color: #E5E7E6;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z'/%3E%3C/svg%3E") no-repeat center;
+  }
+  
+  .live-chat-container {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    width: 174px;
+    height: 202px;
+    background: #0054A6;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-10deg);
+    padding: 20px 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+  
+  .live-chat-container:hover {
+      background: #0066CC; 
+      transform: rotate(-10deg) scale(1.05); 
+    }
+  
+  .live-chat-icon {
+    width: 100px;
+    height: 100px;
+    background-color: #FFFFFF; 
+    margin-bottom: 10px;
+  }
+
+/* Main Content Styles */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+  margin-top: -70px;
+}
+
+.subscription-content-container {
+  position: relative;
+width: calc(100% - 236px);
+margin-left: 236px; 
+background: #FFFFFF;
+border-radius: 40px;
+padding: 24px 30px;
+}
+
+  .search-bar {
+    width: 352px;
+    height: 44px;
+    background: #F2F4F7;
+    border: 1px solid #EAEAEA;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+  }
+  
+  .search-bar input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #667085;
+    outline: none;
+  }
+  
+  .search-icon {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #98A2B3;
+    border-radius: 50%;
+    position: relative;
+  }
+  
+  .search-icon::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 2px;
+    background: #98A2B3;
+    bottom: -2px;
+    right: -3px;
+    transform: rotate(45deg);
+  }
+  
+  .user-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .notification-icon {
+    position: relative;
+    width: 32px;
+    height: 32px;
+   
+  }
+  
+  .notification-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+  }
+  
+  .notification-badge {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 12px;
+    background: #036BDD;
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background: #C7B9DA;
+    border-radius: 50%;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #344054;
+  }
+  
+  .user-email {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #667085;
+  }
+
+ /* Main Container */
+.subscription-main-container {
+  position: relative;
+  width: 1204px;
+  height: 948px;
+  margin-left: 150px;
+  left: -150px;
+  top: -20px;
+  background: #FFFFFF;
+  border-radius: 40px;
+}
+
+.subscription-title h1 {
+  width: 229px;
+  height: 29px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+  color: #999999;
+  margin: 0;
+}
+
+
+.renew-button,
+.cancel-button {
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 160px;
+  height: 40px;
+
+  padding: 12px 0; 
+  border-radius: 15px;
+
+  cursor: pointer;
+}
+
+
+.renew-button {
+  background: #244A89;
+  color: white;
+  border: none;
+}
+
+.renew-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  color: white;
+}
+
+.cancel-button {
+  border: 1px solid #D93025;
+  background: white;
+  color: #D93025;
+}
+
+.cancel-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  color: #D93025;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px; 
+}
+
+
+
+.subscription-status {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  margin:0;
+  flex-shrink: 0;
+  gap: 10px;
+  width: 160px;
+  height: 40px;
+  background: #E5E7E6;
+  border-radius: 6px;
+}
+
+
+
+.subscription-table{
+  position: absolute;
+  width: 1144px;
+  height: 705px;
+  left: 30px;
+  top: 190px;
+  box-sizing: border-box;
+  border: 1px solid #9A9A9A;
+  border-radius: 9px;
+  padding: 19px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+.subscription-card {
+  position: relative;
+  width: 1105px;
+  height: 199px;
+  box-sizing: border-box;
+  border: 1px solid #D9D9D9;
+  filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25));
+  border-radius: 5px;
+  background: #FFFFFF;
+}
+
+.subscription-title {
+  position: relative;
+  width: 279px;
+  height: 22.5px;
+  left: 32px;
+  top: 10px;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 21px;
+  text-transform: capitalize;
+  color: #000000;
+}
+
+
+.subscription-provider {
+  position: absolute;
+  width: 121px;
+  height: 21px;
+  left: 37px;
+  top: 63px;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 21px;
+  color: #5BBAE3;
+}
+
+/* Price */
+.subscription-price {
+  position: absolute;
+  width: 133px;
+  height: 21px;
+  left: 941px;
+  top: 62px;
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 21px;
+  color: #000000;
+}
+
+
+.subscription-info {
+  display: flex;
+  position: absolute;
+  top: 129px;
+  left: 33px;
+  gap: 155px;
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 6px;
+  width: 149px;
+  height: 48px;
+}
+
+.info-group:nth-child(2) {
+  width: 171px;
+}
+
+.info-group:nth-child(3) {
+  width: 86px;
+}
+
+/* Info Labels */
+.info-label {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 21px;
+  color: #757575;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Info Values */
+.info-value {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 21px;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Action Button Container */
+.subscription-action {
+  position: absolute;
+  width: 144px;
+  height: 39px;
+  left: 945px;
+  top: 139px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 25px;
+}
+
+/* Cancel Button */
+.cancel-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  width: 144px;
+  height: 39px;
+  background: #21409A;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #E5E7E6;
+  
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.cancel-btn:hover {
+  background: #1a3580;
+}
+
+.cancel-btn:active {
+  transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .subscription-container {
+    width: 95%;
+    left: 2.5%;
+  }
+  
+  .subscription-card {
+    width: 100%;
+  }
+}
+
+.current-container {
+  position: relative;
+  width: 1068px;
+  height: 438px;
+  border: 1px solid #0054A6;
+  border-radius: 10px;
+  filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25));
+  box-sizing: border-box;
+  padding: 20px;
+}
+.sub-plan-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  width: 100%;
+  height: 57px;
+  margin-bottom: 20px;
+}
+/* Left side - Plan details - Frame 427324283 */
+.plan-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 12px;
+  width: 295px;
+  height: 57px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+/* Plan title */
+.plan-title {
+  width: 295px;
+  height: 23px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  text-transform: capitalize;
+  color: #000000;
+  margin: 0;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Provider name */
+.plan-provider {
+  width: 295px;
+  height: 22px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #5BBAE3;
+  margin: 0;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Right side - Pricing section - Frame 427324282 */
+.pricing-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  gap: 14px;
+  width: 241px;
+  height: 44px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* WiFi icon */
+.wifi-icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Price text */
+.price-text {
+  width: 183px;
+  height: 24px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+/* Data Usage Section */
+.data-usage-section {
+  position: absolute;
+  width: 1003px;
+  height: 49px;
+  left: 23px;
+  top: 159px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.data-usage-title {
+  width: 100%;
+  height: 21px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 21px;
+  text-transform: capitalize;
+  color: #000000;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 16px;
+  background: #D9D9D9;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  width: 604px;
+  height: 16px;
+  background: #E6D117;
+  border-radius: 15px;
+}
+
+/* Subscription Details */
+.subscription-details {
+  position: absolute;
+  width: 664px;
+  height: 149px;
+  left: 20px;
+  top: 238px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 42px;
+}
+
+.details-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.details-row:first-child {
+  gap: 344px;
+  height: 48px;
+}
+
+.details-row:last-child {
+  gap: 302px;
+  height: 59px;
+}
+
+.detail-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.detail-group:first-child {
+  width: 149px;
+}
+
+.detail-group:nth-child(2) {
+  width: 171px;
+}
+
+.details-row:last-child .detail-group:first-child {
+  width: 187px;
+}
+
+.details-row:last-child .detail-group:last-child {
+  width: 142px;
+}
+
+.detail-label {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #757575;
+}
+
+.detail-value {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #000000;
+}
+
+/* Status Button */
+.status-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  width: 120px;
+  height: 30px;
+  background: #E6FAEE;
+  border: 1px solid #28A745;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.status-button span {
+  width: 44px;
+  height: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  color: #28A745;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .current-container {
+    width: 100%;
+    max-width: 1068px;
+  }
+  
+  .data-usage-section {
+    width: calc(100% - 46px);
+  }
+  
+  .subscription-details {
+    width: calc(100% - 40px);
+  }
+  
+  .details-row:first-child {
+    gap: 20px;
+  }
+  
+  .details-row:last-child {
+    gap: 20px;
+  }
+}
+.bottom-cards {
+  display: flex;
+  gap: 16px; /* adjust spacing between cards */
+}
+.frame-4273{
+  position: relative;
+  width: 313px;
+  height: 200px;
+  background: #FFFFFF;
+  border: 1px solid #21409A;
+  border-radius: 12px;
+  box-sizing: border-box;
+  padding: 15px;
+  margin-top: 50px; 
+}
+
+/* Plan Header Section */
+.plan-header {
+  position: absolute;
+  width: 283px;
+  height: 41px;
+  left: 15px;
+  top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.plan-icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plan-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 249px;
+  height: 41px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.plan-name {
+  width: 249px;
+  height: 17px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #5BBAE3;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.plan-description {
+  width: 236px;
+  height: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Features List Section */
+.features-list {
+  position: absolute;
+  width: 193px;
+  height: 76px;
+  left: 15px;
+  top: 63px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px;
+  gap: 7px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 18px;
+}
+
+.feature-item:first-child {
+  width: 124px;
+}
+
+.feature-item:nth-child(2) {
+  width: 131px;
+}
+
+.feature-item:last-child {
+  width: 185px;
+  align-self: stretch;
+}
+
+.check-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-text {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.feature-item:first-child .feature-text {
+  width: 98px;
+}
+
+.feature-item:nth-child(2) .feature-text {
+  width: 105px;
+}
+
+.feature-item:last-child .feature-text {
+  width: 156px;
+}
+
+/* Cancel Button Section */
+.cancel-button-container {
+  position: absolute;
+  width: 271px;
+  height: 39px;
+  left: 15px;
+  top: 151px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+}
+
+.cancel-button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  width: 271px;
+  height: 39px;
+  background: transparent;
+  border: 1px solid #21409A;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25));
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.cancel-button:hover {
+  background: rgba(33, 64, 154, 0.05);
+  transform: translateY(-1px);
+}
+
+.cancel-button:active {
+  transform: translateY(0);
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.cancel-button {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #21409A;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .subscription-plan-card {
+    width: 100%;
+    max-width: 313px;
+  }
+  
+  .plan-header {
+    width: calc(100% - 30px);
+  }
+  
+  .plan-info {
+    width: calc(100% - 34px);
+  }
+  
+  .features-list {
+    width: calc(100% - 30px);
+  }
+  
+  .cancel-button-container {
+    width: calc(100% - 30px);
+  }
+  
+  .cancel-button {
+    width: 100%;
+  }
+}
+
+.frame-4274{
+  position: relative;
+  width: 313px;
+  height: 230px;
+  background: #FFFFFF;
+  border: 1px solid #21409A;
+  border-radius: 12px;
+  box-sizing: border-box;
+  padding: 15px;
+  margin-top: 20px; /* Space from subscription card above */
+}
+
+/* Plan Header Section */
+.frame2-plan-header {
+   position: absolute;
+  width: 283px;
+  height: 41px;
+  left: 15px;
+  top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.frame2-plan-icon {
+   width: 24px;
+  height: 24px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame2-plan-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 249px;
+  height: 41px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.frame2-plan-name {
+  width: 249px;
+  height: 17px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #5BBAE3;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.frame2-plan-description {
+  width: 236px;
+  height: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Features List Section */
+.frame2-features-list {
+  position: absolute;
+  width: 193px;
+  height: 76px;
+  left: 15px;
+  top: 63px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px;
+  gap: 7px;
+}
+
+.frame2-feature-item{
+ display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  height: 18px;
+}
+
+.frame2-feature-item:first-child {
+  width: 124px;
+}
+
+.frame2-feature-item2:nth-child(2) {
+  width: 131px;
+}
+
+.frame2-feature-item2:last-child {
+  width: 185px;
+  align-self: stretch;
+}
+
+.frame2-check-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame2-feature-text {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.frame2-feature-item2:first-child .feature-text {
+  width: 98px;
+}
+
+.frame2-feature-item2:nth-child(2) .feature-text {
+  width: 105px;
+}
+
+.frame2-feature-item2:last-child .feature-text {
+  width: 156px;
+}
+
+/* Cancel Button Section */
+.frame2-button-section {
+  position: absolute;
+  width: 271px;
+  height: 39px;
+  left: 15px;
+  top: 151px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+}
+
+.frame2-cancel-btn {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  width: 271px;
+  height: 39px;
+  background: #21409A; 
+  border: 1px solid #21409A;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25));
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: white; 
+}
+
+.frame2-cancel-btn:hover { 
+  background: rgba(33, 64, 154, 0.8); 
+  transform: translateY(-1px);
+}
+
+.frame2-cancel-btn:active { 
+  transform: translateY(0);
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.25));
+  background: #21409A; 
+}
+
+.frame2-cancel-btn {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .subscription-plan-card {
+    width: 100%;
+    max-width: 313px;
+  }
+  
+  .plan-header2 {
+    width: calc(100% - 30px);
+  }
+  
+  .plan-info2 {
+    width: calc(100% - 34px);
+  }
+  
+  .features-list2 {
+    width: calc(100% - 30px);
+  }
+  
+  .cancel-button-container2 {
+    width: calc(100% - 30px);
+  }
+  
+  .cancel-button2 {
+    width: 100%;
+  }
+}
+.frame-4275{
+  position: relative;
+  width: 313px;
+  height: 200px;
+  background: #FFFFFF;
+  border: 1px solid #21409A;
+  border-radius: 12px;
+  box-sizing: border-box;
+  padding: 15px;
+    margin-top: 50px; 
+}
+
+/* Plan Header Section */
+.frame3-plan-header {
+  position: absolute;
+  width: 283px;
+  height: 41px;
+  left: 15px;
+  top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.frame3-plan-icon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame3-plan-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 249px;
+  height: 41px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.frame3-plan-name {
+  width: 249px;
+  height: 17px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #5BBAE3;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.frame3-plan-description {
+  width: 236px;
+  height: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/* Features List Section */
+.frame3-features-list {
+  position: absolute;
+  width: 193px;
+  height: 76px;
+  left: 15px;
+  top: 63px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px;
+  gap: 7px;
+}
+
+.frame3-feature-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 18px;
+}
+
+.frame3-feature-item:first-child {
+  width: 124px;
+}
+
+.frame3-feature-item:nth-child(2) {
+  width: 131px;
+}
+
+.frame3-feature-item:last-child {
+  width: 185px;
+  align-self: stretch;
+}
+
+.frame3-check-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame3-feature-text {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: capitalize;
+  color: #000000;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.frame3-feature-item:first-child .feature-text {
+  width: 98px;
+}
+
+.frame3-feature-item:nth-child(2) .feature-text {
+  width: 105px;
+}
+
+.frame3-feature-item:last-child .feature-text {
+  width: 156px;
+}
+
+/* Cancel Button Section */
+.frame3-button-section {
+  position: absolute;
+  width: 271px;
+  height: 39px;
+  left: 15px;
+  top: 151px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 25px;
+}
+
+.frame3-cancel-btn {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  width: 271px;
+  height: 39px;
+  background: transparent;
+  border: 1px solid #21409A;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25));
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.frame3-cancel-btn:hover {
+  background: rgba(33, 64, 154, 0.05);
+  transform: translateY(-1px);
+}
+
+.frame3-cancel-btn:active {
+  transform: translateY(0);
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.frame3-cancel-btn {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #21409A;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .subscription-plan-card {
+    width: 100%;
+    max-width: 313px;
+  }
+  
+  .plan-header {
+    width: calc(100% - 30px);
+  }
+  
+  .plan-info {
+    width: calc(100% - 34px);
+  }
+  
+  .features-list {
+    width: calc(100% - 30px);
+  }
+  
+  .cancel-button-container {
+    width: calc(100% - 30px);
+  }
+  
+  .cancel-button {
+    width: 100%;
+  }
+}

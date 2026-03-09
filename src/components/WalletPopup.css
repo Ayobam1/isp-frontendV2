@@ -1,0 +1,207 @@
+/* Popup Overlay */
+.wallet-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.wallet-popup-container {
+  position: relative;
+  width: 647px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 48px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Wallet Content */
+.wallet-content {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 10;
+}
+
+.close-button img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Wallet Header */
+.wallet-header {
+  margin-bottom: 30px;
+}
+
+.wallet-header h1 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 26px;
+  color: #000000;
+  margin: 0 0 5px 0;
+}
+
+.wallet-header p {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #939292;
+  margin: 0;
+}
+
+/* Amount Section */
+.amount-section {
+  margin-bottom: 20px;
+}
+
+.amount-section label {
+  display: block;
+  margin-bottom: 5px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.input-container {
+  border: 1px solid #AAB0BD;
+  border-radius: 4px;
+  padding: 16px 20px;
+}
+
+.amount-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+/* Card Selection */
+.card-selection {
+  margin-bottom: 40px;
+}
+
+.card-option {
+  background: #F3F5F8;
+  border: 1px solid #AAB0BD;
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 15px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.card-label {
+  display: flex;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+.card-logo {
+  width: 31px;
+  height: 24px;
+  margin-right: 12px;
+  object-fit: contain;
+}
+
+/* Action Buttons */
+.action-button {
+  display: flex;
+  justify-content: center;
+  gap: 39px;
+  top: 380px;
+}
+
+.btn {
+  width: 242px;
+  height: 60px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: white;
+  border: 1px solid #E1E2E3;
+  color: #000000;
+}
+
+.btn-continue {
+  background: #21409A;
+  color: white;
+  border: none;
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  appearance: none;
+  border: 1.5px solid #003066;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: white;
+}
+
+input[type="checkbox"]:checked::before {
+  content: '✔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #003066;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .wallet-popup-container {
+    width: 95%;
+    max-width: 95%;
+  }
+
+  .wallet-content {
+    padding: 30px 20px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

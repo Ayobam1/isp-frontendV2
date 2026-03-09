@@ -1,0 +1,112 @@
+.logout-popup-container {
+    position: relative;
+    width: 647px;
+    height: 351px;
+    left: 5802px;
+    top: 2263px;
+    background: #FFFFFF;
+  }
+  
+  .logout-popup-alert-icon {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    left: 44px;
+    top: 27px;
+  }
+  
+  .logout-popup-alert-icon img {
+    position: absolute;
+    left: 12.5%;
+    right: 12.5%;
+    top: 12.5%;
+    bottom: 16.67%;
+  }
+  
+  .logout-popup-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 120px;
+  
+    position: absolute;
+    width: 551px;
+    height: 214px;
+    left: 44px;
+    top: 110px;
+  }
+  
+  .logout-popup-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 28px;
+    margin: 0 auto;
+    width: 551px;
+    height: 73px;
+  }
+  
+  .logout-popup-title {
+    width: 551px;
+    height: 26px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 26px;
+    color: #000000;
+  }
+  
+  .logout-popup-subtitle {
+    width: 551px;
+    height: 19px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #757575;
+  }
+  
+  .logout-popup-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 39px;
+    width: 551px;
+    height: 60px;
+  }
+  
+  .btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 242px;
+    height: 60px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+  }
+  
+  .btn-cancel {
+    border: 1px solid #E1E2E3;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.25));
+    color: #000000;
+  }
+  
+  .btn-signout {
+    background: #21409A;
+    box-shadow: (2px 2px 4px rgba(0, 0, 0, 0.25));
+    color: #E5E7E6;
+  }

@@ -1,0 +1,22 @@
+{
+  "admins": [
+    {
+      "id": "1",
+      "name": "Super Admin",
+      "email": "superadmin@example.com",
+      "password": "2sdfsfns",
+      "role": "super admin",
+      "permissions": "all",
+      "status": "active"
+    },
+    {
+      "id": "1745575030328",
+      "email": "ayobami@example.com",
+      "password": "beauty",
+      "name": "Ayobami ",
+      "role": "admin",
+      "permissions": "limited",
+      "status": "active"
+    }
+  ]
+}
