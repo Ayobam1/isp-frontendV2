@@ -195,7 +195,7 @@ const Started = () => {
 
     return (
 
-        <div className='get-started'>
+        <div className='get-started-container'>
           <div className="frame-241">
           <div className="frame-208">
             <div className="frame-215">

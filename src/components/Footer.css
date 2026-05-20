@@ -1,347 +1,210 @@
-/* FOOTER */
+/* ── FOOTER ───────────────────────────────────────────────── */
 .footer {
   width: 100%;
+  background: #244A89;
+  padding: clamp(32px, 4vw, 58px) clamp(24px, 6%, 125px);
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 3rem 5% 2rem;
-  box-sizing: border-box;
-  min-height: 388px;
-  background: #244A89;
-  }
-  
-  .frame-123 {
-   
-    width: 1189px;
-    height: 230.45px;
-    left: 125px;
-    top: 58px;
-  }
-  
-  .frame-156 {
-   
-    left: 0;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 18px;
-    width: 30%;
-    height: 210.45px;
-  }
-  
-  /* Frame 155 - Logo and company name */
-  .frame-155 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 22.17px;
-    width: 377px;
-    height: 152.45px;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-  }
-  
-  /* Logo white */
-  .logo-white {
-    width: 162.12px;
-    height: 107px;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-  }
-  
-  .logo-white img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  
-  /* Frame 124 - Company name container */
-  .frame-124 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 7.76px;
-    width: 377px;
-    height: 23.28px;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-  }
-  
-  /* Company name text */
-  .company-name {
-    width: 377px;
-    height: 23.28px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    color: #FFFFFF;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-    margin: 0;
-  }
-  
-  /* Company address text */
-  .company-address {
-    width: 342px;
-    height: 40px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    color: #F1F1F1;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-    margin: 0;
-  }
-  
-  /* Frame 125 - Navigation links section */
-  .frame-125 {
-   
-    left: 500px; /* Positioned in the middle */
-    top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 10px;
-    width: 30%;
-    height: 204px;
-  }
-  
-  /* Footer heading (COMPANY, CONTACT INFO) */
-  .footer-heading {
-    width: 100%;
-    height: 21px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 20px;
-    color: #FFFFFF;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-    margin: 0 0 7px 0;
-  }
-  
-  /* Underline for headings */
-  .outline {
-    width: 84px;
-    height: 6px;
-    background: #FFFFFF;
-    border-radius: 3px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-  }
-  
-  /* Frame 38 - Navigation links container */
-  .frame-38 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 5px;
-    width: 190px;
-    height: 160px;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-    margin-top: 15px;
-  }
-  
-  /* Navigation links */
-  .footer-link {
-    width: 190px;
-    height: 28px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 20px;
-    color: #F1F1F1;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-    text-decoration: none;
-    display: block;
-    transition: color 0.3s ease;
-  }
-  
-  .footer-link:hover {
-    color: #FFFFFF;
-    text-decoration: underline;
-  }
-  
-  /* Frame 161 - Contact info section */
-  .frame-161 {
-   
-    right: 0; /* Positioned on the right */
-    top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 89px;
-    width: 30%;
-    height: 202px;
-  }
-  
-  
-  /* Frame 127 - Contact details container */
-  .frame-127 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 20px;
-    width: 298px;
-    height: 89px;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-  }
-  
-  /* Frame 126 - Contact info heading container */
-  .frame-126 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    width: 298px;
-    height: 34px;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-  }
-  
-  /* Frame 40 - Phone number container */
-  .frame-40 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 17px;
-    width: 298px;
-    height: 21px;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-  }
-  
-  /* Phone number text */
-  .contact-phone {
-    width: 298px;
-    height: 21px;
-    font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 20px;
-    color: #F1F1F1;
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-    margin: 0;
-  }
-  
-  /* Social Icons container */
-  .social-icons {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 25px;
-    width: 228px;
-    height: 24px;
-    flex: none;
-    order: 1;
-    flex-grow: 0;
-  }
-  
-  /* Individual social icon */
-  .social-icon {
-    width: 24px;
-    height: 24px;
-    flex: none;
-    flex-grow: 0;
-    transition: transform 0.3s ease;
-  }
-  
-  .social-icon:hover {
-    transform: scale(1.2);
-  }
-  
-  /* Social icon images */
- /* Social icon images */
+  gap: clamp(24px, 4vw, 60px);
+  flex-wrap: nowrap; /* keep all 3 on one row */
+}
+
+/* frame-123 wraps only the logo column — give it a fixed share */
+.frame-123 {
+  flex: 0 0 clamp(180px, 28%, 320px);
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Column 1 — logo + company info */
+.frame-156 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.frame-155 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.logo-white {
+  width: clamp(100px, 12vw, 162px);
+  height: auto;
+}
+
+.logo-white img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.frame-124 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.company-name,
+.company-address {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: clamp(12px, 1.1vw, 15px);
+  line-height: 1.6;
+  color: #FFFFFF;
+  margin: 0;
+  width: 100%;
+}
+
+.company-address { color: #F1F1F1; }
+
+/* Column 2 — COMPANY links */
+.frame-125 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 0 0 clamp(140px, 20%, 200px);
+  min-width: 140px;
+}
+
+.footer-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: clamp(13px, 1.2vw, 18px);
+  line-height: 1.3;
+  color: #FFFFFF;
+  margin: 0 0 4px 0;
+  width: 100%;
+}
+
+.outline {
+  width: 84px;
+  height: 5px;
+  background: #FFFFFF;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+
+.frame-38 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+}
+
+.footer-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1.1vw, 15px);
+  line-height: 1.9;
+  color: #F1F1F1;
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* Column 3 — CONTACT INFO + social icons */
+.frame-161 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 0 0 clamp(160px, 22%, 260px);
+  min-width: 160px;
+}
+
+.frame-127 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.frame-126,
+.frame-40 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.contact-phone {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1.1vw, 15px);
+  line-height: 1.6;
+  color: #F1F1F1;
+  margin: 0;
+  width: 100%;
+}
+
+.social-icons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.social-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.social-icon:hover { transform: scale(1.1); }
+
 .insta-icon,
 .fb-icon,
 .linkedin-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: block; /* Ensure proper display */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
-  
-  /* Responsive Styles */
-  @media (max-width: 1440px) {
-    .footer {
-      width: 100%;
-      left: 0;
-    }
-    
-    .frame-123 {
-      width: 90%;
-      left: 5%;
-      gap: 50px;
-    }
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 32px 24px;
+    gap: 24px;
   }
-  
-  @media (max-width: 992px) {
-    .footer {
-      height: 600px;
-    }
-    
-    .frame-123 {
-      flex-direction: column;
-      height: auto;
-      top: 30px;
-      gap: 40px;
-    }
-    
-    .frame-156,
-    .frame-125,
-    .frame-161 {
-      width: 90%;
-    }
+}
+
+/* Mobile — stack all three columns */
+@media (max-width: 640px) {
+  .footer {
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 32px;
   }
-  
-  @media (max-width: 768px) {
-    .company-name,
-    .company-address,
-    .contact-phone {
-      width: 100%;
-    }
+  .frame-123,
+  .frame-125,
+  .frame-161 {
+    flex: none;
+    width: 100%;
   }
+}

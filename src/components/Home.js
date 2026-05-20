@@ -4,6 +4,7 @@ import heroimage from '../assets/heroimage1.png';
 import heroimage2 from '../assets/heroimage2.png';
 import heroimage3 from '../assets/heroimage3.png';
 import locationIcon from '../assets/mdi_location.png';
+import locationDropdown from '../assets/locationvector.png';
 import serviceimage from '../assets/handsome-black-manager-having-video-interview-with-employee(1).png';
 import smartHomeIcon from '../assets/Smart home.png';
 import companyIcon from '../assets/Company.png';
@@ -225,25 +226,23 @@ const goToTestimonialSlide = (index) => {
 <div className="check-availability-wrapper section-spacer"> 
         <div className="check-availability">
         <div className="left-content">
-            <div className="frame-6">
-            <img src={locationIcon} alt="Icon" className="location-icon" />
+            <div className="frame-6home">
+            <img src={locationIcon} alt="Icon" className="location-iconhome" />
             </div>
         
           </div>
 
-          <div className="middle-content">
-            <div className="frame-210">
-              <div className="location-label">LOCATION</div>
-              <div className="frame-160">
-                <div className="location-placeholder">Enter your Location</div>
-                <div className="vector-container">
-                  <div className="vector"></div>
-                </div>
-              </div>
-            </div>
-            <div className="frame-213"></div>
-            <div className="frame-233"></div>
-          </div>
+         <div className="middle-content">
+  <div className="frame-210">
+    <div className="location-label">LOCATION</div>
+    <div className="frame-160">
+      <div className="location-placeholder">Enter your Location</div>
+      <img src={locationDropdown} alt="dropdown" className="locationdropdown-icon" />
+    </div>
+  </div>
+  <div className="frame-213"></div>
+  <div className="frame-233"></div>
+</div>
 
           <div className="right-content">
             <button className="availability-button">Check Availability</button>
@@ -422,7 +421,7 @@ const goToTestimonialSlide = (index) => {
   </div>
   
   <div className="page-control">
-    <div className="frame" style={{ width: 'auto', minWidth: '120px', left: '50%', transform: 'translateX(-50%)' }}>
+    <div className="frame">
       <div className="platter">
         <div className="ultrathin"></div>
       </div>
@@ -443,9 +442,10 @@ const goToTestimonialSlide = (index) => {
   </div>
 </div>
 
-      {/* Support Container */}
-   <div className="support-container section-spacer clearfix"> 
-<div className="support-container">
+
+{/* Support Container */}
+<div className="support-container section-spacer clearfix"> 
+
   <div className="support-image"></div>
   
   <div className="frame-14-support">
@@ -479,12 +479,8 @@ const goToTestimonialSlide = (index) => {
       <div className="instagram-icon"></div>
     </div>
   </div>
-</div>
-</div>   
 
-<>
-    
-      <style>{styles}</style>
+</div>
       
       {/* FAQ Container */}
       <div className="faq-container section-spacer clearfix"> 
@@ -537,7 +533,7 @@ const goToTestimonialSlide = (index) => {
         </div>
       </div>
       </div>
-    </>
+  
     </div>
    
     </main>

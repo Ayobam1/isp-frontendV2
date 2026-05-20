@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logoWhite from '../assets/imbil-white.png'; // Replace with your actual logo path
-import instagramIcon from '../assets/instaicon.png'; // Replace with your actual icon paths
+import logoWhite from '../assets/imbil-white.png'; 
+import instagramIcon from '../assets/instaicon.png'; 
 import facebookIcon from '../assets/fbicon.png';
 import linkedinIcon from '../assets/linkedicon.png';
 import './Footer.css';

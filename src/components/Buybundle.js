@@ -35,10 +35,10 @@ const Buybundle = () => {
       if (storedUserData) {
         try {
           const parsedUserData = JSON.parse(storedUserData);
-          console.log("Parsed user data:", parsedUserData); // Add this for debugging
+          console.log("Parsed user data:", parsedUserData); 
           setUserData(parsedUserData);
         } catch (error) {
-          console.error("Error parsing user data:", error); // Add this to catch JSON parse errors
+          console.error("Error parsing user data:", error); 
           setIsLoading(false);
         }
       } else {

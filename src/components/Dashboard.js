@@ -17,66 +17,36 @@ import dashicon from '../assets/dashIcon.png';
 import hideicon from '../assets/hideyes.png';
 import notificationicon from '../assets/notifcation.png';
 import WalletPopup from './WalletPopup';
+
 import Popup from './Popup';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const DEV_MODE = true;
+  const DEV_MODE = false;
 
   const [hideBalance, setHideBalance] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [error,setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
 
-  useEffect(() => {
-
-    console.log("Dashboard component mounted");
-  console.log("Auth token:", localStorage.getItem('authToken'));
-  console.log("Current user data:", localStorage.getItem('currentUser'));
-
-
-
-  if (DEV_MODE) {
- 
-    const mockUserData = {
-      name: 'Dev User',
-      email: 'dev@example.com',
-      preferredPlan: 'Basic Plan'
-    };
-    
-   
-    setUserData(mockUserData);
-    localStorage.setItem('currentUser', JSON.stringify(mockUserData));
-    setIsLoading(false);
+ useEffect(() => {
+  const storedUser = localStorage.getItem("currentUser");
+  if (!storedUser) {
+    navigate("/signin");
     return;
   }
-
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      navigate('/signin');
-      return;
-    }
-
-    const storedUserData = localStorage.getItem('currentUser');
-  if (storedUserData) {
-    try {
-      const parsedUserData = JSON.parse(storedUserData);
-      console.log("Parsed user data:", parsedUserData); 
-      setUserData(parsedUserData);
-    } catch (error) {
-      console.error("Error parsing user data:", error); 
-      setIsLoading(false);
-    }
-  } else {
-    setIsLoading(false);
+  try {
+    setUserData(JSON.parse(storedUser));
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+    navigate("/signin");
   }
-  
   setIsLoading(false);
 }, [navigate]);
-
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -85,11 +55,10 @@ const Dashboard = () => {
     return 'Good Evening';
   };
 
-  const getFirstName = () => {
-    if (!userData || !userData.name) return '';
-    return userData.name.split(' ')[0];
-  };
-
+const getFirstName = () => {
+  if (!userData) return '';
+  return userData.firstName || '';
+};
 
   const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false);
 
@@ -146,9 +115,10 @@ const Dashboard = () => {
     navigate('/support');
   };
 
-  const handleLogoutClick = () => {
-    setIsPopupOpen(true);
-  };
+const handleLogoutClick = () => {
+  console.log("Logout clicked, isPopupOpen:", isPopupOpen);
+  setIsPopupOpen(true);
+};
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -162,7 +132,6 @@ const Dashboard = () => {
   }
   console.log("Dashboard is rendering with userData:", userData);
 
-  // If no user data found (should not happen if redirected correctly)
   if (!userData && !DEV_MODE) {
     return (
       <div className="error-container">
@@ -174,7 +143,7 @@ const Dashboard = () => {
 
   const handleLiveChatClick = () => {
     console.log('Live chat opened');
-    // You could also use: window.open('your-chat-url', '_blank');
+   
   };
  
   
@@ -183,16 +152,7 @@ const Dashboard = () => {
   };
 
   // Transaction data
-  const transactions = [
-    { id: 1, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 2, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 3, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 4, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 5, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 6, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 7, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-    { id: 8, type: 'Fund Wallet', amount: '₦10,000', date: '23/03/2025', status: 'Successful' },
-  ];
+const transactions = userData.transactions || [];
 
   return (
     <div className="dashboard-container">
@@ -233,12 +193,14 @@ const Dashboard = () => {
             </div>
             <span>Support</span>
           </div>
-          <div className="menu-item" onClick={handleLogoutClick}>
-            <div className="menu-icon">
-              <img src={logouticon} alt="Logout" />
-            </div>
-            <span>Logout</span>
-          </div>
+         <div className="menu-item" onClick={handleLogoutClick}>
+        <div className="menu-icon">
+          <img src={logouticon} alt="Logout" />
+        </div>
+        <span>Logout</span>
+      </div>
+
+      
         </div>
     
         <div className="live-chat-container" onClick={handleLiveChatClick}>
@@ -249,12 +211,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {isPopupOpen && (
-        <Popup 
-          onClose={() => setIsPopupOpen(false)}
-          onLogout={handleLogout}
-        />
-      )}
+
+   
       {/* Main Content */}
       <div className="dashboard-content-container">
       <div className="top-barr">
@@ -270,7 +228,7 @@ const Dashboard = () => {
               <div className="user-profile">
                 <div className="avatar"></div>
                 <div className="user-info">
-                  <div className="user-name">{userData.name}</div>
+                  <div className="user-name">{userData.firstName} {userData.lastName}</div>
                   <div className="user-email">{userData.email}</div>
                 </div>
               </div>
@@ -289,7 +247,9 @@ const Dashboard = () => {
                 <img src={walleticon} alt="Wallet" />
                 </div>
                 <div className="wallet-label">Wallet balance</div>
-                <div className="wallet-amount">{hideBalance ? '****' : '₦2,900'}</div>
+               <div className="wallet-amount">
+  {hideBalance ? '****' : `₦${Number(userData.walletBalance).toLocaleString()}`}
+</div>
               </div>
               <div className="hide-balance-btn" onClick={toggleBalance}>
                 <span>{hideBalance ? 'Show Balance' : 'Hide Balance'}</span>
@@ -359,8 +319,7 @@ const Dashboard = () => {
                  <div className="detail-item">
                   <div className="detail-dot active-dot"></div>
                    <div className="detail-info">
-                   <span className="detail-label">{`Active Bundle:
-                    ${userData.preferredPlan}`}</span>
+                  <span className="detail-label">Active Bundle: {userData.subscriptions?.[0]?.planType || 'No active plan'}</span>
                    </div>
                    </div>
 
@@ -395,24 +354,30 @@ const Dashboard = () => {
               <div className="view-all">View all transactions</div>
             </div>
             <div className="activities-table">
-              {transactions.map((transaction) => (
-                <div className="activity-row" key={transaction.id}>
-                  <div className="activity-icon fund-icon">
-                    <div className="arrow-right-up">
-                    <img src={dashicon} alt="Name"/> 
-                    </div>
-                  </div>
-                  <div className="activity-type">{transaction.type}</div>
-                  <div className="activity-amount">{transaction.amount}</div>
-                  <div className="activity-date">{transaction.date}</div>
-                  <div className="activity-status">{transaction.status}</div>
-                  <div className="activity-action">View More</div>
-                </div>
-              ))}
+             {transactions.map((transaction) => (
+  <div className="activity-row" key={transaction.id}>
+    <div className="activity-icon fund-icon">
+      <div className="arrow-right-up">
+        <img src={dashicon} alt="Name"/>
+      </div>
+    </div>
+    <div className="activity-type">{transaction.type}</div>
+    <div className="activity-amount">₦{Number(transaction.amount).toLocaleString()}</div>
+    <div className="activity-date">{new Date(transaction.createdAt).toLocaleDateString()}</div>
+    <div className="activity-status">{transaction.status}</div>
+    <div className="activity-action">View More</div>
+  </div>
+))}
             </div>
           </div>
         </div>
       </div>
+         {isPopupOpen && (
+        <Popup 
+          onClose={() => setIsPopupOpen(false)}
+          onLogout={handleLogout}
+        />
+      )}
     </div>
   );
 };

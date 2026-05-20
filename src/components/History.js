@@ -20,53 +20,25 @@ const History = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState('Last 30 days');
   const [activeTab, setActiveTab] = useState('bundle'); 
+  const transactions = userData?.transactions || [];
 
 
-  const DEV_MODE = true;
+  const DEV_MODE = false;
 
-  useEffect(() => {
-    console.log("History component mounted");
-    console.log("Auth token:", localStorage.getItem('authToken'));
-    console.log("Current user data:", localStorage.getItem('currentUser'));
-
-    if (DEV_MODE) {
-      // Simulate user data for development
-      const mockUserData = {
-        name: 'Dev User',
-        email: 'dev@example.com',
-        preferredPlan: 'Basic Plan'
-      };
-      
-      // Set mock user data
-      setUserData(mockUserData);
-      localStorage.setItem('currentUser', JSON.stringify(mockUserData));
-      setIsLoading(false);
-      return;
-    }
-
-    // Regular authentication check
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-      navigate('/signin');
-      return;
-    }
-
-    const storedUserData = localStorage.getItem('currentUser');
-    if (storedUserData) {
-      try {
-        const parsedUserData = JSON.parse(storedUserData);
-        console.log("Parsed user data:", parsedUserData);
-        setUserData(parsedUserData);
-      } catch (error) {
-        console.error("Error parsing user data:", error);
-        setIsLoading(false);
-      }
-    } else {
-      setIsLoading(false);
-    }
-    
-    setIsLoading(false);
-  }, [navigate]);
+ useEffect(() => {
+  const storedUser = localStorage.getItem("currentUser");
+  if (!storedUser) {
+    navigate("/signin");
+    return;
+  }
+  try {
+    setUserData(JSON.parse(storedUser));
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+    navigate("/signin");
+  }
+  setIsLoading(false);
+}, [navigate]);
 
   const handleDashboardClick = () => {
     navigate('/dashboard');
@@ -84,11 +56,12 @@ const History = () => {
     navigate('/support');
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('currentUser');
-    navigate('/signin');
-  };
+ const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('currentUser');
+  navigate('/signin');
+};
 
   const handleLiveChatClick = () => {
     console.log('Live chat opened');
@@ -103,6 +76,7 @@ const History = () => {
         bundle: bundletransaction 
       } 
     });
+  
 
   if (isLoading) {
     console.log("History is in loading state");
@@ -120,137 +94,28 @@ const History = () => {
   }
 };
 
-  const bundletransactions = [
-    { 
-      status: 'Success', 
-      bundleName: 'Imbil Classic', 
-      date: 'Jan 24, 2020', 
-      amount: '₦35,000',
-      action: 'Buy'
-    },
-    { 
-      status: 'Pending', 
-      bundleName: 'Imbil Standard', 
-      date: 'Feb 1, 2020', 
-      amount: '₦45,000',
-      action: 'Buy'
-    },
-    { 
-      status: 'Failed', 
-      bundleName: 'Imbil Basic', 
-      date: 'Jan 20, 2020', 
-      amount: '₦25,000',
-      action: 'Buy'
-    },
-    { 
-        status: 'Failed', 
-        bundleName: 'Imbil Basic', 
-        date: 'Jan 20, 2020', 
-        amount: '₦25,000',
-        action: 'Buy'
-      },
-      { 
-        status: 'Failed', 
-        bundleName: 'Imbil Basic', 
-        date: 'Jan 20, 2020', 
-        amount: '₦25,000',
-        action: 'Buy'
-      },
-      { 
-        status: 'Failed', 
-        bundleName: 'Imbil Basic', 
-        date: 'Jan 20, 2020', 
-        amount: '₦25,000',
-        action: 'Buy'
-      },
-      { 
-        status: 'Failed', 
-        bundleName: 'Imbil Basic', 
-        date: 'Jan 20, 2020', 
-        amount: '₦25,000',
-        action: 'Buy'
-      },
-      { 
-        status: 'Failed', 
-        bundleName: 'Imbil Basic', 
-        date: 'Jan 20, 2020', 
-        amount: '₦25,000',
-        action: 'Buy'
-      },
-      { 
-        status: 'Success', 
-        bundleName: 'Imbil Standard', 
-        date: 'Jan 20, 2020', 
-        amount: '₦25,000',
-        action: 'Buy'
-      }
-  ];
+ const bundletransactions = (userData?.transactions || [])
+  .filter(t => t.type === "SUBSCRIPTION")
+  .map(t => ({
+    status: t.status === "SUCCESS" ? "Success" : t.status === "PENDING" ? "Pending" : "Failed",
+    bundleName: "Imbil Classic",
+    date: new Date(t.createdAt).toLocaleDateString(),
+    amount: `₦${Number(t.amount).toLocaleString()}`,
+    action: "Buy",
+    raw: t
+  }));
 
-  const topuptransactions = [
-    { 
-      status: 'Success', 
-      narration: 'Imbil Classic', 
-      date: 'Jan 24, 2020', 
-      description: 'Bank Transfer',
-      amount: '₦25,000'
-    },
-    { 
-        status: 'Success', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Bank Transfer',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Pending', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Bank Transfer',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Success', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Bank Transfer',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Failed', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Online Payment',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Success', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Bank Transfer',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Success', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Top Up',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Success', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Online Payment',
-        amount: '₦25,000'
-      },
-      { 
-        status: 'Success', 
-        narration: 'Imbil Classic', 
-        date: 'Jan 24, 2020', 
-        description: 'Bank Transfer',
-        amount: '₦25,000'
-      },
-  ];
+  const topuptransactions = (userData?.transactions || [])
+  .filter(t => t.type === "CREDIT")
+  .map(t => ({
+    status: t.status === "SUCCESS" ? "Success" : t.status === "PENDING" ? "Pending" : "Failed",
+    narration: t.reference || "Wallet Top Up",
+    date: new Date(t.createdAt).toLocaleDateString(),
+    description: t.from || "Bank Transfer",
+    amount: `₦${Number(t.amount).toLocaleString()}`,
+    raw: t
+  }));
+
 
   const renderStatusBadge = (status) => {
     let badgeClass = '';
@@ -363,7 +228,7 @@ const History = () => {
               <div className="user-profile">
                 <div className="avatar"></div>
                 <div className="user-info">
-                  <div className="user-name">{userData.name}</div>
+                <div className="user-name">{userData.firstName} {userData.lastName}</div>
                   <div className="user-email">{userData.email}</div>
                 </div>
               </div>

@@ -19,12 +19,14 @@ import './Subscriptions.css';
 
 
 const Subscriptions = () => {
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [error,setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState('Last 30 days');
   const [activeTab, setActiveTab] = useState('current'); 
+  const currentSubscription = userData?.subscriptions?.[0];
+  const subscriptionHistory = userData?.subscriptions || [];
 
 
   const subscriptionCards = [
@@ -62,33 +64,19 @@ const Subscriptions = () => {
 
 
       useEffect(() => {
-    
-        console.log("Dashboard component mounted");
-      console.log("Auth token:", localStorage.getItem('authToken'));
-      console.log("Current user data:", localStorage.getItem('currentUser'));
-    
-        const authToken = localStorage.getItem('authToken');
-        if (!authToken) {
-          navigate('/signin');
-          return;
-        }
-    
-        const storedUserData = localStorage.getItem('currentUser');
-      if (storedUserData) {
-        try {
-          const parsedUserData = JSON.parse(storedUserData);
-          console.log("Parsed user data:", parsedUserData); // Add this for debugging
-          setUserData(parsedUserData);
-        } catch (error) {
-          console.error("Error parsing user data:", error); // Add this to catch JSON parse errors
-          setIsLoading(false);
-        }
-      } else {
-        setIsLoading(false);
-      }
-      
-      setIsLoading(false);
-    }, [navigate]);
+  const storedUser = localStorage.getItem("currentUser");
+  if (!storedUser) {
+    navigate("/signin");
+    return;
+  }
+  try {
+    setUserData(JSON.parse(storedUser));
+  } catch (error) {
+    console.error("Error parsing user data:", error);
+    navigate("/signin");
+  }
+  setIsLoading(false);
+}, [navigate]);
     
     
       const getGreeting = () => {
@@ -126,11 +114,12 @@ const Subscriptions = () => {
         navigate('/support');
       };
     
-      const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('currentUser');
-        navigate('/signin');
-      };
+     const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('currentUser');
+  navigate('/signin');
+};
       if (isLoading) {
         console.log("Dashboard is in loading state"); 
         return <div className="loading">Loading...</div>;
@@ -222,7 +211,7 @@ return (
           <div className="user-profile">
             <div className="avatar"></div>
             <div className="user-info">
-              <div className="user-name">{userData.name}</div>
+              <div className="user-name">{userData.firstName} {userData.lastName}</div>
               <div className="user-email">{userData.email}</div>
             </div>
           </div>
@@ -290,57 +279,37 @@ return (
     {activeTab === 'history' && (
       <>
        <div className="subscription-table">
-  {subscriptionCards.map((subscriptionCards) => (
-    <div key={subscriptionCards.id} className="subscription-card">
-      {/* Title */}
-      <div className="subscription-title">
-        {subscriptionCards.title}
-      </div>
-      
-      {/* Provider */}
-      <div className="subscription-provider">
-        {subscriptionCards.provider}
-      </div>
-      
-      {/* Price */}
-      <div className="subscription-price">
-        {subscriptionCards.price}
-      </div>
-      
-      {/* Date and Status Info */}
-      <div className="subscription-info">
-        {/* Start Date */}
-        <div className="info-group">
-          <div className="info-label">Start Date</div>
-          <div className="info-value">{subscriptionCards.startDate}</div>
-        </div>
-        
-        {/* End Date */}
-        <div className="info-group">
-          <div className="info-label">End Date</div>
-          <div className="info-value">{subscriptionCards.endDate}</div>
-        </div>
-        
-        {/* Status */}
-        <div className="info-group">
-          <div className="info-label">Status</div>
-          <div 
-            className="info-value status-value" 
-            style={{ color:subscriptionCards.statusColor }}
-          >
-            {subscriptionCards.status}
-          </div>
+  {subscriptionHistory.map((sub) => (
+  <div key={sub.id} className="subscription-card">
+    <div className="subscription-title">{sub.planType}</div>
+    <div className="subscription-provider">Imbil Connect</div>
+    <div className="subscription-price">₦25,000/Month</div>
+    <div className="subscription-info">
+      <div className="info-group">
+        <div className="info-label">Start Date</div>
+        <div className="info-value">
+          {new Date(sub.startDate).toLocaleDateString()}
         </div>
       </div>
-      
-      {/* Action Button */}
-      <div className="subscription-action">
-        <button className="cancel-btn">
-         Buy Again
-        </button>
+      <div className="info-group">
+        <div className="info-label">End Date</div>
+        <div className="info-value">
+          {new Date(sub.nextPaymentDate).toLocaleDateString()}
+        </div>
+      </div>
+      <div className="info-group">
+        <div className="info-label">Status</div>
+        <div className="info-value status-value"
+          style={{ color: sub.status === 'ACTIVE' ? '#107C41' : '#757575' }}>
+          {sub.status}
+        </div>
       </div>
     </div>
-  ))}
+    <div className="subscription-action">
+      <button className="cancel-btn">Buy Again</button>
+    </div>
+  </div>
+))}
 </div>
     </>
     )}
@@ -349,8 +318,8 @@ return (
 <div className="current-container">
   <div className="sub-plan-container">
     <div className="plan-details">
-      <h2 className="plan-title">Unlimited Data for 30days</h2>
-      <p className="plan-provider">Imbil Connect</p>
+     <h2 className="plan-title">{currentSubscription?.planType}</h2>
+    <p className="plan-provider">Imbil Connect</p>
     </div>
 
     {/* Right side - Pricing */}
@@ -358,7 +327,7 @@ return (
       <div className="wifi-icon">
         <img src={wifiIcon} alt="Name"/>
       </div>
-      <span className="price-text">N25,000/ Month</span>
+      <span className="price-text">₦25,000/Month</span>
     </div>
   </div>
 
@@ -375,11 +344,15 @@ return (
     <div className="details-row">
       <div className="detail-group">
         <div className="detail-label">Plan Start Date</div>
-        <div className="detail-value">12, October 2024</div>
+        <div className="detail-value">
+  {new Date(currentSubscription?.startDate).toLocaleDateString()}
+</div>
       </div>
       <div className="detail-group">
         <div className="detail-label">Next Billing Date</div>
-        <div className="detail-value">12, November 2024</div>
+       <div className="detail-value">
+  {new Date(currentSubscription?.nextPaymentDate).toLocaleDateString()}
+</div>
       </div>
     </div>
 
@@ -387,13 +360,15 @@ return (
     <div className="details-row">
       <div className="detail-group">
         <div className="detail-label">Days Remaining</div>
-        <div className="detail-value">20 Days</div>
+       <div className="detail-value">
+  {Math.max(0, Math.ceil((new Date(currentSubscription?.nextPaymentDate) - new Date()) / (1000 * 60 * 60 * 24)))} Days
+</div>
       </div>
       <div className="detail-group">
         <div className="detail-label">Status</div>
-        <div className="status-button">
-          <span>Active</span>
-        </div>
+       <div className="status-button">
+  <span>{currentSubscription?.status}</span>
+</div>
       </div>
     </div>
   </div>

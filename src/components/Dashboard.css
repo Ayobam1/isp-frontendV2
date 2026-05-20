@@ -551,14 +551,14 @@ padding: 24px 30px;
 /* Bundle Card Styles */
 .bundle-card {
   width: 314px;
-  height: 277px;
+  height: auto;
+  min-height: 320px;        
   background: #FFFFFF;
   border: 1px solid #E5E7E6;
   border-radius: 10px;
-  padding: 30px 21px;
+  padding: 20px 21px 24px 21px;
   box-sizing: border-box;
-  overflow: visible;
-  min-height: fit-content; 
+  overflow: hidden;
 }
 
 
@@ -566,7 +566,7 @@ padding: 24px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 8px;       
 }
 
 .period-selector {
@@ -629,51 +629,52 @@ padding: 24px 30px;
 
 .bundle-content {
   display: flex;
-  gap: 60px;
-  width: 100%; 
-  min-height: fit-content; 
-  align-items: flex-start; 
+  gap: 16px;
+  width: 100%;
+  align-items: flex-start;  /* anchor everything to the top */
+  margin-top: 16px;
 }
 
 .bundle-details {
   display: flex;
   flex-direction: column;
-  gap: 15px; 
-  flex: 1; 
-  min-height: fit-content; 
-  height: auto; 
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .detail-item {
   display: flex;
   gap: 8px;
-  align-items: center; 
-  flex-wrap: wrap; 
-  max-width: 100%; 
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .detail-dot {
-  flex-shrink: 0; 
-  width: 8px; 
-  height: 8px; 
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
-.active-dot {
-  background: #1F9854;
-}
-
-.used-dot, .left-dot {
-  background: #F2415A;
-}
+.active-dot { background: #1F9854; }
+.used-dot, .left-dot { background: #F2415A; }
 
 .detail-info {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 2px;
   flex: 1;
-  min-width: 0; 
+  min-width: 0;
 }
+
+.detail-label {
+  font-weight: 500;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
 
 .detail-info .detail-label:first-child:last-child {
  
@@ -701,30 +702,64 @@ padding: 24px 30px;
 }
 
 .bundle-chart {
-  flex-shrink: 1;
-  width: 120px;
+  flex-shrink: 0;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;   /* keeps it in the flex flow */
+  margin-top: 40px;         /* ONLY moves the chart down, nothing else */
 }
 
 .chart-circle {
-  width: 158px;
-  height: 158px;
-  background: conic-gradient(
-    #1F9854 0% 70%,
-    #F2415A 70% 100%
-  );
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   position: relative;
+  flex-shrink: 0;
+
+  /* 
+    Layered conic-gradient:
+    - Outer ring uses dark colours (stroke effect via box-shadow won't work on conic,
+      so we use a border trick with background-clip)
+    We build it as: dark green arc + dark red arc as the visible ring,
+    with a light-coloured inner circle on top via ::before
+  */
+  background: conic-gradient(
+    #1F9854 0% 70%,       /* dark green — days used */
+    #F2415A 70% 100%      /* dark red — days left */
+  );
 }
 
+/* Light fill layer — sits on top of the dark ring, slightly inset */
 .chart-circle::before {
   content: '';
   position: absolute;
-  width: 130px;
-  height: 130px;
-  top: 14px;
-  left: 14px;
+  width: 86px;
+  height: 86px;
+  top: 12px;
+  left: 12px;
+  border-radius: 50%;
+  /* Split light colours to match the segments behind */
+  background: conic-gradient(
+    #E6FAEE 0% 70%,       /* light green — matches green segment */
+    #FEECEE 70% 100%      /* light red — matches red segment */
+  );
+  z-index: 1;
+}
+
+/* White centre hole — sits on top of both layers */
+.chart-circle::after {
+  content: '';
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  top: 23px;
+  left: 23px;
   background: white;
   border-radius: 50%;
+  z-index: 2;
 }
 
 /* Activities Section Styles */

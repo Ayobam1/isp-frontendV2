@@ -5,7 +5,12 @@ import dashboardLogo from '../assets/dashboard.png';
 import dashboardicon from '../assets/grid-4.png';
 import subscriptionicon from '../assets/Wifi.png';
 import historyicon from '../assets/Trending-down.png';
+import userheaderIcon from '../assets/userheader.png';
+import callSupport from '../assets/call support.png';
+import supportagent from '../assets/supportagent.png';
 import supporticon from '../assets/support.png';
+import sectionicon from '../assets/sectionicon.png';
+import chathistory from '../assets/chathistory.png';
 import logouticon from '../assets/logout.png';
 
 
@@ -80,13 +85,48 @@ const Support = () => {
       dateOfBirth 
     });
   };
-// const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-      
-//       const paymentMethods = [
-//         { id: 'webPay', label: 'Web Pay', left: '24px' },
-//         { id: 'bankTransfer', label: 'Bank Transfer', left: '192px' },
-//         { id: 'onlinePayment', label: 'Online Payment', left: '360px' }
-//       ];
+const faqs = [
+  { id: 1, question: "What is Imbil Connect?" },
+  { id: 2, question: "Are There Any Hidden Fees?" },
+  { id: 3, question: "How do I Get Imbil Connect Installed?" },
+  { id: 4, question: "Can I Upgrade or Downgrade My Plan?" },
+  { id: 5, question: "My Internet is Slow. What Should I Do?" },
+ 
+];
+ 
+const faqAnswers = {
+  1: "Imbil Connect is a premium internet service provider offering truly unlimited, high-speed broadband with no fair usage policy (FUP)—meaning no data caps or speed throttling.",
+  2: "No! Our pricing is transparent, with no extra charges for exceeding data limits—because there are no limits!",
+  3: "You can update your account information by navigating to your profile settings and editing the relevant fields.",
+  4: "Imbil Connect accepts major credit/debit cards, bank transfers, and various mobile payment options.",
+  5: "You can contact customer support via the live chat widget on this page, email, or phone number listed in your account dashboard.",
+};
+
+
+  const [openFaq, setOpenFaq] = useState(null);
+  const [message, setMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatStarted, setChatStarted] = useState(false);
+ 
+  const toggleFaq = (id) => setOpenFaq(openFaq === id ? null : id);
+ 
+  const sendMessage = () => {
+    if (!message.trim()) return;
+    const userMsg = { from: "user", text: message };
+    setChatMessages((prev) => [...prev, userMsg]);
+    setMessage("");
+    setChatStarted(true);
+    setTimeout(() => {
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          from: "agent",
+          text: "Thanks for reaching out! A support agent will be with you shortly.",
+        },
+      ]);
+    }, 900);
+  };
+
   const handleLiveChatClick = () => {
     console.log('Live chat opened');
     // alternative method: window.open('your-chat-url', '_blank');
@@ -185,96 +225,217 @@ const Support = () => {
 
 
        <div className="subscription-main-container">
-      <div className="info-section">
-        <div className="contact-info-column">
-          <div className="contact-info">
-            {/* Profile Photo Section */}
-            <div className="profile-photo">
-              <div className="photo-circle"></div>
-              <div className="photo-actions">
-                <button className="edit-photo-btn">
-                  <span>Edit Photo</span>
-                </button>
-                <button className="delete-photo-btn">
-                  <span className="delete-icon"></span>
-                </button>
+         <div className="sp-page">
+        <div className="sp-card">
+ 
+          {/* ── User Header ── */}
+          <div className="sp-user-header">
+            <div className="sp-user-left">
+              <button className="sp-back-btn" aria-label="Go back">
+                <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+                  <path d="M10 12L6 8l4-4" stroke="#191C1D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+ 
+              <div className="sp-avatar-wrap">
+                <div className="sp-avatar">TO</div>
+                <div className="sp-avatar-online" />
               </div>
+ 
+             <div className="sp-user-info">
+             <span className="sp-user-name">Taofeek Olaojo</span>
+             <div className="sp-user-meta">
+    <span className="sp-user-role">
+      <img 
+        src={userheaderIcon} 
+        alt="user" 
+        width="12" 
+        height="12" 
+        style={{ objectFit: 'contain' }}
+      />
+      Last seen: 12 minutes ago
+    </span>
+    <span className="sp-badge">ID: NEX-8829-S</span>
+  </div>
+</div>
             </div>
-
-            {/* Name Fields Row */}
-            <div className="form-row">
-              <div className="form-field">
-                <label>First Name</label>
-                <div className="input-container">
-                  <input type="text" placeholder="First name" />
-                  <span className="user-icon"></span>
-                </div>
-              </div>
-              <div className="form-field">
-                <label>Last Name</label>
-                <div className="input-container">
-                  <input type="text" placeholder="Last name" />
-                  <span className="user-icon"></span>
-                </div>
-              </div>
+ 
+           <button className="sp-message-btn">
+  <img 
+    src={callSupport} 
+    alt="call support" 
+    width="18" 
+    height="18" 
+    style={{ objectFit: 'contain' }}
+  />
+  Support Call
+</button>
+          </div>
+ 
+          {/* ── Personal Info Bar ── */}
+          <div className="sp-info-bar">
+            <div className="sp-info-col">
+              <span className="sp-info-label">Email Address</span>
+              <span className="sp-info-value">t.mateen@gmail.com</span>
             </div>
-
-            {/* Contact Fields Row */}
-            <div className="form-row">
-              <div className="form-field">
-                <label>Enter phone number</label>
-                <div className="input-container">
-                  <input type="tel" placeholder="Phone number" />
-                  <span className="phone-icon"></span>
-                </div>
-              </div>
-              <div className="form-field">
-                <label>Enter email address</label>
-                <div className="input-container">
-                  <input type="email" placeholder="Email address" />
-                  <span className="mail-icon"></span>
-                </div>
-              </div>
+            <div className="sp-info-col">
+              <span className="sp-info-label">Phone Number</span>
+              <span className="sp-info-value">+234 816 575 2232</span>
             </div>
-
-            {/* Address and DOB Row */}
-            <div className="form-row">
-              <div className="form-field">
-                <label>Address</label>
-                <div className="input-container">
-                  <input type="text" placeholder="Address" />
-                </div>
-              </div>
-              <div className="form-field">
-                <label>Date of Birth</label>
-                <div className="input-container">
-                  <input type="text" placeholder="DD/MM/YYYY" />
-                  <span className="calendar-icon"></span>
-                </div>
-              </div>
+            <div className="sp-info-col">
+              <span className="sp-info-label">Address</span>
+              <span className="sp-info-value">20, Adeshina St, Ikeja, Lagos</span>
+            </div>
+            <div className="sp-info-col">
+              <span className="sp-info-label">Account Type</span>
+             <div className="sp-account-type">
+  <img 
+    src={sectionicon} 
+    alt="section icon" 
+    width="10" 
+    height="13" 
+    style={{ objectFit: 'contain' }}
+  />
+  USER
+</div>
             </div>
           </div>
-
-          {/* Info Footer */}
-          <div className="info-footer">
-            <div className="info-card">
-              <div className="info-icon email-icon"></div>
-              <div className="info-text">
-                <span>info@imbiltelecom.com</span>
+ 
+          {/* ── Bottom: FAQ + Chat ── */}
+          <div className="sp-bottom">
+ 
+            {/* FAQ */}
+            <div className="sp-faq-section">
+              <div className="sp-faq-header">
+                <span className="sp-faq-title">Frequently Asked Questions</span>
+                <button className="sp-view-all-btn">View All</button>
+              </div>
+ 
+              <div className="sp-faq-list">
+                {faqs.map((faq) => (
+                  <div className="sp-faq-item" key={faq.id}>
+                    <button
+                      className="sp-faq-question"
+                      onClick={() => toggleFaq(faq.id)}
+                      aria-expanded={openFaq === faq.id}
+                    >
+                      <span className="sp-faq-question-text">{faq.question}</span>
+                      <span className={`sp-faq-icon${openFaq === faq.id ? " open" : ""}`}>
+                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                          <path d="M12 5v14M5 12h14" stroke="#F24822" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </span>
+                    </button>
+                    <div className={`sp-faq-answer${openFaq === faq.id ? " open" : ""}`}>
+                      {faqAnswers[faq.id]}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="info-card">
-              <div className="info-icon map-icon"></div>
-              <div className="info-text">
-                <span>No 20 Adeshina Street, Off Obafemi Awolowo Way, Ikeja, Lagos</span>
+ 
+            {/* Chat Widget */}
+            <div className="sp-chat-section">
+              {/* Header */}
+              <div className="sp-chat-header">
+                <div className="sp-chat-agent">
+                  <div className="sp-agent-avatar-wrap">
+                    <div className="sp-agent-avatar">
+                                           <img 
+    src={supportagent} 
+    alt="suport agent" 
+    width="22" 
+    height="19" 
+    style={{ objectFit: 'contain' }}
+  />
+                    </div>
+                    <div className="sp-agent-online" />
+                  </div>
+                  <div>
+                    <div className="sp-agent-name">IMBIL Support Agent</div>
+                    <div className="sp-agent-status">Online</div>
+                  </div>
+                </div>
+                <div className="sp-chat-actions">
+                  <button className="sp-chat-action-btn" aria-label="Search">
+                    <img 
+        src={userheaderIcon} 
+        alt="user" 
+        width="12" 
+        height="12" 
+        style={{ objectFit: 'contain' }}
+      />
+                  </button>
+                  <button className="sp-chat-action-btn" aria-label="More options">
+                    <svg width="4" height="14" fill="none" viewBox="0 0 4 14">
+                      <circle cx="2" cy="2" r="1.5" fill="#64748B"/>
+                      <circle cx="2" cy="7" r="1.5" fill="#64748B"/>
+                      <circle cx="2" cy="12" r="1.5" fill="#64748B"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+ 
+              {/* Chat History */}
+              <div className="sp-chat-history">
+                {!chatStarted ? (
+                  <div className="sp-chat-empty">
+                    <div className="sp-chat-empty-icon">
+                       <img 
+    src={chathistory} 
+    alt="chat history" 
+    width="33" 
+    height="28.5" 
+    style={{ objectFit: 'contain' }}
+  />
+                    </div>
+                    <div className="sp-chat-empty-title">No Messages Yet</div>
+                    <div className="sp-chat-empty-desc">
+                      Start a conversation with our support agent. We typically reply within a few minutes.
+                    </div>
+                  </div>
+                ) : (
+                  chatMessages.map((msg, i) => (
+                    <div key={i} className={`sp-bubble-row ${msg.from}`}>
+                      <div className={`sp-bubble ${msg.from}`}>{msg.text}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+ 
+              {/* Input */}
+              <div className="sp-chat-input-area">
+                <div className="sp-chat-input-row">
+                  <button className="sp-attach-btn" aria-label="Attach file">
+                    <svg width="13" height="20" fill="none" viewBox="0 0 13 20">
+                      <path d="M11.5 5v9a5 5 0 0 1-10 0V4a3 3 0 1 1 6 0v9a1 1 0 1 1-2 0V5" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                  <div className="sp-input-wrap">
+                    <input
+                      className="sp-input"
+                      type="text"
+                      placeholder="Type your message..."
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") sendMessage(); }}
+                    />
+                    <button className="sp-send-btn" onClick={sendMessage} aria-label="Send">
+                      <svg width="19" height="16" fill="none" viewBox="0 0 19 16">
+                        <path d="M1 8h17M10 1l8 7-8 7" stroke="#21409A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <button className="sp-mic-btn" aria-label="Voice message">
+                    <svg width="14" height="19" fill="none" viewBox="0 0 14 19">
+                      <rect x="4" y="1" width="6" height="10" rx="3" stroke="#94A3B8" strokeWidth="1.5"/>
+                      <path d="M1 9a6 6 0 0 0 12 0M7 15v3" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="info-card">
-              <div className="info-icon phone-icon"></div>
-              <div className="info-text">
-                <span>+234 20 13100100</span>
-              </div>
-            </div>
+ 
           </div>
         </div>
       </div>
