@@ -1255,7 +1255,7 @@ h3.plan-title {
   background: var(--grey-bg);
 
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 50/50 split */
+  grid-template-columns: 1fr 1fr; 
   align-items: center;
 }
  
@@ -1445,7 +1445,7 @@ h3.plan-title {
   width: clamp(260px, 40%, 627px);
   min-height: clamp(280px, 40vw, 619px);
   flex-shrink: 0;
-  order: 2; /* image on right */
+  order: 2; 
   background: url('../assets/handholding.png');
   background-size: cover;
   background-position: center;

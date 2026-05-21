@@ -1,9 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://imbil-isp-backend-cjdd.onrender.com/api/v1",
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
-
 
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");

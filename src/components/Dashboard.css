@@ -708,8 +708,8 @@ padding: 24px 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-start;   /* keeps it in the flex flow */
-  margin-top: 40px;         /* ONLY moves the chart down, nothing else */
+  align-self: flex-start;  
+  margin-top: 40px;        
 }
 
 .chart-circle {

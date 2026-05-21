@@ -38,7 +38,7 @@ body.signin-page {
   z-index: 1;
 }
 
-/* ── WHITE CARD ───────────────────────────────────────────── */
+
 .signin-box {
   position: relative;
   width: 100%;
@@ -85,7 +85,7 @@ body.signin-page {
   object-fit: contain;
 }
 
-/* ── FORM ─────────────────────────────────────────────────── */
+/* ── FORM ─── */
 form {
   display: flex;
   flex-direction: column;
@@ -138,7 +138,7 @@ input {
   line-height: 24px;
   color: #4D4D4D;
   outline: none;
-  min-width: 0; /* prevents flex overflow */
+  min-width: 0; 
 }
 
 .icon {
