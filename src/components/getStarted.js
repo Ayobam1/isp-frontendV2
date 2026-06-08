@@ -8,6 +8,8 @@ import numberIcon from '../assets/startedcall.png';
 import residenceIcon from '../assets/residence.png';
 import expandArrow from '../assets/Expand Arrow.png';
 import { useNavigate } from 'react-router-dom';
+import { createRequest } from "../api/authService";
+
 
 
 const Started = () => {
@@ -141,40 +143,48 @@ const Started = () => {
         return Object.keys(newErrors).length === 0;
       };
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        if (validateForm()) {
-          setIsSubmitting(true);
-          
-          try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Show success popup
-            setShowPopup(true);
-            
-            // Reset form after successful submission
-            setFormData({
-              name: '',
-              phone: '',
-              email: '',
-              residence: '',
-              website: '',
-              location: '',
-              preferredPlan: 'Select a plan',
-            });
-            setTermsAgreed(false);
-          } catch (error) {
-            setErrors({
-              ...errors,
-              submit: 'An error occurred. Please try again.'
-            });
-          } finally {
-            setIsSubmitting(false);
-          }
-        }
-      };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const fullName = formData.name.trim().split(" ");
+
+    const payload = {
+      firstName: fullName[0] || "",
+      lastName: fullName.slice(1).join(" ") || "",
+      address: formData.address,
+      email: formData.email,
+      phoneNumber: formData.phone,
+      preferredPlan: formData.preferredPlan,
+      propertyType: "RESIDENTIAL",
+      location: formData.preferredLocation,
+      heardUs: formData.website || null
+    };
+
+   const response = await createRequest(payload);
+
+console.log(response);
+
+    console.log(response.data);
+
+    setShowPopup(true);
+
+  } catch (error) {
+    console.error(error);
+
+    setErrors({
+      submit:
+        error.response?.data?.message ||
+        "An error occurred. Please try again."
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
     
       const handleSignInClick = () => {
         navigate('/signin');

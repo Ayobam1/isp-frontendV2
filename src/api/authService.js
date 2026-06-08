@@ -19,3 +19,13 @@ export const logoutUser = async () => {
   const response = await axiosInstance.post("/auth/logout");
   return response.data;
 };
+
+export const getWalletBalance = async () => {
+  const response = await axiosInstance.get("/dashboard/wallet");
+  return response.data;
+};
+
+export const createRequest = async (payload) => {
+  const response = await axiosInstance.post("/requests", payload);
+  return response.data;
+};
