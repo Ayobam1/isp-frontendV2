@@ -115,13 +115,13 @@ const handleSubmit = async (e) => {
             </div>
             
             <div className="action-links">
-             <div 
+             {/* <div 
   className="forgot-password" 
   onClick={() => setShowForgotPassword(true)}
 >
   Forgot Password?
-</div>
-              <div className="retrieve-user">Retrieve User ID</div>
+</div> */}
+              {/* <div className="retrieve-user">Retrieve User ID</div> */}
               
               {/* Both submit and onClick will navigate to dashboard */}
              {error && <p style={{ color: "red" }}>{error}</p>}
@@ -144,17 +144,24 @@ const handleSubmit = async (e) => {
   onClose={() => setShowForgotPassword(false)} 
 />
         <div className="footer-links">
-          <div>Help and Support</div>
+         <div onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
+             Help and Support
+            </div>
           <div>FAQs</div>
           <div>Privacy Notice</div>
-         <div className="footer-link-clickable" onClick={() => navigate('/started')}>
-    Getting Started
-  </div>
         </div>
       </div>
       <div className="copyright">Copyright © 2024 Simplecall. All rights reserved</div>
     </div>
   );
 };
+
+<div> 
+
+</div>
+
+
+
+
 
 export default Sign;

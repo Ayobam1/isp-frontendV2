@@ -1,0 +1,339 @@
+.our-plans-wrapper {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.plans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.plan-card {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 2px 8px rgba(36, 74, 137, 0.2);
+}
+
+.plan-card-top-bar {
+  width: 100%;
+  height: 38px;
+  background: #7ec8e3;
+}
+
+.plan-card-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  background: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.plan-card-info {
+  padding: 24px;
+  box-sizing: border-box;
+  min-width: 0;
+  border-right: 1px solid #f0f0f0;
+}
+
+.plan-card-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #0c4381;
+  margin: 0 0 4px 0;
+}
+
+.plan-card-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+}
+
+.plan-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.plan-feature-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.plan-feature-row img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.plan-feature-row span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6b7280;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+  display: block;
+}
+
+.plan-speed {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+}
+
+.plan-card-icons {
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #f0f0f0;
+}
+
+.plan-icons-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plan-icons-row img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.plan-icons-row span {
+  font-size: 14px;
+  color: #1a1a1a;
+}
+
+.plan-card-price {
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.plan-price-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #1a1a1a;
+  text-align: center;
+  margin: 0;
+}
+
+.plan-buy-btn {
+  padding: 12px 32px;
+  background: #0c4381;
+  border: none;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.plan-buy-btn:hover {
+  background: #1d3c6f;
+}
+
+/* ── iPad (768px and below) ── */
+@media (max-width: 768px) {
+  .our-plans-wrapper {
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .plans-list {
+    gap: 16px;
+  }
+
+  .plan-card {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .plan-card-top-bar {
+    width: 100%;
+    height: 12px;        /* ← thinner bar per Figma */
+    background: #00adef;
+  }
+
+  /* Switch from 3-column grid to single column */
+  .plan-card-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Icons move to TOP of card body */
+  .plan-card-icons {
+    order: 0;
+    padding: 24px 24px 0px 24px;
+    border-right: none;
+    border-bottom: none;
+    justify-content: flex-start;
+    opacity: 0.6;        /* ← per Figma */
+  }
+
+  .plan-icons-row {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
+  .plan-icons-row img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .plan-icons-row span {
+    display: none;       /* ← hide the + signs on mobile per Figma */
+  }
+
+  /* Info section below icons */
+  .plan-card-info {
+    order: 1;
+    padding: 0px 24px 0px 24px;
+    border-right: none;
+  }
+
+  .plan-card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: #2e5b9a;
+    margin: 16.7px 0 0 0;
+  }
+
+  .plan-card-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #111827;
+    margin: 0.7px 0 0 0;
+  }
+
+  .plan-features {
+    gap: 0;
+    margin-bottom: 0;
+    padding-bottom: 17.45px;
+  }
+
+  .plan-feature-row {
+    display: block;      /* ← Figma shows features as plain text, no icons */
+  }
+
+  .plan-feature-row img {
+    display: none;       /* ← hide check icons on mobile per Figma */
+  }
+
+  .plan-feature-row span {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #6b7280;
+  }
+
+  .plan-speed {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  /* Price section at bottom with dashed border top */
+  .plan-card-price {
+    order: 2;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+    gap: 16px;
+    border-top: 1px dashed #d1d5db;  /* ← per Figma HorizontalBorder */
+    border-right: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .plan-price-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #001b3d;
+    text-align: center;
+    margin: 0 0 16px 0;
+  }
+
+  .plan-buy-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #001b3d;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .plan-buy-btn:hover {
+    background: #0c3366;
+    transform: none;
+  }
+}
+
+/* ── Mobile (480px and below) ── */
+@media (max-width: 480px) {
+  .our-plans-wrapper {
+    padding: 12px;
+  }
+
+  .plan-card-title {
+    font-size: 18px;
+  }
+
+  .plan-price-text {
+    font-size: 20px;
+  }
+
+  .plan-buy-btn {
+    font-size: 14px;
+  }
+}

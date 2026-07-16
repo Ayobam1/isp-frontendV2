@@ -1,3 +1,4 @@
+/* ── BASE STYLES ── */
 * {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
@@ -11,7 +12,7 @@ body.signin-page {
   overflow-x: hidden;
 }
 
-
+/* ── DESKTOP LAYOUT ── */
 .signin-container {
   position: relative;
   width: 100%;
@@ -25,7 +26,7 @@ body.signin-page {
   overflow: hidden;
 }
 
-/* Decorative triangle bottom corner */
+/* Decorative triangle */
 .signin-container::after {
   content: '';
   position: absolute;
@@ -37,7 +38,6 @@ body.signin-page {
   clip-path: polygon(0 100%, 100% 100%, 100% 0);
   z-index: 1;
 }
-
 
 .signin-box {
   position: relative;
@@ -52,25 +52,19 @@ body.signin-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
 }
 
-/* ── INNER CONTENT ────────────────────────────────────────── */
 .signin-content {
-  position: static;
   width: 100%;
   max-width: 670px;
-  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: clamp(20px, 3vh, 32px);
-  left: auto;
-  top: auto;
 }
 
-/* ── LOGO ─────────────────────────────────────────────────── */
+/* ── LOGO ── */
 .logo {
   width: clamp(90px, 12vw, 140px);
   height: auto;
@@ -85,7 +79,7 @@ body.signin-page {
   object-fit: contain;
 }
 
-/* ── FORM ─── */
+/* ── FORM ── */
 form {
   display: flex;
   flex-direction: column;
@@ -98,16 +92,12 @@ form {
 .form-group {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
   gap: 11px;
   width: 100%;
-  height: auto;
 }
 
 label {
   width: 100%;
-  height: auto;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: clamp(14px, 1.5vw, 18px);
@@ -138,7 +128,7 @@ input {
   line-height: 24px;
   color: #4D4D4D;
   outline: none;
-  min-width: 0; 
+  min-width: 0;
 }
 
 .icon {
@@ -156,7 +146,7 @@ input {
   object-fit: contain;
 }
 
-/* ── ACTION LINKS (forgot, button, signup) ────────────────── */
+/* ── ACTION LINKS ── */
 .action-links {
   display: flex;
   flex-direction: column;
@@ -164,18 +154,15 @@ input {
   gap: clamp(12px, 1.8vh, 16px);
   width: 100%;
   max-width: 316px;
-  height: auto;
   margin: clamp(16px, 2.5vh, 30px) auto 0 auto;
 }
 
 .forgot-password,
 .retrieve-user {
   width: 100%;
-  height: auto;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: clamp(13px, 1.3vw, 16px);
-  line-height: 1.4;
   text-align: center;
   color: #21409A;
   cursor: pointer;
@@ -188,11 +175,8 @@ input {
 
 .login-button {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 12px 67px;
-  gap: 10px;
   width: 100%;
   max-width: 316px;
   height: clamp(50px, 7vh, 60px);
@@ -202,8 +186,6 @@ input {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: clamp(14px, 1.4vw, 16px);
-  line-height: 24px;
-  text-align: center;
   color: #FFFFFF;
   cursor: pointer;
   margin-top: clamp(8px, 1.5vh, 14px);
@@ -214,13 +196,16 @@ input {
   background: #0ba7d8;
 }
 
+.login-button:disabled {
+  background: #95e5fb;
+  cursor: not-allowed;
+}
+
 .signup-prompt {
   width: 100%;
-  height: auto;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: clamp(13px, 1.3vw, 16px);
-  line-height: 1.4;
   text-align: center;
   color: #000000;
   margin-top: clamp(6px, 1vh, 10px);
@@ -230,15 +215,13 @@ input {
   color: #21409A;
   cursor: pointer;
   font-weight: 500;
-  text-decoration: none;
-  transition: text-decoration 0.2s ease;
 }
 
 .get-started:hover {
   text-decoration: underline;
 }
 
-/* ── FOOTER LINKS ─────────────────────────────────────────── */
+/* ── FOOTER LINKS ── */
 .footer-links {
   display: flex;
   flex-direction: row;
@@ -248,18 +231,13 @@ input {
   gap: clamp(16px, 4vw, 60px);
   width: 100%;
   max-width: 670px;
-  height: auto;
   margin-top: clamp(24px, 4vh, 48px);
-  position: static;
-  left: auto;
-  top: auto;
 }
 
 .footer-links div {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: clamp(12px, 1.2vw, 16px);
-  line-height: 1.4;
   color: #000000;
   cursor: pointer;
   white-space: nowrap;
@@ -269,23 +247,19 @@ input {
   text-decoration: underline;
 }
 
-/* ── COPYRIGHT ────────────────────────────────────────────── */
+/* ── COPYRIGHT ── */
 .copyright {
-  position: static;
   width: 100%;
   text-align: center;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: clamp(11px, 1.1vw, 16px);
-  line-height: 1.5;
-  color: #E4F6F7;
+  color: #000000;
   margin-top: clamp(16px, 3vh, 32px);
   z-index: 2;
-  left: auto;
-  bottom: auto;
 }
 
-/* ── TABLET (iPad, ≤1024px) ───────────────────────────────── */
+/* ── LAPTOP (max-width: 1024px) ── */
 @media (max-width: 1024px) {
   .signin-box {
     padding: 48px 40px 40px;
@@ -300,63 +274,187 @@ input {
   }
 }
 
-/* ── MOBILE (≤768px) ──────────────────────────────────────── */
+/* ── iPAD / MOBILE (max-width: 768px) ── */
 @media (max-width: 768px) {
   .signin-container {
-    padding: 32px 16px 48px;
+    padding: 0;
     justify-content: flex-start;
+    background: #F8F9FA;
+    min-height: 100vh;
+  }
+
+  /* Remove triangle on mobile */
+  .signin-container::after {
+    display: none;
   }
 
   .signin-box {
-    padding: 32px 20px 28px;
-    border-radius: 8px;
+    width: 100%;
+    max-width: 448px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 64px 32px 40px;
+    border-radius: 0;
+    box-shadow: none;
+    background: #F8F9FA;
+    align-items: flex-start;
   }
 
+  .signin-content {
+    width: 100%;
+    max-width: 326px;
+    align-items: flex-start;
+    margin: 0 auto;
+  }
+
+  /* Logo — centered */
   .logo {
-    width: clamp(80px, 28vw, 120px);
+    width: 140px;
+    height: 98px;
+    margin: 0 auto 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Heading and subtext per Figma */
+  form {
+    max-width: 326px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 24px;
+  }
+
+  .form-group {
+    gap: 8px;
+    width: 100%;
   }
 
   label {
-    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #434750;
+    padding: 0 4px;
   }
 
+  /* Input box — white card style per Figma */
   .input-field {
-    height: 48px;
-    padding: 12px 16px;
+    position: relative;
+    width: 100%;
+    height: 55px;
+    background: #FFFFFF;
+    box-shadow: 0px 8px 24px rgba(25, 28, 29, 0.06);
+    border-radius: 12px;
+    padding: 18px 16px 18px 48px;
+    gap: 12px;
   }
 
   input {
-    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #191C1D;
   }
 
+  input::placeholder {
+    color: #C3C6D2;
+  }
+
+  .icon {
+    position: absolute;
+    left: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Sign in button — dark gradient per Figma */
   .action-links {
-    max-width: 100%;
+    max-width: 326px;
     width: 100%;
+    margin: 0 auto;
+    gap: 16px;
   }
 
   .login-button {
-    max-width: 100%;
     width: 100%;
-    border-radius: 10px;
+    max-width: 326px;
+    height: 56px;
+    background: linear-gradient(99.75deg, #0C4381 0%, #2E5B9A 100%);
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow:
+      0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
   }
 
+  .login-button:hover {
+    opacity: 0.95;
+    background: linear-gradient(99.75deg, #0C4381 0%, #2E5B9A 100%);
+  }
+
+  .signup-prompt {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #434750;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Footer links — stacked 2x2 per Figma */
   .footer-links {
-    gap: 16px;
-    margin-top: 20px;
+    max-width: 326px;
+    width: 100%;
+    margin: 64px auto 0 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    padding-top: 32px;
+    border-top: 1px solid #E7E8E9;
   }
 
   .footer-links div {
-    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #434750;
+    width: calc(50% - 12px);     /* ← 2 per row per Figma */
+    text-align: center;
   }
 
+  /* Copyright */
   .copyright {
-    font-size: 12px;
-    margin-top: 20px;
-    color: #b0d8e8;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #C3C6D2;
+    text-align: center;
+    margin-top: 24px;
+    width: 100%;
+    max-width: 326px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
-/* ── LARGE MONITOR (1440px+) ──────────────────────────────── */
+/* ── SMALL PHONES (max-width: 400px) ── */
+@media (max-width: 400px) {
+  .signin-box {
+    padding: 48px 20px 32px;
+  }
+
+  .footer-links div {
+    font-size: 14px;
+  }
+}
+
+/* ── LARGE MONITOR (1440px+) ── */
 @media (min-width: 1440px) {
   .signin-container {
     padding: 129px 40px;

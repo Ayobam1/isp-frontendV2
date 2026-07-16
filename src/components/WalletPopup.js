@@ -1,110 +1,82 @@
-import React,{useState} from 'react';
-import mastercardlogo from '../assets/logos_mastercard.png';
-import cardlogo from '../assets/cardlogo.png';
-import CloseIcon from '../assets/closeicon.png';
+import React from 'react';
 import './WalletPopup.css';
+import bankWallet from '../assets/Bank wallet.png';
+import walletSolution from '../assets/walletsolution.png';
+import copyIcon from '../assets/copyicon.png';
 
-const WalletPopup = ({ isOpen, onClose }) => {
-  const [amount, setAmount] = useState('');
-  const [selectedCard, setSelectedCard] = useState(null);
-
-  
+const WalletPopup = ({ isOpen, onClose, accountNumber, accountName, bankName }) => {
   if (!isOpen) return null;
 
-  const handleAmountChange = (e) => {
-    setAmount(e.target.value);
-  };
-
-  const handleCardSelect = () => {
-    setSelectedCard(selectedCard === 'mastercard' ? null : 'mastercard');
-  };
-
-  const handleCancel = () => {
-    onClose();
-  };
-
-  const handleContinue = () => {
-    // Proceed with wallet funding logic
-    // Optionally close the popup after successful funding
-    onClose();
+  const handleCopy = () => {
+    navigator.clipboard.writeText(accountNumber);
+    alert("Account number copied!");
   };
 
   return (
-    <div className="wallet-popup-overlay">
-      <div className="wallet-popup-container">
-        <button className="close-button" onClick={onClose}>
-          <img src={CloseIcon} alt="Close" />
-        </button>
-        
+    <div className="wallet-overlay" onClick={onClose}>
+      <div className="fund-wallet" onClick={e => e.stopPropagation()}>
+
+        {/* Header */}
         <div className="wallet-header">
-          <h1>Fund Wallet</h1>
-          <p>Select Prepaid card type</p>
-        </div>
-
-        <div className="amount-section">
-          <label htmlFor="amount">Amount</label>
-          <div className="input-container">
-            <input 
-              type="text" 
-              id="amount"
-              value={amount}
-              onChange={handleAmountChange}
-              placeholder="Enter amount"
-              className="amount-input"
-            />
+          <div>
+            <h2>Fund Wallet</h2>
+            <p>Transfer funds to your wallet</p>
           </div>
+          <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <div className="card-selection">
-          <div className="card-option">
-            <div className="checkbox-container">
-              <input 
-                type="checkbox" 
-                id="mastercard"
-                checked={selectedCard === 'mastercard'}
-                onChange={handleCardSelect}
-              />
-              <label htmlFor="mastercard" className="card-label">
-                <img 
-                  src={mastercardlogo} 
-                  alt="Mastercard Logo" 
-                  className="card-logo"
-                />
-                Mastercard
-              </label>
+        {/* Body */}
+        <div className="body">
+          <div className="info-alert">
+            <span className="info-icon">ℹ️</span>
+            <p>
+              Transfer the desired amount to the account details below. Your wallet will be
+              updated automatically once the transaction is confirmed.
+            </p>
+          </div>
+
+          <div className="details-grid">
+            {/* Bank Name */}
+            <div className="detail-item">
+              <label>BANK NAME</label>
+              <div className="detail-box">
+                <span>{bankName}</span>
+              </div>
+            </div>
+
+            {/* Account Number */}
+            <div className="detail-item">
+              <label>ACCOUNT NUMBER</label>
+              <div className="account-box">
+                <span className="account-number">{accountNumber}</span>
+                <button className="copy-btn" onClick={handleCopy}>
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            {/* Account Name */}
+            <div className="detail-item">
+              <label>ACCOUNT NAME</label>
+              <div className="detail-box">
+                <span>{accountName}</span>
+              </div>
             </div>
           </div>
 
-          <div className="card-option add-new-card">
-            <div className="checkbox-container">
-              <label htmlFor="newcard" className="card-label">
-                <img 
-                  src={cardlogo} 
-                  alt="Add New Card" 
-                  className="card-logo"
-                />
-                Add new card details to your Account
-              </label>
+          {/* Illustration */}
+          <div className="illustration">
+            <div className="overlay">
+              Secure Payment Processing via IMBIL Network Gateway
             </div>
           </div>
+
+          {/* Footer Button */}
+          <button className="done-btn" onClick={onClose}>Done</button>
         </div>
 
-        <div className="action-button">
-          <button 
-            className="btn btn-cancel"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-          <button 
-            className="btn btn-continue"
-            onClick={handleContinue}
-          >
-            Continue
-          </button>
-        </div>
-      </div>
-    </div>
+      </div>  
+    </div>    
   );
 };
 

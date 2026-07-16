@@ -231,17 +231,25 @@ const goToTestimonialSlide = (index) => {
             </div>
         
           </div>
-
-         <div className="middle-content">
+          
+<div className="middle-content">
   <div className="frame-210">
-    <div className="location-label">LOCATION</div>
+
+    {/* Icon + label row — shows on mobile above the input */}
+    <div className="location-label-row">
+      <div className="frame-6home">
+        <img src={locationIcon} alt="Icon" className="location-iconhome" />
+      </div>
+      <div className="location-label">LOCATION</div>
+    </div>
+
+    {/* Input box */}
     <div className="frame-160">
       <div className="location-placeholder">Enter your Location</div>
       <img src={locationDropdown} alt="dropdown" className="locationdropdown-icon" />
     </div>
+
   </div>
-  <div className="frame-213"></div>
-  <div className="frame-233"></div>
 </div>
 
           <div className="right-content">
@@ -395,9 +403,9 @@ const goToTestimonialSlide = (index) => {
       </div>
       </div>
 
-      <div className="our-plans-container section-spacer">
-      <OurPlans />
-      </div>
+<div className="our-plans-container">
+  <OurPlans />
+</div>
 
       <div className="customer-stories-container">
   <div className="customer-stories-bg"></div>

@@ -8,9 +8,9 @@ export const loginUser = async (username, password) => {
 
   const { accessToken, refreshToken, data } = response.data;
 
-  localStorage.setItem("token", accessToken);
+  localStorage.setItem("token", response.data.accessToken);
   localStorage.setItem("refreshToken", refreshToken);
-  localStorage.setItem("currentUser", JSON.stringify(data));
+  localStorage.setItem("currentUser", JSON.stringify(response.data.data));
 
   return response.data;
 };

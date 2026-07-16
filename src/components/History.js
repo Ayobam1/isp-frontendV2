@@ -69,8 +69,7 @@ const History = () => {
 
     const handleBuyClick = (bundletransaction) => {
     console.log('Buy clicked for:', bundletransaction.bundleName);
-    // Navigate to BuyBundle page
-    // You can also pass data as state if needed
+    
     navigate('/buybundle', { 
       state: { 
         bundle: bundletransaction 
@@ -83,7 +82,6 @@ const History = () => {
     return <div className="loading">Loading...</div>;
   }
 
-  // If no user data found and not in dev mode
   if (!userData && !DEV_MODE) {
     return (
       <div className="error-container">
@@ -354,7 +352,7 @@ const History = () => {
               </div>
             </div>
             
-            {/* Pagination - Now with prev and next on opposite sides */}
+            {/* Pagination */}
             <div className="pagination">
               <div className="pagination-content">
                 <div className="prev-btn">
@@ -433,7 +431,7 @@ const History = () => {
               </div>
             </div>
             
-            {/* Pagination - Now with prev and next on opposite sides */}
+            {/* Pagination  */}
             <div className="pagination">
               <div className="pagination-content">
                 <div className="prev-btn">

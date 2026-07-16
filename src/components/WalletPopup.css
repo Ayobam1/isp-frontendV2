@@ -1,207 +1,192 @@
-/* Popup Overlay */
-.wallet-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.wallet-popup-container {
-  position: relative;
-  width: 647px;
-  background: #FFFFFF;
-  border-radius: 10px;
-  padding: 48px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-height: 60vh;
+.fund-wallet {
+  max-width: 448px;
+  max-height: 90vh;
   overflow-y: auto;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(25, 28, 29, 0.12);
+  overflow: hidden;
+  font-family: Inter, sans-serif;
 }
 
-/* Wallet Content */
-.wallet-content {
-  padding: 48px;
+/* HEADER */
+
+.wallet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 8px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #191c1d;
+}
+
+.header p {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #434750;
+}
+
+.close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* BODY */
+
+.body {
+  padding: 24px;
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
-/* Close Button */
-.close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 10;
+/* INFO ALERT */
+
+.info-alert {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(196, 212, 253, 0.3);
+  border-radius: 8px;
 }
 
-.close-button img {
-  width: 24px;
-  height: 24px;
-}
-
-/* Wallet Header */
-.wallet-header {
-  margin-bottom: 30px;
-}
-
-.wallet-header h1 {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 26px;
-  color: #000000;
-  margin: 0 0 5px 0;
-}
-
-.wallet-header p {
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #939292;
+.info-alert p {
   margin: 0;
+  font-size: 12px;
+  line-height: 20px;
+  color: #4b5b7e;
 }
 
-/* Amount Section */
-.amount-section {
-  margin-bottom: 20px;
+.info-icon {
+  font-size: 16px;
 }
 
-.amount-section label {
+/* DETAILS */
+
+.details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-item label {
   display: block;
-  margin-bottom: 5px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(67, 71, 80, 0.7);
+}
+
+.detail-box,
+.account-box {
+  background: #f3f4f5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 100%;       
+  box-sizing: border-box; 
+}
+
+.detail-box {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
   font-size: 16px;
+  font-weight: 600;
+  color: #191c1d;
 }
 
-.input-container {
-  border: 1px solid #AAB0BD;
-  border-radius: 4px;
-  padding: 16px 20px;
+.account-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.amount-input {
-  width: 100%;
+.account-number {
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #0c4381;
+}
+
+.copy-btn {
   border: none;
-  outline: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-}
-
-/* Card Selection */
-.card-selection {
-  margin-bottom: 40px;
-}
-
-.card-option {
-  background: #F3F5F8;
-  border: 1px solid #AAB0BD;
-  border-radius: 4px;
-  padding: 16px 20px;
-  margin-bottom: 15px;
-}
-
-.checkbox-container {
-  display: flex;
-  align-items: center;
-}
-
-.card-label {
-  display: flex;
-  align-items: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-}
-
-.card-logo {
-  width: 31px;
-  height: 24px;
-  margin-right: 12px;
-  object-fit: contain;
-}
-
-/* Action Buttons */
-.action-button {
-  display: flex;
-  justify-content: center;
-  gap: 39px;
-  top: 380px;
-}
-
-.btn {
-  width: 242px;
-  height: 60px;
-  border-radius: 10px;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.btn-cancel {
-  background: white;
-  border: 1px solid #E1E2E3;
-  color: #000000;
-}
-
-.btn-continue {
-  background: #21409A;
+  background: #0c4381;
   color: white;
-  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-/* Checkbox Styling */
-input[type="checkbox"] {
-  width: 24px;
-  height: 24px;
-  margin-right: 12px;
-  appearance: none;
-  border: 1.5px solid #003066;
-  border-radius: 4px;
-  cursor: pointer;
+/* ILLUSTRATION */
+
+.illustration {
+  height: 96px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-image: url("https://images.unsplash.com/photo-1556740749-887f6717d7e4");
+  background-size: cover;
+  background-position: center;
   position: relative;
 }
 
-input[type="checkbox"]:checked {
-  background-color: white;
-}
-
-input[type="checkbox"]:checked::before {
-  content: '✔';
+.overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #003066;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #d6e3ff;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 27, 61, 0.8) 0%,
+    rgba(0, 27, 61, 0) 100%
+  );
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .wallet-popup-container {
-    width: 95%;
-    max-width: 95%;
-  }
+.wallet-overlay {
+  position: fixed;
+  inset: 0;                          /* top/right/bottom/left: 0 */
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;                     /* prevents clipping on small screens */
+}
 
-  .wallet-content {
-    padding: 30px 20px;
-  }
+/* BUTTON */
 
-  .action-buttons {
-    flex-direction: column;
-    gap: 15px;
-  }
+.done-btn {
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0c4381 0%, #2e5b9a 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow:
+    0 10px 15px -3px rgba(12, 67, 129, 0.2),
+    0 4px 6px -4px rgba(12, 67, 129, 0.2);
+}
 
-  .btn {
-    width: 100%;
-  }
+.done-btn:hover {
+  opacity: 0.95;
 }

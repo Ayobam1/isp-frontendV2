@@ -20,13 +20,12 @@
 .logout-popup-alert-icon {
   width: 42px;
   height: 42px;
-  /* remove position: absolute, left, top */
 }
 
 .logout-popup-alert-icon img {
   width: 100%;
   height: 100%;
-  /* remove position: absolute */
+  
 }
   
   .logout-popup-content {

@@ -102,13 +102,13 @@ const Started = () => {
 
       const togglePlanDropdown = () => {
         setPlanDropdownOpen(!planDropdownOpen);
-        // Close the other dropdown if it's open
+       
         if (planDropdownOpen) setLocationDropdownOpen(false); 
     };
 
       const toggleLocationDropdown = () => {
         setLocationDropdownOpen(!locationDropdownOpen);
-        // Close the other dropdown if it's open
+        
         if (locationDropdownOpen) setLocationDropdownOpen(false);
       };
 
@@ -195,7 +195,7 @@ console.log(response);
 
       const navigateToSignin = () => {
         console.log('Navigating to signin...');
-        // Uncomment this line for React Router
+       
         navigate('/signin');
         
       
@@ -206,6 +206,9 @@ console.log(response);
     return (
 
         <div className='get-started-container'>
+            <div className="frame-168-mobile">
+      <button className="hero-close-btn" onClick={() => navigate('/home')}>✕</button>
+    </div>
           <div className="frame-241">
           <div className="frame-208">
             <div className="frame-215">
@@ -435,9 +438,9 @@ console.log(response);
   </div>
 </div>
         </div>
-            <div className='frame-168'>
 
-            </div>
+              <div className="frame-168-desktop"></div>
+
             <SuccessPopup 
         isOpen={showPopup} 
         onClose={handleClosePopup} 
