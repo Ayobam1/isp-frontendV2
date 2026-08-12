@@ -8,6 +8,9 @@ import Subscriptions from './components/Subscriptions';
 import Support from './components/Support';
 import History from './components/History';
 import Buybundle from './components/Buybundle';
+import GetStartedForm from './components/getStartedForm';
+import GetStartedVerification from './components/getStartedVerification';
+import GetStartedPayment from './components/getStartedPayment';
 // import Payments from './components/Payments';
 
 function App() {
@@ -23,6 +26,11 @@ function App() {
         <Route path="/support" element={<Support />} />
         <Route path="/history" element={<History />} />
         <Route path="/buybundle" element={<Buybundle />} />
+        <Route path="/getstartedform" element={<GetStartedForm />} />
+        <Route path="/verification" element={<GetStartedVerification />} />
+         <Route path="/verifypayment" element={<GetStartedPayment />} />
+
+
         {/* <Route path="/payments" element={<Payments />} /> */}
       </Routes>
     </Router>

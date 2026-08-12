@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import logoImage from '../assets/IMBIL LOGO.png';
 import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNavigation = (path) => {
     setMenuOpen(false);
     navigate(path);
   };
+
+  const handleSectionNav = (sectionId) => {
+  if (location.pathname === '/home') {
+    // Already on Home
+    const element = document.getElementById(sectionId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  } else {
+    // Go to Home first
+    navigate('/home', {
+      state: {
+        scrollTo: sectionId,
+      },
+    });
+  }
+};
 
   return (
     <header className="header">
@@ -25,9 +47,9 @@ const Header = () => {
         <nav className="desktop-nav">
           <div className="nav-items-container">
             <button className="nav-item" onClick={() => handleNavigation('/home')}>Home</button>
-            <button className="nav-item">Our Plans</button>
-            <button className="nav-item">Contact Us</button>
-            <button className="nav-item">FAQ</button>
+            <button className="nav-item" onClick={() => handleSectionNav('our-plans')}>Our Plans</button>
+            <button className="nav-item" onClick={() => handleSectionNav('contact-us')}>Contact Us</button>
+            <button className="nav-item" onClick = {() => handleSectionNav('faq')}>FAQ</button>
             <button className="big-button2" onClick={() => handleNavigation('/started')}>
               <span className="button-text2">Get Started</span>
             </button>

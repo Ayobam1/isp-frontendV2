@@ -29,3 +29,20 @@ export const createRequest = async (payload) => {
   const response = await axiosInstance.post("/requests", payload);
   return response.data;
 };
+
+export const verifyAddressAndGetPaymentLink = async (requestId, payload) => {
+  const response = await axiosInstance.post(
+    `/requests/${requestId}/verify-address-get-payment-link`,
+    payload
+  );
+  return response.data;
+};
+
+export const cancelSubscription = (subscriptionID, planType) => {
+  return axiosInstance.post(`/subscription/${subscriptionID}/cancel`, { planType });
+};
+
+// authService.js
+export const reactivateSubscription = (subscriptionID, planType) => {
+  return axiosInstance.post(`/subscription/${subscriptionID}/reactivate`, { planType });
+};

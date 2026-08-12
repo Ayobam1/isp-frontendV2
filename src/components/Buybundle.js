@@ -18,14 +18,15 @@ const Buybundle = () => {
       const [isLoading, setIsLoading] = useState(true);
       const [selectedPeriod, setSelectedPeriod] = useState('Last 30 days');
       const [activeTab, setActiveTab] = useState('current'); 
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
       useEffect(() => {
     
         console.log("Dashboard component mounted");
-      console.log("Auth token:", localStorage.getItem('authToken'));
+      console.log("Auth token:", localStorage.getItem('token'));
       console.log("Current user data:", localStorage.getItem('currentUser'));
     
-        const authToken = localStorage.getItem('authToken');
+        const authToken = localStorage.getItem('token');
         if (!authToken) {
           navigate('/signin');
           return;
@@ -62,44 +63,62 @@ const Buybundle = () => {
       };
     
 
-    const data = [
-    {
-      id: 1,
-      bundleName: "Imbil Standard",
-      amount: "₦15,600",
-      description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-    },
-    {
-      id: 2,
-      bundleName: "Imbil Standard",
-      amount: "₦30,000",
-      description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-    },
-    {
-      id: 3,
-      bundleName: "Imbil Standard",
-      amount: "₦13,500",
-      description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-    },
-    {
-      id: 4,
-      bundleName: "Imbil Standard",
-      amount: "₦42,500",
-      description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-    },
-    {
-      id: 5,
-      bundleName: "Imbil Standard",
-      amount: "₦18,900",
-      description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-    },
-    {
-      id: 6,
-      bundleName: "Imbil Standard",
-      amount: "₦9,000",
-      description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-    }
-  ];
+   const data = [
+  {
+    id: 1,
+    bundleName: "Imbil Standard",
+    amount: "₦48,375",
+    speed: "15mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: "Bestseller",
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+  },
+  {
+    id: 2,
+    bundleName: "Imbil Premium",
+    amount: "₦64,500",
+    speed: "30mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: null,
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+  },
+  {
+    id: 3,
+    bundleName: "Imbil Basic",
+    amount: "₦26,875",
+    speed: "5mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: null,
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+  },
+  {
+    id: 4,
+    bundleName: "Imbil Standard",
+    amount: "₦42,500",
+    speed: "15mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: null,
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+  },
+  {
+    id: 5,
+    bundleName: "Imbil Classic",
+    amount: "₦18,900",
+    speed: "8mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: null,
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+  },
+  {
+    id: 6,
+    bundleName: "Imbil Standard",
+    amount: "₦9,000",
+    speed: "15mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: null,
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+  }
+];
     
       const handleDashboardClick = () => {
   
@@ -122,7 +141,7 @@ const Buybundle = () => {
       };
     
       const handleLogout = () => {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
         localStorage.removeItem('currentUser');
         navigate('/signin');
       };
@@ -159,55 +178,51 @@ const Buybundle = () => {
 
      return (
 <div className='bundles-container'>
-      <div className="side-menu">
-    <div className="logo">
-      <div className="logo-image">
-      <img src={dashboardLogo} alt="Name"/>
-      </div>
-    </div>
+    <div className={`bb-side-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+  <button className="bb-mobile-menu-close" onClick={() => setMobileMenuOpen(false)}>✕</button>
+  <div className="bb-logo">
+    <div className="bb-logo-image"><img src={dashboardLogo} alt="Name"/></div>
+  </div>
 
-    <div className="menu-items">
-      <div className="menu-item active" onClick={handleDashboardClick}>
-        <div className="menu-icon">
-          <img src={dashboardicon} alt="Dashboard" />
-        </div>
-        <span>Dashboard</span>
-        <div className="active-indicator"></div>
-      </div>
-      <div className="menu-item" onClick={handleSubscriptionsClick}>
-        <div className="menu-icon">
-          <img src={subscriptionicon} alt="Subscriptions" />
-        </div>
-        <span>Subscriptions</span>
-      </div>
-      <div className="menu-item" onClick={handleHistoryClick}>
-        <div className="menu-icon">
-          <img src={historyicon} alt="History" />
-        </div>
-        <span>History</span>
-        <div className="chevron-icon"></div>
-      </div>
+  <div className="bb-menu-items">
+    <div className="bb-menu-item active" onClick={handleDashboardClick}>
+      <div className="bb-menu-icon"><img src={dashboardicon} alt="Dashboard" /></div>
+      <span>Dashboard</span>
+      <div className="bb-active-indicator"></div>
     </div>
+    <div className="bb-menu-item" onClick={handleSubscriptionsClick}>
+      <div className="bb-menu-icon"><img src={subscriptionicon} alt="Subscriptions" /></div>
+      <span>Subscriptions</span>
+    </div>
+    <div className="bb-menu-item" onClick={handleHistoryClick}>
+      <div className="bb-menu-icon"><img src={historyicon} alt="History" /></div>
+      <span>History</span>
+      <div className="bb-chevron-icon"></div>
+    </div>
+  </div>
 
-    <div className="bottom-menu-items">
-      <div className="menu-item" onClick={handleSupportClick}>
-        <div className="menu-icon">
-          <img src={supporticon} alt="Support" />
-        </div>
-        <span>Support</span>
-      </div>
-      <div className="menu-item" onClick={handleLogout}>
-        <div className="menu-icon">
-          <img src={logouticon} alt="Logout" />
-        </div>
-        <span>Logout</span>
-      </div>
+  <div className="bb-bottom-menu-items">
+    <div className="bb-menu-item" onClick={handleSupportClick}>
+      <div className="bb-menu-icon"><img src={supporticon} alt="Support" /></div>
+      <span>Support</span>
     </div>
+    <div className="bb-menu-item" onClick={handleLogout}>
+      <div className="bb-menu-icon"><img src={logouticon} alt="Logout" /></div>
+      <span>Logout</span>
     </div>
+  </div>
+</div>
+
+{mobileMenuOpen && (
+  <div className="bb-mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)} />
+)}
 
 
     <div className='bundles-main-container'>
         <div className="top-bar">
+           <button className="hamburger-btn-bb" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+    <span></span><span></span><span></span>
+  </button>
             <div className="search-bar">
               <input type="text" placeholder="Search" />
               <div className="search-icon"></div>
@@ -290,7 +305,51 @@ const Buybundle = () => {
         </div>
       </div>
     </div>
+{/* ── Mobile Hero + Cards ── */}
+<div className="bb-mobile-main">
+  <div className="bb-hero">
+    <div className="bb-hero-badge">Data Plans</div>
+    <h2 className="bb-hero-title">Buy Data Bundle</h2>
+    <p className="bb-hero-subtitle">
+      Select a plan tailored to your digital lifestyle. Experience the Responsive Sentinel speed.
+    </p>
+  </div>
 
+  <div className="bb-bundle-list">
+  {data.map((item) => (
+    <div key={item.id} className="bb-bundle-card">
+      <div className="bb-bundle-top">
+        <div className="bb-bundle-info">
+          <div className="bb-bundle-name-row">
+            <h3 className="bb-bundle-name">{item.bundleName}</h3>
+            {item.badge && <span className="bb-bundle-badge">{item.badge}</span>}
+          </div>
+          <span className="bb-bundle-price">{item.amount}</span>
+        </div>
+      </div>
+      <div className="bb-bundle-features">
+        <div className="bb-feature-row">
+          <span className="bb-feature-dot"></span>
+          <span className="bb-feature-text">{item.speed}</span>
+        </div>
+        <div className="bb-feature-row">
+          <span className="bb-feature-dot"></span>
+          <span className="bb-feature-text">Validity: {item.validity}</span>
+        </div>
+      </div>
+      <button className="bb-buy-btn" onClick={() => handleBuyClick(item)}>
+        Buy Now
+      </button>
+    </div>
+  ))}
+</div>
+
+  <div className="bb-custom-banner">
+  <h4 className="bb-custom-title">Need a custom plan for your business?</h4>
+  <p className="bb-custom-text">Dedicated bandwidth for professionals.</p>
+  <button className="bb-custom-btn">Contact Sales</button>
+</div>
+</div>
     </div>
 </div>
 

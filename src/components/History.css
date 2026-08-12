@@ -15,7 +15,7 @@
 }
 
 /* Side Menu Styles */
-.side-menu {
+.hist-side-menu {
   position: fixed; 
   top: 0;
   left: 0;
@@ -29,15 +29,19 @@
   overflow-y: auto; 
   z-index: 1000; 
   }
+
+  .hist-mobile-menu-close {
+  display: none;
+}
   
-  .logo {
+  .hist-logo {
     padding: 34px 0;
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
-  .logo-image {
+  .hist-logo-image {
     width: 106px;
     height: 60px;
     color: white;
@@ -47,13 +51,13 @@
     font-weight: bold;
   }
   
-  .menu-items {
+  .hist-menu-items {
     display: flex;
     flex-direction: column;
     margin-top: 60px;
   }
   
-  .menu-item {
+  .hist-menu-item {
     position: relative;
     width: 100%;
     height: 56px;
@@ -63,23 +67,23 @@
     cursor: pointer;
   }
   
-  .menu-item:hover {
+  .hist-menu-item:hover {
       background-color: rgba(228, 246, 247, 0.2); 
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
     
    
-    .menu-item.active:hover {
+    .hist-menu-item.active:hover {
       background: #E4F6F7;
     }
   
-  .menu-item.active {
+  .hist-menu-item.active {
     background: #E4F6F7;
     color: #000000;
   }
   
-  .active-indicator {
+  .hist-active-indicator {
     position: absolute;
     width: 6px;
     height: 56px;
@@ -88,7 +92,7 @@
     background: #92B6AA;
   }
   
-  .menu-icon {
+  .hist-menu-icon {
     width: 24px;
     height: 24px;
     margin-right: 10px;
@@ -118,7 +122,7 @@
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E") no-repeat center;
   }
   
-  .bottom-menu-items {
+  .hist-bottom-menu-items {
       margin-top: auto;
       margin-bottom: 20px;
       position: absolute;
@@ -140,7 +144,7 @@
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z'/%3E%3C/svg%3E") no-repeat center;
   }
   
-  .live-chat-container {
+  .hist-live-chat-container {
     position: absolute;
     bottom: 30px;
     left: 20px;
@@ -158,12 +162,12 @@
     transition: transform 0.2s ease, background-color 0.3s ease;
   }
   
-  .live-chat-container:hover {
+  .hist-live-chat-container:hover {
       background: #0066CC; 
       transform: rotate(-10deg) scale(1.05); 
     }
   
-  .live-chat-icon {
+  .hist-live-chat-icon {
     width: 100px;
     height: 100px;
     background-color: #FFFFFF; 
@@ -679,4 +683,376 @@
   align-items: center;
   gap: 8px;
   white-space: nowrap;
+}
+
+/* ── HAMBURGER — hidden on desktop ── */
+.hamburger-btn-history {
+  display: none;
+}
+
+.mobile-menu-close {
+  display: none;
+}
+
+.mobile-menu-overlay {
+  display: none;
+}
+
+/* ── Mobile tab switcher — hidden on desktop ── */
+.mobile-tab-switcher {
+  display: none;
+}
+
+/* ── Mobile cards — hidden on desktop ── */
+.mobile-transaction-cards {
+  display: none;
+}
+
+.history-subtitle {
+  display: none;
+}
+
+
+/* ── MOBILE (max-width: 768px) ── */
+@media (max-width: 768px) {
+
+  .history-container {
+    flex-direction: column;
+    background: #F8F9FA;
+  }
+
+  /* ── Sidebar hidden by default ── */
+  .hist-side-menu {
+    display: none !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 200;
+    background: #21409A;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+  .hist-side-menu.mobile-open {
+    display: flex !important;
+  }
+
+  .hist-mobile-menu-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 201;
+  }
+
+  .hist-mobile-menu-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+  }
+
+  /* ── Main content ── */
+  .history-content-container {
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+    padding: 0 0 96px 0;
+    background: #F8F9FA;
+  }
+
+  /* ── Top bar — light per Figma ── */
+  .top-bar {
+    width: 100%;
+    height: 74px;
+    background: #F8F9FA;
+    padding: 16px 24px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    order: 1 ;
+  }
+
+  /* ── Hamburger ── */
+  .hamburger-btn-history {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 16px;
+    height: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .hamburger-btn-history span {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: #0C4381;
+    border-radius: 2px;
+  }
+
+  /* ── Hide search bar ── */
+  .search-bar {
+    display: none !important;
+  }
+
+  .user-section {
+    justify-content: flex-end;
+    gap: 16px;
+  }
+
+  /* ── Page title ── */
+  .transaction-title {
+    position: static;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    padding: 16px 20px 8px;
+    box-sizing: border-box;
+    order: 2;
+  }
+
+  .transaction-title h1 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 36px;
+    letter-spacing: -0.75px;
+    color: #191C1D;
+    width: 100%;
+    height: auto;
+  }
+
+  .history-subtitle {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #434750;
+    margin-top: 8px;
+    max-width: 280px;
+  }
+
+  /* ── History header — hide desktop filters ── */
+  .history-header {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+    align-items: flex-start;
+    order:3;
+  }
+
+  .period-selector,
+  .active-selector {
+    display: none;
+  }
+
+  /* ── Desktop tabs — hide on mobile ── */
+  .desktop-tabs {
+    display: none;
+  }
+
+  /* ── Mobile pill tab switcher ── */
+  .mobile-tab-switcher {
+    display: flex;
+    width: 100%;
+  }
+
+  .mobile-tab-bg {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 4px;
+    gap: 4px;
+    width: 292px;
+    height: 44px;
+    background: #E7E8E9;
+    border-radius: 12px;
+    box-sizing: border-box;
+  }
+
+  .mobile-tab-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 20px;
+    width: 140px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #434750;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-tab-btn.active {
+    background: #FFFFFF;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+    color: #0C4381;
+  }
+
+  /* ── Hide desktop table ── */
+  .desktop-table {
+    display: none;
+    order: 4;
+  }
+
+  /* ── Mobile transaction cards ── */
+  .mobile-transaction-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+    order: 4;
+    flex: 1 0 auto;
+  }
+
+  .tx-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+    background: #FFFFFF;
+    box-shadow: 0px 8px 24px rgba(25, 28, 29, 0.04);
+    border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tx-card-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .tx-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .tx-card-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+
+  .tx-card-amount {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    color: #191C1D;
+  }
+
+  .tx-card-badge {
+    display: flex;
+    align-items: center;
+    padding: 4px 12px;
+    gap: 6px;
+    border-radius: 9999px;
+    height: 25px;
+  }
+
+  .tx-card-badge span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 15px;
+  }
+
+  .tx-card-divider {
+    width: 100%;
+    height: 1px;
+    background: #F3F4F5;
+  }
+
+  .tx-card-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .tx-card-date {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #434750;
+  }
+
+  .tx-card-link {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0C4381;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* ── Pagination on mobile ── */
+  .pagination {
+    padding: 16px 20px;
+    order: 5;
+    margin-top: auto;
+  }
+
+  .pagination-content {
+    max-width: 100%;
+  }
+
+  /* ── Bottom menu fix inside drawer ── */
+  .hist-bottom-menu-items {
+    position: static;
+    margin-top: 24px;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .hist-live-chat-container {
+    position: static;
+    margin: 24px auto 20px;
+  }
 }

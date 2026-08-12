@@ -8,7 +8,7 @@ import numberIcon from '../assets/startedcall.png';
 import residenceIcon from '../assets/residence.png';
 import expandArrow from '../assets/Expand Arrow.png';
 import { useNavigate } from 'react-router-dom';
-import { createRequest } from "../api/authService";
+
 
 
 
@@ -16,47 +16,61 @@ const Started = () => {
 
   const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        address: '',
-        email: '',
-        residence: '',
-        preferredLocation: 'Select the location',
-        preferredPlan: 'Select a plan',
-        website: ''
-      });
-
+  const [formData, setFormData] = useState({
+  name: '',
+  phone: '',
+  address: '',
+  email: '',
+  preferredarea: 'Select City',
+  preferredaboutus: 'Select how you heard about us',
+  heardAboutUsValue: '',
+  salesAgentName: ''
+});
+ 
     
       const [termsAgreed, setTermsAgreed] = useState(false);
-      const [locationDropdownOpen, setLocationDropdownOpen] = useState(false);
-      const [planDropdownOpen, setPlanDropdownOpen] = useState(false);
+      const [areaDropdownOpen, setareaDropdownOpen] = useState(false);
+       const [aboutusDropdownOpen, setaboutusDropdownOpen] = useState(false);
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [errors, setErrors] = useState({});
       const [showPopup, setShowPopup] = useState(false);
-      const locationDropdownRef = useRef(null);
-      const planDropdownRef = useRef(null);
-
-      const planOptions = [
-        'IMBIL Connect Classic', 
-        'IMBIL Connect Pro', 
-        'IMBIL Connect Premium', 
-        'IMBIL Connect Ultimate'
-      ];
-      const locationOptions = [
+      const areaDropdownRef = useRef(null);
+      const aboutusDropdownRef = useRef(null);
+      
+      const areaOptions = [
         'Ikeja',
         'Surulere',
         'Lekki',
         
       ];
 
+const aboutusOptions = [
+  {
+    label: 'Social Media',
+    value: 'SOCIAL_MEDIA'
+  },
+  {
+    label: 'Website',
+    value: 'WEBSITE'
+  },
+  {
+    label: 'Friend',
+    value: 'FRIEND'
+  },
+  {
+    label: 'Estate Manager',
+    value: 'ESTATE_MANAGER'
+  },
+  {
+    label: 'Sales Agent',
+    value: 'SALES_AGENT'
+  }
+];
+
       useEffect(() => {
         const handleClickOutside = (event) => {
-          if (locationDropdownRef.current && !locationDropdownRef.current.contains(event.target)) {
-            setLocationDropdownOpen(false);
-          }
-          if (planDropdownRef.current && !planDropdownRef.current.contains(event.target)) {
-            setPlanDropdownOpen(false);
+          if (areaDropdownRef.current && !areaDropdownRef.current.contains(event.target)) {
+            setareaDropdownOpen(false);
           }
         };
       
@@ -66,6 +80,18 @@ const Started = () => {
         };
       }, []);
 
+  useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (aboutusDropdownRef.current && !aboutusDropdownRef.current.contains(event.target)) {
+            setaboutusDropdownOpen(false);
+          }
+        };
+      
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+      }, []);
 
       const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -82,34 +108,48 @@ const Started = () => {
         }
       };
 
-      
-
-      const handlePlanSelect = (plan) => {
-        setFormData(prevState => ({
-          ...prevState,
-          preferredPlan: plan
-        }));
-        setPlanDropdownOpen(false);
-      };
     
-      const handleLocationSelect = (location) => {
+    
+      const handleareaSelect = (area) => {
         setFormData (prevState => ({
           ...prevState, 
-          preferredLocation :location
+          preferredarea :area
         })) ;
-       setLocationDropdownOpen(false);
+       setareaDropdownOpen(false);
       }
 
-      const togglePlanDropdown = () => {
-        setPlanDropdownOpen(!planDropdownOpen);
-       
-        if (planDropdownOpen) setLocationDropdownOpen(false); 
-    };
+const handleaboutusSelect = (aboutus) => {
+  setFormData((prevState) => ({
+    ...prevState,
+    
 
-      const toggleLocationDropdown = () => {
-        setLocationDropdownOpen(!locationDropdownOpen);
+
+    preferredaboutus: aboutus.label,
+
+    
+    heardAboutUsValue: aboutus.value,
+
+    // Clear the sales-agent name if another option is selected
+    salesAgentName:
+      aboutus.value === 'SALES_AGENT'
+        ? prevState.salesAgentName
+        : ''
+  }));
+
+  setaboutusDropdownOpen(false);
+};
+
+   
+      const toggleareaopdown = () => {
+        setareaDropdownOpen(!areaDropdownOpen);
         
-        if (locationDropdownOpen) setLocationDropdownOpen(false);
+        if (areaDropdownOpen) setareaDropdownOpen(false);
+      };
+
+       const toggleaboutusdropdown = () => {
+        setaboutusDropdownOpen(!aboutusDropdownOpen);
+        
+        if (aboutusDropdownOpen) setaboutusDropdownOpen(false);
       };
 
       const validateForm = () => {
@@ -125,13 +165,26 @@ const Started = () => {
         console.log("Email:", formData.email);
         if (!formData.email.trim()) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email address is invalid';
+
         
-        console.log("Residence:", formData.residence);
-        if (!formData.residence.trim()) newErrors.residence = 'Residence is required';
-        
-        console.log("Preferred Location:", formData.preferredLocation);
-        if (!formData.preferredLocation === 'Select Location') newErrors.preferredUsage = 'Please select location';
-        
+        console.log("Preferred Area:", formData.preferredarea);
+        if (!formData.preferredarea === 'Select Area') newErrors.preferredUsage = 'Please select Area';
+
+        console.log("Preferred Method of hearing:", formData.preferredaboutus);
+       if (!formData.heardAboutUsValue) {
+  newErrors.preferredaboutus =
+    'Please select how you heard about us';
+}
+
+if (
+  formData.heardAboutUsValue ===
+    'SALES_AGENT' &&
+  !formData.salesAgentName.trim()
+) {
+  newErrors.salesAgentName =
+    'Please enter the sales agent’s name';
+}
+
         console.log("Preferred Plan:", formData.preferredPlan);
         if (formData.preferredPlan === 'Select a plan') newErrors.preferredPlan = 'Please select a plan';
         
@@ -143,52 +196,62 @@ const Started = () => {
         return Object.keys(newErrors).length === 0;
       };
 
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
+  // Stop submission if validation fails
   if (!validateForm()) return;
 
   setIsSubmitting(true);
 
   try {
-    const fullName = formData.name.trim().split(" ");
+  
+    localStorage.setItem(
+      "serviceRequestData",
+      JSON.stringify(formData)
+    );
 
-    const payload = {
-      firstName: fullName[0] || "",
-      lastName: fullName.slice(1).join(" ") || "",
-      address: formData.address,
-      email: formData.email,
-      phoneNumber: formData.phone,
-      preferredPlan: formData.preferredPlan,
-      propertyType: "RESIDENTIAL",
-      location: formData.preferredLocation,
-      heardUs: formData.website || null
-    };
+  
+    console.log(
+      "Form data saved successfully:",
+      JSON.parse(
+        localStorage.getItem("serviceRequestData")
+      )
+    );
 
-   const response = await createRequest(payload);
 
-console.log(response);
-
-    console.log(response.data);
-
-    setShowPopup(true);
+    navigate("/getstartedform");
 
   } catch (error) {
-    console.error(error);
+    console.error(
+      "Error saving form information:",
+      error
+    );
 
     setErrors({
       submit:
-        error.response?.data?.message ||
         "An error occurred. Please try again."
     });
+
   } finally {
     setIsSubmitting(false);
   }
 };
-    
-      const handleSignInClick = () => {
-        navigate('/signin');
-      };
+
+const handleSignInClick = () => {
+  localStorage.setItem(
+    "currentUser",
+    JSON.stringify({
+      firstName: "Test",
+      lastName: "User",
+      email: "test@example.com",
+      name: "Test User" // Buybundle.js uses userData.name, not firstName/lastName
+    })
+  );
+  localStorage.setItem("authToken", "mock-token-for-testing");
+  navigate("/dashboard");
+};
       const handleClosePopup = () => {
         setShowPopup(false);
       };
@@ -196,7 +259,7 @@ console.log(response);
       const navigateToSignin = () => {
         console.log('Navigating to signin...');
        
-        navigate('/signin');
+        navigate("/dashboard");
         
       
         setShowPopup(false);
@@ -213,7 +276,7 @@ console.log(response);
           <div className="frame-208">
             <div className="frame-215">
               <div className="frame-207">
-                <h1 className="get-started-title">Get Started </h1>
+                <h1 className="get-started-title">Service Request Form </h1>
               </div>
               
               <div className="frame-169">
@@ -224,6 +287,7 @@ console.log(response);
                     <input 
                       type="text"
                       name="name"
+                      placeholder='John Doe'
                       value={formData.name}
                       onChange={handleInputChange}
                       className="startedinput-field"
@@ -236,47 +300,13 @@ console.log(response);
                 </div>
                 
                 {/* Email field */}
-                <div className="text-field">
-                  <label className="field-label">Phone Number</label>
-                  <div className="frame-163">
-                    <input 
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="startedinput-field"
-                    />
-                    <div className="component-3">
-                      <img src={numberIcon} alt="phone" className="field-icon" />
-                    </div>
-                  </div>
-                  {errors.phone && <div className="error-message">{errors.phone}</div>}
-                </div>
-                
-                <div className="text-field">
-                  <label className="field-label">Address</label>
-                  <div className="frame-163">
-                    <input 
-                      type="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className="startedinput-field"
-                    />
-                    <div className="component-3">
-                      {/* <img src={emailIcon} alt="Name" className="field-icon" /> */}
-                    </div>
-                  </div>
-                  {errors.email && <div className="error-message">{errors.address}</div>}
-                </div>
-                      
-                {/* Company field */}
-                <div className="text-field">
+                  <div className="text-field">
                   <label className="field-label">Email</label>
                   <div className="frame-163">
                     <input 
                       type="email"
                       name="email"
+                      placeholder='email@example.com'
                       value={formData.email}
                       onChange={handleInputChange}
                       className="startedinput-field"
@@ -287,127 +317,181 @@ console.log(response);
                   </div>
                   {errors.email && <div className="error-message">{errors.email}</div>}
                 </div>
+            
+                {/* Phone Number field */}
+                <div className="text-field">
+                   <label className="field-label">Phone Number</label>
+                     <div className="frame-163">
+    <div className="country-code">
+      <span className="country-code-text">+234</span>
+    </div>
+    <input 
+      type="tel"
+      name="phone"
+      placeholder="800 000 0000"
+      value={formData.phone}
+      onChange={handleInputChange}
+      className="startedinput-field"
+    />
+    <div className="component-3">
+      <img src={numberIcon} alt="phone" className="field-icon" />
+    </div>
+  </div>
+  {errors.phone && <div className="error-message">{errors.phone}</div>}
+</div>
                 
-                {/* Website field */}
+                 {/* Address field */}
                 <div className="text-field">
-                  <label className="field-label">Estate, Residence/Office</label>
+                  <label className="field-label">Address</label>
                   <div className="frame-163">
                     <input 
-                      type="text"
-                      name="residence"
-                      value={formData.residence}
-                      onChange={handleInputChange}
-                      className="startedinput-field"
-                    />
-                     <div className="component-3">
-                      <img src={residenceIcon} alt="Name" className="field-icon" />
-                    </div>
-                  </div>
-                  {errors.residence && <div className="error-message">{errors.residence}</div>}
-                </div>
-
-                <div className="text-field">
-                  <label className="field-label">How did you hear about us ?</label>
-                  <div className="frame-163">
-                    <input 
-                      type="text"
-                      name="website"
-                      value={formData.website}
+                      type="address"
+                      name="address"
+                      placeholder='123 Innovation Drive'
+                      value={formData.address}
                       onChange={handleInputChange}
                       className="startedinput-field"
                     />
                     <div className="component-3">
-                      {/* <img src={nameIcon} alt="Name" className="field-icon" /> */}
+                      <img src={nameIcon} alt="Name" className="field-icon" />
                     </div>
                   </div>
-                  <div className="error-message">Sorry, text field is required.</div>
+                  {errors.email && <div className="error-message">{errors.address}</div>}
                 </div>
-
-
-    {/* Preferred Usage dropdown */}
-                  <div className="text-field-dropdown" ref={locationDropdownRef}>
+                      
+                      {/* area dropdown  */}
+                 <div className="text-field-dropdown" ref={areaDropdownRef}>
                   <div className="text-field">
-                    <label className="field-label">Location</label>
+                    <label className="field-label">Area</label>
                     <div 
                       className="frame-163 dropdown-field"
-                      onClick={toggleLocationDropdown}
+                      onClick={toggleareaopdown}
                     >
-                      <div className="preferred-plan-text">{formData.preferredLocation}</div>
+                      <div className="preferred-plan-text">{formData.preferredarea}</div>
                       <img 
                         src={expandArrow} 
                         alt="Expand" 
-                        className={`expand-arrow ${locationDropdownOpen ? 'rotate' : ''}`} 
+                        className={`expand-arrow ${areaDropdownOpen ? 'rotate' : ''}`} 
                       />
                     </div>
                     
                     {/* Dropdown options */}
-                    {locationDropdownOpen && (
+                    {areaDropdownOpen && (
                       <div className="dropdown-options">
-                        {locationOptions.map((location, index) => (
+                        {areaOptions.map((area, index) => (
                           <div 
                             key={index}
-                            className={`dropdown-option ${formData.preferredLocation === location ? 'selected' : ''}`}
-                            onClick={() => handleLocationSelect(location)}
+                            className={`dropdown-option ${formData.preferredarea === area ? 'selected' : ''}`}
+                            onClick={() => handleareaSelect(area)}
                           >
-                            {location}
+                            {area}
                           </div>
                         ))}
                       </div>
                     )}
-                     {errors.preferredLocation && <div className="error-message">{errors.preferredLocation}</div>}
+                     {errors.preferredarea && <div className="error-message">{errors.preferredarea}</div>}
                   </div>
                 </div>
+              
+                  {/* how did you hear about us  */}
+               {/* How did you hear about us */}
+<div
+  className="text-field-dropdown"
+  ref={aboutusDropdownRef}
+>
+  <div className="text-field">
+    <label className="field-label">
+      How did you hear about us
+    </label>
 
-                
-                
-                {/* Preferred Plan dropdown */}
-                <div className="text-field-dropdown" ref={planDropdownRef}>
-                  <div className="text-field">
-                    <label className="field-label"> Preferred Plan</label>
-                    <div 
-                      className="frame-163 dropdown-field"
-                      onClick={togglePlanDropdown}
-                    >
-                      <div className="preferred-plan-text">{formData.preferredPlan}</div>
-                      <img 
-                        src={expandArrow} 
-                        alt="Expand" 
-                        className={`expand-arrow ${planDropdownOpen ? 'rotate' : ''}`} 
-                      />
-                    </div>
-                    
-                    {/* Dropdown options */}
-                    {planDropdownOpen && (
-                      <div className="dropdown-options">
-                        {planOptions.map((plan, index) => (
-                          <div 
-                            key={index}
-                            className={`dropdown-option ${formData.preferredPlan === plan ? 'selected' : ''}`}
-                            onClick={() => handlePlanSelect(plan)}
-                          >
-                            {plan}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                     {errors.preferredPlan && <div className="error-message">{errors.preferredPlan}</div>}
-                  </div>
-                </div>
+    <div
+      className="frame-163 dropdown-field"
+      onClick={toggleaboutusdropdown}
+    >
+      <div className="preferred-plan-text">
+        {formData.preferredaboutus}
+      </div>
 
-                
+      <img
+        src={expandArrow}
+        alt="Expand"
+        className={`expand-arrow ${
+          aboutusDropdownOpen ? 'rotate' : ''
+        }`}
+      />
+    </div>
+
+    {/* Dropdown options */}
+    {aboutusDropdownOpen && (
+      <div className="dropdown-options">
+        {aboutusOptions.map((aboutus) => (
+          <div
+            key={aboutus.value}
+            className={`dropdown-option ${
+              formData.heardAboutUsValue ===
+              aboutus.value
+                ? 'selected'
+                : ''
+            }`}
+            onClick={() =>
+              handleaboutusSelect(aboutus)
+            }
+          >
+            {aboutus.label}
+          </div>
+        ))}
+      </div>
+    )}
+
+    {errors.preferredaboutus && (
+      <div className="error-message">
+        {errors.preferredaboutus}
+      </div>
+    )}
+  </div>
+</div>
+                 
+                 {/* Sales Agent  */}
+                  {formData.preferredaboutus === 'Sales Agent' && (
+  <div className="text-field">
+    <label className="field-label">
+      Sales Agent Name
+    </label>
+
+    <div className="frame-163">
+      <input
+        type="text"
+        name="salesAgentName"
+        placeholder="Enter the sales agent's name"
+        value={formData.salesAgentName}
+        onChange={handleInputChange}
+        className="startedinput-field"
+      />
+    </div>
+
+    {errors.salesAgentName && (
+      <div className="error-message">
+        {errors.salesAgentName}
+      </div>
+    )}
+  </div>
+)}
+
+
                 
                 {/* Terms agreement checkbox */}
                 <div className="check-agreement">
-                  <div 
-                    className={`frame-167 ${termsAgreed ? 'checked' : ''}`}
-                    onClick={() => setTermsAgreed(!termsAgreed)}
-                  >
-                    <div className="done-check"></div>
-                  </div>
-                  <div className="terms-text">I have agreed to the terms and condition.</div>
-                  {errors.terms && <div className="error-message">{errors.terms}</div>}
-                </div>
-                
+  <div className="terms-row">
+    <div 
+      className={`frame-167 ${termsAgreed ? 'checked' : ''}`}
+      onClick={() => setTermsAgreed(!termsAgreed)}
+    >
+      <div className="done-check"></div>
+    </div>
+    <div className="terms-text">I have agreed to the terms and condition.</div>
+  </div>
+  {errors.terms && <div className="error-message">{errors.terms}</div>}
+</div>
 
                 {errors.submit && <div className="error-message submit-error">{errors.submit}</div>}
                 <button 

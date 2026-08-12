@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import heroimage from '../assets/heroimage1.png';
 import heroimage2 from '../assets/heroimage2.png';
 import heroimage3 from '../assets/heroimage3.png';
@@ -25,12 +26,22 @@ import './Home.css';
 const Home = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-   
+     const navigate = useNavigate();
+
+     const handleNavigation = (path) => {
+    // setMenuOpen(false);
+    navigate(path);
+  };
+
+   const [menuOpen, setMenuOpen] = useState(false);
     const heroImages = [
       heroimage, 
       heroimage2, 
       heroimage3  
     ];
+
+    const location = useLocation();
+
     useEffect(() => {
         const interval = setInterval(() => {
           setCurrentSlide((prev) => (prev === heroImages.length - 1 ? 0 : prev + 1));
@@ -49,12 +60,51 @@ const Home = () => {
       return () => clearInterval(interval);
     }, [heroImages.length]);
     
-  
+
     const goToSlide = (index) => {
       setCurrentSlide(index);
     };
     const [openFaqs, setOpenFaqs] = React.useState({});
 
+useEffect(() => {
+  const sectionId = location.state?.scrollTo;
+
+  if (!sectionId) return;
+
+  // Give React time to render the Home page
+  const timer = setTimeout(() => {
+    const element = document.getElementById(sectionId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, 100);
+
+  return () => clearTimeout(timer);
+}, [location]);
+
+const handleSectionNav = (sectionId) => {
+  setMenuOpen(false);
+
+  if (window.location.pathname === '/home') {
+    // Already on Home — scroll directly
+    const el = document.getElementById(sectionId);
+
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  } else {
+    // Navigate to Home and tell it which section to scroll to
+    navigate('/home', {
+      state: {
+        scrollTo: sectionId,
+      },
+    });
+  }
+};
 
     const toggleFaq = (index) => {
         setOpenFaqs(prevState => ({
@@ -209,7 +259,12 @@ const goToTestimonialSlide = (index) => {
       }}
     />
   ))}
-  
+
+  {/* Get Started Button - mobile only */}
+  <button className="hero-get-started-btn" onClick={() => handleNavigation('/started')}>
+    Get Started
+  </button>
+
   {/* Navigation Dots */}
   <div className="slider-dots">
     {heroImages.map((_, index) => (
@@ -403,7 +458,7 @@ const goToTestimonialSlide = (index) => {
       </div>
       </div>
 
-<div className="our-plans-container">
+<div className="our-plans-container" id = "our-plans">
   <OurPlans />
 </div>
 
@@ -452,7 +507,7 @@ const goToTestimonialSlide = (index) => {
 
 
 {/* Support Container */}
-<div className="support-container section-spacer clearfix"> 
+<div className="support-container section-spacer clearfix" id="contact-us"> 
 
   <div className="support-image"></div>
   
@@ -491,7 +546,7 @@ const goToTestimonialSlide = (index) => {
 </div>
       
       {/* FAQ Container */}
-      <div className="faq-container section-spacer clearfix"> 
+      <div className="faq-container section-spacer clearfix" id="faq"> 
       <div className="faq-container">
         <div className="faq-image"></div>
         <div className="frame-206">

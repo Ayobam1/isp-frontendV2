@@ -35,7 +35,7 @@ a {
   background:
     linear-gradient(170.49deg, rgba(0, 0, 0, 0) 3.67%, rgba(0, 0, 0, 0.2) 96.33%),
     linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    url('../assets/Technical\ engineer.png');
+    url('../assets/female-it-engineer-working-tablet-pc\ 2.png');
   background-size: cover;
   background-position: center;
 }
@@ -93,7 +93,7 @@ a {
   font-weight: 600;
   font-size: 40px;
   line-height: 52px;
-  color: #000000;
+  color: #0C4381;
 }
 
 .frame-169 {
@@ -123,43 +123,77 @@ a {
 }
 
 .frame-163 {
+  box-sizing: border-box;
+  position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   align-items: center;
-  padding: 0 20px;
-  gap: 10px;
+  padding: 12px 16px;
+  gap: 12px;
   width: 100%;
-  height: 50px;
-  border: 1px solid #969595;
-  border-radius: 4px;
-  position: relative;
+  height: 48px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: inset 0px 0px 0px 1px rgba(115, 119, 129, 0.1);
+  isolation: isolate;
+}
+
+.country-code {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 0px 12px 0px 0px;
+  height: 24px;
+  border-right: 1px solid #C3C6D2;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.country-code-text {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0C4381;
+  white-space: nowrap;
 }
 
 .startedinput-field {
-  width: 100%;
-  height: 100%;
+  flex: 1;
+  min-width: 0;
+  height: 23px;
+  padding: 2px 0px;
   border: none;
   outline: none;
   background: transparent;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
   font-weight: 400;
   font-size: 16px;
-  color: #000000;
-  padding: 0;
+  line-height: 19px;
+  color: #1A1A1A;
+  z-index: 2;
+}
+
+.startedinput-field::placeholder {
+  color: rgba(115, 119, 129, 0.5);
 }
 
 .component-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  position: relative;
+  z-index: 3;
 }
 
 .field-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .error-message {
@@ -242,16 +276,24 @@ a {
 /* ── CHECKBOX ── */
 .check-agreement {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.terms-row {
+  display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 12px;
+  align-items: flex-start; /* keeps checkbox aligned to first line if text wraps */
+  gap: 10px;
   width: 100%;
 }
 
 .frame-167 {
   box-sizing: border-box;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   min-width: 24px;
   border: 1px solid #C3C6D2;
   border-radius: 6px;
@@ -290,6 +332,7 @@ a {
   line-height: 26px;
   color: #434750;
   flex: 1;
+    min-width: 0;
 }
 
 /* ── SUBMIT BUTTON ── */
@@ -405,7 +448,7 @@ a {
     background:
       linear-gradient(170.49deg, rgba(0, 0, 0, 0) 3.67%, rgba(0, 0, 0, 0.2) 96.33%),
       linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-      url('../assets/Technical\ engineer.png');
+      url('../assets/female-it-engineer-working-tablet-pc\ 2.png');
     background-size: cover;
     background-position: center;
   }

@@ -107,6 +107,7 @@ const faqAnswers = {
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  
   const toggleFaq = (id) => setOpenFaq(openFaq === id ? null : id);
  
@@ -146,63 +147,57 @@ const faqAnswers = {
   }
 
   return (
-    <div className='subcriptions-container'>
-          <div className="side-menu">
-     <div className="logo">
-       <div className="logo-image">
-       <img src={dashboardLogo} alt="Name"/>
-       </div>
-     </div>
+    <div className='support-container'>
+      <div className={`sp-side-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+  <button className="sp-mobile-menu-close" onClick={() => setMobileMenuOpen(false)}>✕</button>
+  <div className="sp-logo">
+    <div className="sp-logo-image"><img src={dashboardLogo} alt="Name"/></div>
+  </div>
 
-     <div className="menu-items">
-       <div className="menu-item active" onClick={handleDashboardClick}>
-         <div className="menu-icon">
-           <img src={dashboardicon} alt="Dashboard" />
-         </div>
-         <span>Dashboard</span>
-         <div className="active-indicator"></div>
-       </div>
-       <div className="menu-item" onClick={handleSubscriptionsClick}>
-         <div className="menu-icon">
-           <img src={subscriptionicon} alt="Subscriptions" />
-         </div>
-         <span>Subscriptions</span>
-       </div>
-       <div className="menu-item" onClick={handleHistoryClick}>
-         <div className="menu-icon">
-           <img src={historyicon} alt="History" />
-         </div>
-         <span>History</span>
-         <div className="chevron-icon"></div>
-       </div>
-     </div>
+  <div className="sp-menu-items">
+    <div className="sp-menu-item" onClick={handleDashboardClick}>
+      <div className="sp-menu-icon"><img src={dashboardicon} alt="Dashboard" /></div>
+      <span>Dashboard</span>
+    </div>
+    <div className="sp-menu-item" onClick={handleSubscriptionsClick}>
+      <div className="sp-menu-icon"><img src={subscriptionicon} alt="Subscriptions" /></div>
+      <span>Subscriptions</span>
+    </div>
+    <div className="sp-menu-item" onClick={handleHistoryClick}>
+      <div className="sp-menu-icon"><img src={historyicon} alt="History" /></div>
+      <span>History</span>
+      <div className="sp-chevron-icon"></div>
+    </div>
+  </div>
 
-     <div className="bottom-menu-items">
-       <div className="menu-item" onClick={handleSupportClick}>
-         <div className="menu-icon">
-           <img src={supporticon} alt="Support" />
-         </div>
-         <span>Support</span>
-       </div>
-       <div className="menu-item" onClick={handleLogout}>
-         <div className="menu-icon">
-           <img src={logouticon} alt="Logout" />
-         </div>
-         <span>Logout</span>
-       </div>
-     </div>
+  <div className="sp-bottom-menu-items">
+    <div className="sp-menu-item active" onClick={handleSupportClick}>
+      <div className="sp-menu-icon"><img src={supporticon} alt="Support" /></div>
+      <span>Support</span>
+      <div className="sp-active-indicator"></div>
+    </div>
+    <div className="sp-menu-item" onClick={handleLogout}>
+      <div className="sp-menu-icon"><img src={logouticon} alt="Logout" /></div>
+      <span>Logout</span>
+    </div>
+  </div>
 
-     <div className="live-chat-container" onClick={handleLiveChatClick}>
-       <div className="live-chat-icon">
-       <img src={livechatIcon} alt="Name"/>
-       </div>
-       <span>Live chat</span>
-     </div>
-   </div>
+  <div className="sp-live-chat-container" onClick={handleLiveChatClick}>
+    <div className="sp-live-chat-icon"><img src={livechatIcon} alt="Name"/></div>
+    <span>Live chat</span>
+  </div>
+</div>
+
+{mobileMenuOpen && (
+  <div className="sp-mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)} />
+)}   
 
 
-   <div className="subscription-content-container">
+   <div className="support-content-container">
    <div className="top-bar">
+    <button className="hamburger-btn-sp" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+    <span></span><span></span><span></span>
+  </button>
          <div className="search-bar">
            <input type="text" placeholder="Search" />
            <div className="search-icon"></div>
@@ -231,45 +226,37 @@ const faqAnswers = {
           {/* ── User Header ── */}
           <div className="sp-user-header">
             <div className="sp-user-left">
-              <button className="sp-back-btn" aria-label="Go back">
-                <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
-                  <path d="M10 12L6 8l4-4" stroke="#191C1D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
- 
-              <div className="sp-avatar-wrap">
-                <div className="sp-avatar">TO</div>
-                <div className="sp-avatar-online" />
-              </div>
- 
-             <div className="sp-user-info">
-             <span className="sp-user-name">Taofeek Olaojo</span>
-             <div className="sp-user-meta">
-    <span className="sp-user-role">
-      <img 
-        src={userheaderIcon} 
-        alt="user" 
-        width="12" 
-        height="12" 
-        style={{ objectFit: 'contain' }}
-      />
-      Last seen: 12 minutes ago
-    </span>
-    <span className="sp-badge">ID: NEX-8829-S</span>
+  <button className="sp-back-btn" aria-label="Go back">
+    <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+      <path d="M10 12L6 8l4-4" stroke="#191C1D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </button>
+
+  <div className="sp-avatar-wrap">
+    <div className="sp-avatar">TO</div>
+    <div className="sp-avatar-online" />
   </div>
+
+  <div className="sp-user-info">
+    <span className="sp-user-name">Taofeek Olaojo</span>
+    <div className="sp-user-meta">
+      <span className="sp-user-role">
+        <img src={userheaderIcon} alt="user" width="12" height="12" style={{ objectFit: 'contain' }} />
+        Last seen: 12 minutes ago
+      </span>
+      <span className="sp-badge">ID: NEX-8829-S</span>
+    </div>
+  </div>
+  <button className="sp-call-icon-btn" aria-label="Call support">
+      <img src={callSupport} alt="call support" width="18" height="18" style={{ objectFit: 'contain' }} />
+    </button>
 </div>
-            </div>
  
-           <button className="sp-message-btn">
-  <img 
-    src={callSupport} 
-    alt="call support" 
-    width="18" 
-    height="18" 
-    style={{ objectFit: 'contain' }}
-  />
+         <button className="sp-message-btn">
+  <img src={callSupport} alt="call support" width="18" height="18" style={{ objectFit: 'contain' }} />
   Support Call
 </button>
+
           </div>
  
           {/* ── Personal Info Bar ── */}

@@ -15,25 +15,36 @@
 }
 
 /* ── SIDE MENU — desktop ── */
-.side-menu {
-  position: relative;
+/* ── SIDE MENU — DESKTOP ── */
+.dash-side-menu {
   width: 236px;
-  min-height: 100vh;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  z-index: 1000;
   background: #21409A;
   color: #E5E7E6;
+
   display: flex;
   flex-direction: column;
+
   flex-shrink: 0;
 }
 
-.logo {
+.dash-logo {
   padding: 34px 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.logo-image {
+.dash-logo-image {
   width: 106px;
   height: 60px;
   color: white;
@@ -43,38 +54,38 @@
   font-weight: bold;
 }
 
-.menu-items {
+.dash-menu-items {
   display: flex;
   flex-direction: column;
-  margin-top: 60px;
 }
 
-.menu-item {
+.dash-menu-item {
   position: relative;
   width: 100%;
   height: 56px;
   display: flex;
+  padding: 0 24px;
   align-items: center;
   padding-left: 50px;
   cursor: pointer;
   color: #E5E7E6;
 }
 
-.menu-item:hover {
+.dash-menu-item:hover {
   background-color: rgba(228, 246, 247, 0.2);
   transition: background-color 0.3s ease;
 }
 
-.menu-item.active {
+.dash-menu-item.active {
   background: #E4F6F7;
   color: #000000;
 }
 
-.menu-item.active:hover {
+.dash-menu-item.active:hover {
   background: #E4F6F7;
 }
 
-.active-indicator {
+.dash-active-indicator {
   position: absolute;
   width: 6px;
   height: 56px;
@@ -83,19 +94,19 @@
   background: #92B6AA;
 }
 
-.menu-icon {
+.dash-menu-icon {
   width: 24px;
   height: 24px;
   margin-right: 10px;
 }
 
-.menu-icon img {
+.dash-menu-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.chevron-icon {
+.dash-chevron-icon {
   position: absolute;
   right: 50px;
   width: 24px;
@@ -104,43 +115,46 @@
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E") no-repeat center;
 }
 
-.bottom-menu-items {
-  position: absolute;
-  bottom: 250px;
-  width: 100%;
+.dash-bottom-menu-items {
+    position: static;
+    margin-top: 40px; /* minimum gap guaranteed */
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+.dash-live-chat-container {
+    width: 174px;
+    height: 202px;
+
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+
+    background: #0054A6;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    transform: rotate(-10deg);
 }
 
-.live-chat-container {
-  position: absolute;
-  bottom: 30px;
-  left: 20px;
-  width: 174px;
-  height: 202px;
-  background: #0054A6;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(-10deg);
-  padding: 20px 0;
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.3s ease;
-}
-
-.live-chat-container:hover {
+.dash-live-chat-container:hover {
   background: #0066CC;
   transform: rotate(-10deg) scale(1.05);
 }
 
-.live-chat-icon {
+.dash-live-chat-icon {
   width: 100px;
   height: 100px;
   background-color: #FFFFFF;
   margin-bottom: 10px;
 }
 
-.live-chat-icon img {
+.dash-live-chat-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -167,11 +181,18 @@
   display: none;
 }
 
+.dash-mobile-menu-close {
+  display: none;
+}
+
 /* ── MAIN CONTENT ── */
 .dashboard-content-container {
   position: relative;
-  width: calc(100% - 236px);
-  margin-left: 236px;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  margin-left: 236px !important;
+  min-width: 0;
+
   background: #FFFFFF;
   border-radius: 40px;
   padding: 24px 30px;
@@ -327,10 +348,10 @@
   flex-direction: column;
 }
 
- .wallet-top-row {
+.wallet-top-row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
 }
@@ -425,6 +446,10 @@
   cursor: pointer;
   position: absolute;
   left: 0;
+}
+
+.fund-wallet-mobile {
+  display: none;
 }
 
 .plus-icon {
@@ -827,8 +852,13 @@
     background: #F8F9FA;
   }
 
+.dashboard-container .bottom-menu-items {
+    margin-top: 40px !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+  }
 
-   .side-menu {
+ .dash-side-menu {
     display: none !important;
     position: fixed;
     top: 0;
@@ -841,12 +871,15 @@
     flex-direction: column;
   }
 
-  .side-menu.mobile-open {
+  .dash-side-menu.mobile-open {
     display: flex !important;
   }
 
+  .dash-live-chat-container {
+    margin-top: 24px;
+  }
 
-  .mobile-menu-close {
+.dash-mobile-menu-close {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -862,11 +895,10 @@
     font-size: 16px;
     cursor: pointer;
     z-index: 201;
-    flex-shrink: 0;
   }
 
  
-  .mobile-menu-overlay {
+  .dash-mobile-menu-overlay {
     display: block;
     position: fixed;
     inset: 0;
@@ -877,7 +909,7 @@
 
   .dashboard-content-container {
     width: 100%;
-    margin-left: 0;
+    margin-left: 0 !important;
     border-radius: 0;
     padding: 80px 0 96px;
     background: #F8F9FA;
@@ -925,7 +957,7 @@
 
 
   .search-bar {
-    display: none;
+    display: none !important;
   }
 
   .user-section {
@@ -968,8 +1000,6 @@
     margin-bottom: 0;
   }
 
-
-
   .wallet-card {
     width: 100%;
     height: auto;
@@ -986,14 +1016,11 @@
     box-sizing: border-box;
   }
 
-   .wallet-top-row {
-    display: flex;
-    flex-direction: row;
+    .wallet-top-row {
     justify-content: space-between;
     align-items: flex-start;
-    width: 100%;
-    gap: 12px;
   }
+
 
   .wallet-info {
     flex-direction: column;
@@ -1051,21 +1078,25 @@
     display: none;
   }
 
- .fund-wallet-btn {
+  .fund-wallet-mobile {
+    display: flex;
     position: static;
     width: auto;
     height: 36px;
     background: #2E5B9A;
     border-radius: 8px;
     padding: 6px 12px;
-    gap: 6px;
-    flex-shrink: 0;
     align-self: flex-start;
-    display: flex;
-    align-items: center;
+    flex-shrink: 0;
   }
 
-    .fund-wallet-btn span {
+  .fund-wallet-mobile img {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+  }
+
+    .fund-wallet-mobile span {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
     font-size: 14px;
@@ -1333,10 +1364,10 @@
   }
 
   /* ── Fix bottom menu positioning inside mobile drawer ── */
-  .bottom-menu-items {
-    position: static;
-    margin-top: auto;
-    margin-bottom: 20px;
-    width: 100%;
-  }
+  .dash-bottom-menu-items {
+  position: static;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  width: 100%;
+}
 }

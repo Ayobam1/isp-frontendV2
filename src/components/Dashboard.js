@@ -25,7 +25,7 @@ import Popup from './Popup';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const DEV_MODE = true;
+  const DEV_MODE = false;
 
   const [hideBalance, setHideBalance] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -133,20 +133,18 @@ const handleWalletDone = async () => {
 
 
   const handleTopupHistory = () => {
-    
-    console.log('Topup History clicked');
-   
+    navigate('/history')
   };
   
   const handleContactUs = () => {
    
-    console.log('Contact Us clicked');
+    navigate('/support')
  
   };
   
   const handleBuyBundles = () => {
-   
-    console.log('Buy Bundles clicked');
+
+   navigate('/buybundle');
    
   };
   
@@ -182,7 +180,7 @@ const handleLogoutClick = () => {
 };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
     navigate('/signin');
   };
@@ -217,64 +215,64 @@ const transactions = userData.transactions || [];
 
   return (
     <div className="dashboard-container">
-    <div className={`side-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-  {/* Close button — mobile only */}
-  <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)}>✕</button>
-  
-        <div className="logo">
-          <div className="logo-image">
-          <img src={dashboardLogo} alt="Name"/>
-          </div>
-        </div>
+   <div className={`dash-side-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+  <button className="dash-mobile-menu-close" onClick={() => setMobileMenuOpen(false)}>✕</button>
 
-        <div className="menu-items">
-          <div className="menu-item active" onClick={handleDashboardClick}>
-            <div className="menu-icon">
-              <img src={dashboardicon} alt="Dashboard" />
-            </div>
-            <span>Dashboard</span>
-            <div className="active-indicator"></div>
-          </div>
-          <div className="menu-item" onClick={handleSubscriptionsClick}>
-            <div className="menu-icon">
-              <img src={subscriptionicon} alt="Subscriptions" />
-            </div>
-            <span>Subscriptions</span>
-          </div>
-          <div className="menu-item" onClick={handleHistoryClick}>
-            <div className="menu-icon">
-              <img src={historyicon} alt="History" />
-            </div>
-            <span>History</span>
-            <div className="chevron-icon"></div>
-          </div>
-        </div>
+  <div className="dash-logo">
+    <div className="dash-logo-image">
+      <img src={dashboardLogo} alt="Name"/>
+    </div>
+  </div>
 
-        <div className="bottom-menu-items">
-          <div className="menu-item" onClick={handleSupportClick}>
-            <div className="menu-icon">
-              <img src={supporticon} alt="Support" />
-            </div>
-            <span>Support</span>
-          </div>
-         <div className="menu-item" onClick={handleLogoutClick}>
-        <div className="menu-icon">
-          <img src={logouticon} alt="Logout" />
-        </div>
-        <span>Logout</span>
+  <div className="dash-menu-items">
+    <div className="dash-menu-item active" onClick={handleDashboardClick}>
+      <div className="dash-menu-icon">
+        <img src={dashboardicon} alt="Dashboard" />
       </div>
-
-      
-        </div>
-    
-        <div className="live-chat-container" onClick={handleLiveChatClick}>
-          <div className="live-chat-icon">
-          <img src={livechatIcon} alt="Name"/>
-          </div>
-          <span>Live chat</span>
-        </div>
+      <span>Dashboard</span>
+      <div className="dash-active-indicator"></div>
+    </div>
+    <div className="dash-menu-item" onClick={handleSubscriptionsClick}>
+      <div className="dash-menu-icon">
+        <img src={subscriptionicon} alt="Subscriptions" />
       </div>
+      <span>Subscriptions</span>
+    </div>
+    <div className="dash-menu-item" onClick={handleHistoryClick}>
+      <div className="dash-menu-icon">
+        <img src={historyicon} alt="History" />
+      </div>
+      <span>History</span>
+      <div className="dash-chevron-icon"></div>
+    </div>
+  </div>
 
+  <div className="dash-bottom-menu-items">
+    <div className="dash-menu-item" onClick={handleSupportClick}>
+      <div className="dash-menu-icon">
+        <img src={supporticon} alt="Support" />
+      </div>
+      <span>Support</span>
+    </div>
+    <div className="dash-menu-item" onClick={handleLogoutClick}>
+      <div className="dash-menu-icon">
+        <img src={logouticon} alt="Logout" />
+      </div>
+      <span>Logout</span>
+    </div>
+  </div>
+
+  <div className="dash-live-chat-container" onClick={handleLiveChatClick}>
+    <div className="dash-live-chat-icon">
+      <img src={livechatIcon} alt="Name"/>
+    </div>
+    <span>Live chat</span>
+  </div>
+</div>
+
+{mobileMenuOpen && (
+  <div className="dash-mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)} />
+)}
 {mobileMenuOpen && (
   <div className="mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)} />
 )}
@@ -328,12 +326,10 @@ const transactions = userData.transactions || [];
     </div>
 
     {/* Fund Wallet — top right on mobile */}
-    <button className="fund-wallet-btn" onClick={() => setShowWallet(true)}>
-      <div className="plus-icon">
-        <img src={fundicon} alt="Fund" />
-      </div>
-      <span>Fund Wallet</span>
-    </button>
+      <button className="fund-wallet-mobile" onClick={() => setShowWallet(true)}>
+    <img src={fundicon} alt="Fund" />
+    <span>Fund Wallet</span>
+  </button>
   </div>
 
               <div className="hide-balance-btn" onClick={toggleBalance}>
@@ -398,12 +394,12 @@ const transactions = userData.transactions || [];
                     <span>Buy Bundles</span>
                   </div>
 
-                  <div className="action-item" onClick = {handleViewProfile}>
+                  {/* <div className="action-item" onClick = {handleViewProfile}>
                     <div className="action-icon">
                        <img src={profileLogo} alt="Wallet" /> 
                     </div>
                     <span>View Profile</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

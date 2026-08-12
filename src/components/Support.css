@@ -6,88 +6,150 @@
   box-sizing: border-box;
 }
 
-.subscription-container{
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-    background: white;
+.support-container{
+   display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: white;
 
 }
 
 /* Side Menu Styles */
-.side-menu {
-    position: relative;
-    width: 236px;
-    height: 1024px;
-    background: #21409A;
-    color: #E5E7E6;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .logo {
-    padding: 34px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .logo-image {
-    width: 106px;
-    height: 60px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-  }
-  
-  .menu-items {
-    display: flex;
-    flex-direction: column;
-    margin-top: 60px;
-  }
-  
-  .menu-item {
-    position: relative;
-    width: 100%;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    padding-left: 50px;
-    cursor: pointer;
-  }
-  
-  .menu-item:hover {
-      background-color: rgba(228, 246, 247, 0.2); /* Light blue with transparency */
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    
-    /* When an item is active, it should keep its original style */
-    .menu-item.active:hover {
-      background: #E4F6F7;
-    }
-  
-  .menu-item.active {
-    background: #E4F6F7;
-    color: #000000;
-  }
-  
-  .active-indicator {
-    position: absolute;
-    width: 6px;
-    height: 56px;
-    right: 0;
-    top: 0;
-    background: #92B6AA;
-  }
-  
-  .menu-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-  }
+.sp-side-menu {
+  width: 236px;
+  height: 100vh;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  z-index: 1000;
+  background: #21409A;
+  color: #E5E7E6;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-logo {
+  padding: 34px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sp-logo-image {
+  width: 106px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-menu-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp-menu-item {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding-left: 50px;
+  cursor: pointer;
+  color: #E5E7E6;
+}
+
+.sp-menu-item:hover {
+  background-color: rgba(228, 246, 247, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.sp-menu-item.active {
+  background: #E4F6F7;
+  color: #000000;
+}
+
+.sp-active-indicator {
+  position: absolute;
+  width: 6px;
+  height: 56px;
+  right: 0;
+  top: 0;
+  background: #92B6AA;
+}
+
+.sp-menu-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.sp-menu-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sp-chevron-icon {
+  position: absolute;
+  right: 50px;
+  width: 24px;
+  height: 24px;
+  background-color: #FFFFFF;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E") no-repeat center;
+}
+
+.sp-bottom-menu-items {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.sp-live-chat-container {
+  width: 174px;
+  height: 202px;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  background: #0054A6;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(-10deg);
+}
+
+.sp-live-chat-container:hover {
+  background: #0066CC;
+  transform: rotate(-10deg) scale(1.05);
+}
+
+.sp-live-chat-icon {
+  width: 100px;
+  height: 100px;
+  background-color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.sp-live-chat-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hamburger-btn-sp,
+.sp-mobile-menu-close,
+.sp-mobile-menu-overlay {
+  display: none;
+}
   
   .grid-icon {
     background-color: currentColor;
@@ -175,13 +237,16 @@
   margin-top: -70px;
 }
 
-.subscription-content-container {
+.support-content-container {
   position: relative;
-width: calc(100% - 236px);
-margin-left: 236px; 
-background: #FFFFFF;
-border-radius: 40px;
-padding: 24px 30px;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  margin-left: 236px !important;
+  min-width: 0;
+
+  background: #FFFFFF;
+  border-radius: 40px;
+  padding: 24px 30px;
 }
 
   .search-bar {
@@ -404,7 +469,20 @@ padding: 24px 30px;
   align-items: center;
   gap: 12px;
 }
- 
+ .sp-call-icon-btn {
+  display: none; /* hidden on desktop by default */
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0C4381 0%, #2E5B9A 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  flex-shrink: 0;
+}
 .sp-user-role {
   display: flex;
   align-items: center;
@@ -922,6 +1000,290 @@ padding: 24px 30px;
   }
   .sp-user-name {
     font-size: 18px;
+  }
+}
+@media (max-width: 768px) {
+
+  .sp-page {
+    background: #F8F9FA;
+    padding: 0;
+  }
+
+  .sp-card {
+    padding: 16px 16px 100px;
+    border-radius: 0;
+    position: relative;
+  }
+  .sp-side-menu {
+   display: none !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 200;
+    background: #21409A;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+  .sp-side-menu.mobile-open {
+    display: flex !important;
+  }
+
+  .sp-mobile-menu-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 201;
+  }
+
+  .sp-mobile-menu-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+  }
+
+  .hamburger-btn-sp {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 16px;
+    height: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .hamburger-btn-sp span {
+    display: block;
+    width: 16px;
+    height: 2px;
+    background: #0C4381;
+    border-radius: 2px;
+  }
+
+  .sp-bottom-menu-items {
+    position: static;
+    margin-top: 24px;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .user-profile {
+    display: none;
+  }
+
+  .sp-call-icon-btn {
+    display: flex;
+  }
+
+  .top-bar {
+    justify-content: flex-end;
+  }
+
+  /* ── Content container / main container resets ── */
+  .support-content-container {
+    width: 100%;
+    margin-left: 0 !important;
+    border-radius: 0;
+    padding: 80px 0 96px;
+    background: #F8F9FA;
+  }
+
+  .support-main-container {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-left: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* .top-bar {
+    margin-top: 0;
+    padding: 16px 20px;
+  } */
+
+  .search-bar {
+    display: none !important;
+  }
+  /* ── User header stacks, back button hidden, message-btn hidden ── */
+  .sp-user-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .sp-back-btn {
+    display: none;
+  }
+
+  .sp-message-btn {
+    display: none;
+  }
+
+  .sp-user-left {
+    gap: 16px;
+  }
+
+  .sp-avatar-wrap {
+    width: 80px;
+    height: 80px;
+  }
+
+  .sp-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 22px;
+  }
+
+  .sp-user-name {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .sp-user-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── Info bar becomes stacked cards ── */
+ .sp-info-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .sp-info-col {
+    background: #FFFFFF;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    border-right: none;
+  }
+
+ 
+  .sp-info-col + .sp-info-col {
+    padding-left: 16px;
+  }
+
+  /* ── Floating "Support Call" button ── */
+
+
+
+
+  /* ── FAQ section ── */
+  .sp-faq-section {
+    gap: 16px;
+  }
+
+  .sp-faq-header {
+    padding: 0;
+  }
+
+  .sp-faq-title {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .sp-view-all-btn {
+    background: rgba(46, 91, 154, 0.1);
+    color: #0C4381;
+    border-radius: 9999px;
+    padding: 6px 12px;
+  }
+
+  .sp-faq-list {
+    padding: 0;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  .sp-faq-question {
+    padding: 20px 10px;
+  }
+
+  .sp-faq-question-text {
+    font-size: 16px;
+  }
+
+  /* ── Bottom columns stack ── */
+  .sp-bottom {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ── Chat widget ── */
+  .sp-chat-section {
+    width: 100%;
+    height: 471px;
+    border-radius: 24px;
+    border: 1px solid #E7E8E9;
+  }
+
+  .sp-chat-header {
+    background: #001B3D;
+    padding: 16px;
+  }
+
+  .sp-agent-avatar {
+    background: #2E5B9A;
+  }
+
+  .sp-agent-name {
+    color: #FFFFFF;
+  }
+
+  .sp-agent-status {
+    color: #A9C8FF;
+  }
+
+  .sp-chat-action-btn svg circle {
+    fill: #A9C8FF;
+  }
+
+  .sp-chat-empty-icon {
+    background: #EDEEEF;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+
+  .sp-chat-empty-title {
+    font-size: 20px;
+  }
+
+  .sp-chat-history {
+    background: #FFFFFF;
+  }
+
+  .sp-input {
+    background: #FFFFFF;
+    border: 1px solid rgba(195, 198, 210, 0.2);
+  }
+
+  .sp-mic-btn {
+    background: #E1E3E4;
   }
 }
  

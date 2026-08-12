@@ -195,6 +195,11 @@ main {
   display: block;
 }
  
+.hero-get-started-btn {
+  display: none; /* hidden on desktop by default */
+}
+
+
 .slider-dots {
   display: flex;
   justify-content: center;
@@ -286,6 +291,10 @@ main {
   align-items: flex-start;
   gap: 8px;
   width: 100%;
+}
+
+.location-label-row {
+  display: none; 
 }
 
 .location-label {
@@ -402,6 +411,36 @@ main {
 
 /* ── iPad (768px and below) ── */
 @media (max-width: 768px) {
+
+   .hero-get-started-btn {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+  position: absolute;
+  width: 160px;
+  height: 46px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(50px, 12vw, 80px); /* sits just above the dots */
+  background: #F1F1F1;
+  border: 2px solid #D5D5D5;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: capitalize;
+  color: #244A89;
+  cursor: pointer;
+  z-index: 10;
+}
+
   .check-availability-wrapper {
     padding: 0;
   }

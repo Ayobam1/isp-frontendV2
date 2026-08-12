@@ -33,13 +33,15 @@ const handleSubmit = async (e) => {
   setError("");
 
   try {
-    const data = await loginUser(username, password);
-    localStorage.setItem("token", data.token);
+    const response = await loginUser(username, password);
+
+    localStorage.setItem("token", response.data.accessToken);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
+    localStorage.setItem("currentUser", JSON.stringify(response.data.data));
+
     navigate("/dashboard");
-   } catch (err) {
+  } catch (err) {
     console.log("Full error:", err);
-    console.log("Error response:", err.response);
-    console.log("Error response data:", err.response?.data);
     setError(err.response?.data?.message || "Invalid username or password. Please try again.");
   } finally {
     setLoading(false);
@@ -154,7 +156,7 @@ const handleSubmit = async (e) => {
       <div className="copyright">Copyright © 2024 Simplecall. All rights reserved</div>
     </div>
   );
-};
+}; 
 
 <div> 
 
