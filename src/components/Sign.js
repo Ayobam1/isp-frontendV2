@@ -33,12 +33,7 @@ const handleSubmit = async (e) => {
   setError("");
 
   try {
-    const response = await loginUser(username, password);
-
-    localStorage.setItem("token", response.data.accessToken);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
-    localStorage.setItem("currentUser", JSON.stringify(response.data.data));
-
+    await loginUser(username, password); // authService already stores token, refreshToken, currentUser
     navigate("/dashboard");
   } catch (err) {
     console.log("Full error:", err);

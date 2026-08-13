@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './getStartedPayment.css';
 
 
@@ -60,10 +61,18 @@ export default function GetStartedPayment({
   discount = "₦0.00",
   total = "₦48,375",
   onComplete = () => {},
-}) {
-  const [selectedMethod, setSelectedMethod] = useState("card");
+}) 
 
+{
+  const navigate = useNavigate();
+  const [selectedMethod, setSelectedMethod] = useState("card");
   const isCard = selectedMethod === "card";
+
+  const handleComplete = () => {
+    console.log('Complete clicked — bypassing payment for testing');
+    navigate('/signin');
+  };
+
 
   return (
     <div className="gsp-page">
@@ -312,7 +321,7 @@ export default function GetStartedPayment({
                 <button
                   type="button"
                   className="gsp-complete-btn"
-                  onClick={onComplete}
+                  onClick={handleComplete}
                 >
                   Complete
                 </button>
