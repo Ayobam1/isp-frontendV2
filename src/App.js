@@ -11,32 +11,34 @@ import Buybundle from './components/Buybundle';
 import GetStartedForm from './components/getStartedForm';
 import GetStartedVerification from './components/getStartedVerification';
 import GetStartedPayment from './components/getStartedPayment';
+import NinVerificationPage from './components/NinVerificationPage';
+import { OnboardingProvider } from './context/OnboardingContext';
 // import Payments from './components/Payments';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/started" element={<Started />} />
-        <Route path="/signin" element={<Sign />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/subscriptions" element={<Subscriptions />} />
-        <Route path="/support" element={<Support />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/buybundle" element={<Buybundle />} />
-        <Route path="/getstartedform" element={<GetStartedForm />} />
-        <Route path="/verification" element={<GetStartedVerification />} />
-         <Route path="/verifypayment" element={<GetStartedPayment />} />
+      <OnboardingProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/started" element={<Started />} />
+          <Route path="/signin" element={<Sign />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/buybundle" element={<Buybundle />} />
+          <Route path="/getstartedform" element={<GetStartedForm />} />
+          <Route path="/verification" element={<GetStartedVerification />} />
+          <Route path="/verifypayment" element={<GetStartedPayment />} />
+          <Route path="/verifynin/" element={<NinVerificationPage />} />
 
-
-        {/* <Route path="/payments" element={<Payments />} /> */}
-      </Routes>
+          {/* <Route path="/payments" element={<Payments />} /> */}
+        </Routes>
+      </OnboardingProvider>
     </Router>
   );
 }
 
 export default App;
-
-

@@ -71,7 +71,7 @@ const Buybundle = () => {
     speed: "15mbps High Speed Data",
     validity: "30 Days Premium",
     badge: "Bestseller",
-    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=15MBPS , Time=24Hrs"
   },
   {
     id: 2,
@@ -80,7 +80,7 @@ const Buybundle = () => {
     speed: "30mbps High Speed Data",
     validity: "30 Days Premium",
     badge: null,
-    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=30MBPS , Time=24Hrs"
   },
   {
     id: 3,
@@ -89,34 +89,34 @@ const Buybundle = () => {
     speed: "5mbps High Speed Data",
     validity: "30 Days Premium",
     badge: null,
-    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=5MBPS , Time=24Hrs"
   },
   {
     id: 4,
-    bundleName: "Imbil Standard",
-    amount: "₦42,500",
-    speed: "15mbps High Speed Data",
-    validity: "30 Days Premium",
-    badge: null,
-    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
-  },
-  {
-    id: 5,
     bundleName: "Imbil Classic",
-    amount: "₦18,900",
+    amount: "₦37,625",
     speed: "8mbps High Speed Data",
     validity: "30 Days Premium",
     badge: null,
-    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=8MBPS , Time=24Hrs"
+  },
+  {
+    id: 5,
+    bundleName: "Imbil Supreme",
+    amount: "₦84,387.50",
+    speed: "50mbps High Speed Data",
+    validity: "30 Days Premium",
+    badge: null,
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=50MBPS , Time=24Hrs"
   },
   {
     id: 6,
-    bundleName: "Imbil Standard",
-    amount: "₦9,000",
-    speed: "15mbps High Speed Data",
+    bundleName: "Imbil Platinum",
+    amount: "₦97,610",
+    speed: "100mbps High Speed Data",
     validity: "30 Days Premium",
     badge: null,
-    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=1MBPS , Time=24Hrs"
+    description: "Unlimited Data,Speed = Burstable upto 200 GB,FUP=100MBPS , Time=24Hrs"
   }
 ];
     

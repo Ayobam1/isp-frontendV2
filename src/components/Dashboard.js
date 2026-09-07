@@ -21,6 +21,7 @@ import WalletPopup from './WalletPopup';
 import WalletSuccess from './WalletSuccess';
 import { getWalletBalance } from "../api/authService";
 
+
 import Popup from './Popup';
 import './Dashboard.css';
 
@@ -34,6 +35,8 @@ const Dashboard = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [isPolling, setIsPolling] = useState( false); 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);  
+
+
 
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -94,6 +97,7 @@ const fetchLatestBalance = async () => {
     return null;
   }
 };
+
 
 const handleWalletDone = async () => {
   setShowWallet(false);
@@ -226,25 +230,25 @@ const transactions = userData.transactions || [];
 
   <div className="dash-menu-items">
     <div className="dash-menu-item active" onClick={handleDashboardClick}>
-      <div className="dash-menu-icon">
+        <div className="dash-menu-icon">
         <img src={dashboardicon} alt="Dashboard" />
-      </div>
-      <span>Dashboard</span>
-      <div className="dash-active-indicator"></div>
+        </div>
+        <span>Dashboard</span>
+        <div className="dash-active-indicator"></div>
     </div>
     <div className="dash-menu-item" onClick={handleSubscriptionsClick}>
-      <div className="dash-menu-icon">
+        <div className="dash-menu-icon">
         <img src={subscriptionicon} alt="Subscriptions" />
-      </div>
-      <span>Subscriptions</span>
+        </div>
+        <span>Subscriptions</span>
     </div>
     <div className="dash-menu-item" onClick={handleHistoryClick}>
-      <div className="dash-menu-icon">
+        <div className="dash-menu-icon">
         <img src={historyicon} alt="History" />
-      </div>
-      <span>History</span>
-      <div className="dash-chevron-icon"></div>
-    </div>
+        </div>
+        <span>History</span>
+        <div className="dash-chevron-icon"></div>
+        </div>
   </div>
 
   <div className="dash-bottom-menu-items">
@@ -326,13 +330,13 @@ const transactions = userData.transactions || [];
     </div>
 
     {/* Fund Wallet — top right on mobile */}
-      <button className="fund-wallet-mobile" onClick={() => setShowWallet(true)}>
-    <img src={fundicon} alt="Fund" />
-    <span>Fund Wallet</span>
-  </button>
-  </div>
+     <button className="fund-wallet-mobile" onClick={() => setShowWallet(true)}>
+  <img src={fundicon} alt="Fund" />
+  <span>Fund Wallet</span>
+</button>
+      </div>
 
-              <div className="hide-balance-btn" onClick={toggleBalance}>
+    <div className="hide-balance-btn" onClick={toggleBalance}>
     <span>{hideBalance ? 'Show Balance' : 'Hide Balance'}</span>
     <div className="eye-icon">
       <img src={hideicon} alt="hide" />
@@ -348,24 +352,25 @@ const transactions = userData.transactions || [];
               <div className="action-buttons">
                 <div>
                 <button className="fund-wallet-btn" onClick={() => setShowWallet(true)}>
-                  <div className="plus-icon">
-                  <img src={fundicon} alt="History" />
-                  </div>
-                  <span>Fund Wallet</span>
-                </button>
+  <div className="plus-icon">
+    <img src={fundicon} alt="History" />
+  </div>
+  <span>Fund Wallet</span>
+</button>
 
                 {isPolling && (
   <div className="polling-banner">
     ⏳ Waiting for payment confirmation...
   </div>
 )}
- <WalletPopup
+<WalletPopup
   isOpen={showWallet}
   onClose={() => setShowWallet(false)}
   accountNumber={userData?.accountNumber}
   accountName={userData?.accountName}
   bankName={userData?.bankName}
-/>  
+/>
+
 <WalletSuccess
   isOpen={showSuccess}
   onClose={() => setShowSuccess(false)}

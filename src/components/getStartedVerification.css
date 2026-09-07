@@ -9,6 +9,18 @@
   --gsf-error-red: #C0392B;
 }
 
+.gsf-nin-section {
+  margin-bottom: 1.5rem;
+}
+
+.gsf-nin-verified-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #12b76a;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 .gsf-page {
   width: 100%;
   background: #FFFFFF;

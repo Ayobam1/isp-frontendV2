@@ -38,6 +38,13 @@ export const verifyAddressAndGetPaymentLink = async (requestId, payload) => {
   return response.data;
 };
 
+export const createSupportTicket = async (payload) => {
+  const response = await axiosInstance.post("/support", payload);
+  return response.data;
+};
+
+
+
 export const cancelSubscription = (subscriptionID, planType) => {
   return axiosInstance.post(`/subscription/${subscriptionID}/cancel`, { planType });
 };
@@ -45,4 +52,11 @@ export const cancelSubscription = (subscriptionID, planType) => {
 // authService.js
 export const reactivateSubscription = (subscriptionID, planType) => {
   return axiosInstance.post(`/subscription/${subscriptionID}/reactivate`, { planType });
+};
+
+export const syncWallet = () => axiosInstance.post('/users/wallet/sync');
+
+export const getPaymentLink = async (requestId, payload) => {
+  const response = await axiosInstance.post(`/requests/${requestId}/get-payment-link`, payload);
+  return response.data; 
 };

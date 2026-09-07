@@ -7,6 +7,7 @@ import emailIcon from '../assets/startedemail.png';
 import numberIcon from '../assets/startedcall.png';
 import residenceIcon from '../assets/residence.png';
 import expandArrow from '../assets/Expand Arrow.png';
+import { useOnboarding } from '../context/OnboardingContext';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -16,19 +17,12 @@ const Started = () => {
 
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-  name: '',
-  phone: '',
-  address: '',
-  email: '',
-  preferredarea: 'Select City',
-  preferredaboutus: 'Select how you heard about us',
-  heardAboutUsValue: '',
-  salesAgentName: ''
-});
+const { serviceForm: formData, updateServiceForm } = useOnboarding();
+const termsAgreed = formData.termsAgreed;
+const setTermsAgreed = (value) => updateServiceForm({ termsAgreed: value });
  
     
-      const [termsAgreed, setTermsAgreed] = useState(false);
+      // const [termsAgreed, setTermsAgreed] = useState(false);
       const [areaDropdownOpen, setareaDropdownOpen] = useState(false);
        const [aboutusDropdownOpen, setaboutusDropdownOpen] = useState(false);
       const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,9 +32,26 @@ const Started = () => {
       const aboutusDropdownRef = useRef(null);
       
       const areaOptions = [
+        'Agege',
+        'Ajeromi-Ifelodun',
+        'Alimosho',
+        'Amuwo-Odofin',
+        'Apapa',
+        'Badagry',
+        'Epe',
+        'Eti-Osa',
+        'Ibeju-Lekki',
+        'Ifako-Ijaiye',
         'Ikeja',
-        'Surulere',
-        'Lekki',
+        'Ikorodu',
+        'Kosofe',
+        'Lagos Island',
+        'Lagos Mainland',
+        'Mushin',
+        'Ojo',
+        'Oshodi-Isolo',
+        'Shomolu',
+        'Surulere'
         
       ];
 
@@ -93,49 +104,28 @@ const aboutusOptions = [
         };
       }, []);
 
-      const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-          ...formData,
-          [name]: value
-        });
-        
-        if (errors[name]) {
-          setErrors({
-            ...errors,
-            [name]: ''
-          });
-        }
-      };
+   const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  updateServiceForm({ [name]: value });
+
+  if (errors[name]) {
+    setErrors({ ...errors, [name]: '' });
+  }
+};
 
     
     
-      const handleareaSelect = (area) => {
-        setFormData (prevState => ({
-          ...prevState, 
-          preferredarea :area
-        })) ;
-       setareaDropdownOpen(false);
-      }
+  const handleareaSelect = (area) => {
+  updateServiceForm({ preferredarea: area });
+  setareaDropdownOpen(false);
+};
 
 const handleaboutusSelect = (aboutus) => {
-  setFormData((prevState) => ({
-    ...prevState,
-    
-
-
+  updateServiceForm({
     preferredaboutus: aboutus.label,
-
-    
     heardAboutUsValue: aboutus.value,
-
-    // Clear the sales-agent name if another option is selected
-    salesAgentName:
-      aboutus.value === 'SALES_AGENT'
-        ? prevState.salesAgentName
-        : ''
-  }));
-
+    salesAgentName: aboutus.value === 'SALES_AGENT' ? formData.salesAgentName : '',
+  });
   setaboutusDropdownOpen(false);
 };
 
@@ -207,10 +197,10 @@ const handleSubmit = async (e) => {
 
   try {
   
-    localStorage.setItem(
-      "serviceRequestData",
-      JSON.stringify(formData)
-    );
+    // localStorage.setItem(
+    //   "serviceRequestData",
+    //   JSON.stringify(formData)
+    // );
 
   
     console.log(

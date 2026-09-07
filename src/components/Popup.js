@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../api/authService';
 import './Popup.css';
@@ -21,7 +22,7 @@ const Popup = ({ onClose, onLogout }) => {
     }
   };
 
-  return (
+  return createPortal(
     <div className="logout-overlay">
       <div className="logout-popup-container">
         <div className="logout-popup-alert-icon">
@@ -44,7 +45,8 @@ const Popup = ({ onClose, onLogout }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

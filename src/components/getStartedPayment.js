@@ -1,340 +1,188 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import './getStartedPayment.css';
+import speedIcon from '../assets/lightning.png';
+import { useOnboarding } from '../context/OnboardingContext';
+import { getPaymentLink } from '../api/authService';
+import "./getStartedPayment.css";
 
+function GetStartedPayment() {
+  const [currentStep] = useState(3);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-const STEPS = [
-  { id: 1, label: "Verification" },
-  { id: 2, label: "Select Plan" },
-  { id: 3, label: "Payment" },
-];
+  const { selectedPlan, serviceForm, availabilityDate, installationPhone, requestId } = useOnboarding();
 
-const CheckIcon = () => (
-  <svg viewBox="0 0 14 11" fill="none" className="gsp-check-icon">
-    <path
-      d="M1 5.5L4.8 9.3L13 1"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const CardIcon = () => (
-  <svg viewBox="0 0 20 16" fill="none" className="gsp-option-icon">
-    <rect x="1" y="1" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M1 5.5H19" stroke="currentColor" strokeWidth="1.5" />
-  </svg>
-);
-
-const WalletIcon = () => (
-  <svg viewBox="0 0 19 18" fill="none" className="gsp-option-icon">
-    <path
-      d="M2 3.5C2 2.4 2.9 1.5 4 1.5H15C16.1 1.5 17 2.4 17 3.5V14.5C17 15.6 16.1 16.5 15 16.5H4C2.9 16.5 2 15.6 2 14.5V3.5Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-    />
-    <circle cx="13" cy="9.5" r="1.3" fill="currentColor" />
-  </svg>
-);
-
-const BankIcon = () => (
-  <svg viewBox="0 0 20 20" fill="none" className="gsp-option-icon">
-    <path d="M2 8L10 2L18 8" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-    <path d="M3 8H17V17H3V8Z" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M2 17H18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-);
-
-const LockIcon = () => (
-  <svg viewBox="0 0 22 21" fill="none" className="gsp-lock-icon">
-    <rect x="4" y="9" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M7 9V6C7 3.8 8.8 2 11 2C13.2 2 15 3.8 15 6V9" stroke="currentColor" strokeWidth="1.5" />
-  </svg>
-);
-
-export default function GetStartedPayment({
-  planName = "IMBIL Pro Plan",
-  planPrice = "₦48,375",
-  subtotal = "₦48,375",
-  discount = "₦0.00",
-  total = "₦48,375",
-  onComplete = () => {},
-}) 
-
-{
-  const navigate = useNavigate();
-  const [selectedMethod, setSelectedMethod] = useState("card");
-  const isCard = selectedMethod === "card";
-
-  const handleComplete = () => {
-    console.log('Complete clicked — bypassing payment for testing');
-    navigate('/signin');
+  const paymentData = {
+    planName: selectedPlan?.name || "",
+    amount: selectedPlan?.price ? `₦${selectedPlan.price}` : "",
+    customerName: serviceForm?.name || "",
+    installationDate: availabilityDate
+      ? new Date(availabilityDate).toLocaleDateString("en-GB", {
+          day: "2-digit", month: "short", year: "numeric",
+        })
+      : "",
+    email: serviceForm?.email || "",
+    phone: installationPhone || serviceForm?.contactPhone || "",
   };
 
+  const handleCompletePayment = async () => {
+    setSubmitError("");
+
+    if (!requestId) {
+      setSubmitError("Missing request info. Please restart from Step 1.");
+      return;
+    }
+    if (!availabilityDate || !installationPhone || !selectedPlan?.id) {
+      setSubmitError("Missing installation details. Please go back and complete Step 2.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { paymentUrl } = await getPaymentLink(requestId, {
+        phone_number: installationPhone,
+        availability_date: availabilityDate,
+        planType: selectedPlan.id,
+      });
+
+      if (!paymentUrl) {
+        setSubmitError("We couldn't generate a payment link. Please try again.");
+        return;
+      }
+
+      window.location.href = paymentUrl; // hands off to Paystack's hosted checkout
+    } catch (error) {
+      console.error("Error getting payment link:", error);
+      setSubmitError(
+        error.response?.data?.message ||
+        "An error occurred while generating your payment link. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const steps = [
+    { number: 1, label: "Choose Plan" },
+    { number: 2, label: "Verification" },
+    { number: 3, label: "Payment" },
+  ];
 
   return (
-    <div className="gsp-page">
-      <div className="gsp-canvas">
-        {/* Stepper */}
-        <div className="gsp-stepper">
-          <div className="gsp-stepper-row">
-            {STEPS.map((step, index) => {
-              const isComplete = step.id < 3;
-              const isCurrent = step.id === 3;
-              const isLastStep = index === STEPS.length - 1;
+    <div className="gsp-canvas">
 
-              return (
-                <div className="gsp-step" key={step.id}>
-                  <div className="gsp-step-top">
-                    <div
-                      className={`gsp-step-circle ${
-                        isComplete ? "gsp-step-circle--complete" : ""
-                      } ${isCurrent ? "gsp-step-circle--current" : ""}`}
-                    >
-                      <span className="gsp-step-circle-ring" />
-                      {isComplete ? (
-                        <CheckIcon />
-                      ) : (
-                        <span className="gsp-step-number">{step.id}</span>
-                      )}
-                    </div>
-                    <span
-                      className={`gsp-step-label ${
-                        isCurrent ? "gsp-step-label--current" : ""
-                      }`}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
-
-                  {!isLastStep && (
-                    <div className="gsp-step-line">
-                      <span
-                        className={`gsp-step-line-segment ${
-                          isComplete ? "gsp-step-line-segment--filled" : ""
-                        }`}
-                      />
-                      <span
-                        className={`gsp-step-line-segment ${
-                          step.id === 2 ? "" : "gsp-step-line-segment--filled"
-                        }`}
-                      />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Heading */}
-        <div className="gsp-heading">
-          <h1 className="gsp-title">Step 3: Secure Payment</h1>
-          <p className="gsp-subtitle">
-            Finalize your subscription to activate your high-speed connectivity.
-          </p>
-        </div>
-
-        {/* Bento grid */}
-        <div className="gsp-grid">
-          {/* Left column: Payment methods */}
-          <div className="gsp-methods-card">
-            <h3 className="gsp-card-heading">Payment Method</h3>
-
-            <div className="gsp-options">
-              <label
-                className={`gsp-option ${isCard ? "gsp-option--selected" : ""}`}
-              >
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="card"
-                  checked={isCard}
-                  onChange={() => setSelectedMethod("card")}
-                  className="gsp-option-radio-input"
-                />
-                <span className="gsp-option-radio" aria-hidden="true">
-                  {isCard && <CheckIcon />}
-                </span>
-                <span className="gsp-option-content">
-                  <span className="gsp-option-text">Debit / Credit Card</span>
-                  <CardIcon />
-                </span>
-              </label>
-
-              <label
-                className={`gsp-option gsp-option--featured ${
-                  selectedMethod === "imbil-pay" ? "gsp-option--selected-outline" : ""
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="imbil-pay"
-                  checked={selectedMethod === "imbil-pay"}
-                  onChange={() => setSelectedMethod("imbil-pay")}
-                  className="gsp-option-radio-input"
-                />
-                <span className="gsp-option-radio gsp-option-radio--outline" aria-hidden="true">
-                  {selectedMethod === "imbil-pay" && <span className="gsp-option-radio-dot" />}
-                </span>
-                <span className="gsp-option-content">
-                  <span className="gsp-option-featured-text">
-                    <span className="gsp-option-text gsp-option-text--brand">IMBIL Pay</span>
-                    <span className="gsp-badge">Save 5%</span>
-                  </span>
-                  <WalletIcon />
-                </span>
-              </label>
-
-              <label
-                className={`gsp-option ${
-                  selectedMethod === "bank" ? "gsp-option--selected-outline" : ""
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="payment-method"
-                  value="bank"
-                  checked={selectedMethod === "bank"}
-                  onChange={() => setSelectedMethod("bank")}
-                  className="gsp-option-radio-input"
-                />
-                <span className="gsp-option-radio gsp-option-radio--outline" aria-hidden="true">
-                  {selectedMethod === "bank" && <span className="gsp-option-radio-dot" />}
-                </span>
-                <span className="gsp-option-content">
-                  <span className="gsp-option-text">Bank Transfer</span>
-                  <BankIcon />
-                </span>
-              </label>
-            </div>
-
-            {/* Card details - only relevant when card is selected */}
-            {isCard && (
-              <div className="gsp-card-details">
-                <div className="gsp-field">
-                  <label htmlFor="cardholder-name" className="gsp-field-label">
-                    Cardholder Name
-                  </label>
-                  <input
-                    id="cardholder-name"
-                    type="text"
-                    className="gsp-input"
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div className="gsp-field">
-                  <label htmlFor="card-number" className="gsp-field-label">
-                    Card Number
-                  </label>
-                  <div className="gsp-input-wrapper">
-                    <input
-                      id="card-number"
-                      type="text"
-                      className="gsp-input"
-                      placeholder="**** **** **** 1234"
-                      inputMode="numeric"
-                    />
-                    <CardIcon />
-                  </div>
-                </div>
-
-                <div className="gsp-field-row">
-                  <div className="gsp-field">
-                    <label htmlFor="expiry-date" className="gsp-field-label">
-                      Expiry Date
-                    </label>
-                    <input
-                      id="expiry-date"
-                      type="text"
-                      className="gsp-input"
-                      placeholder="MM/YY"
-                    />
-                  </div>
-
-                  <div className="gsp-field">
-                    <label htmlFor="cvv" className="gsp-field-label">
-                      CVV
-                    </label>
-                    <input
-                      id="cvv"
-                      type="text"
-                      className="gsp-input"
-                      placeholder="***"
-                      inputMode="numeric"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right column: Order summary */}
-          <div className="gsp-summary">
-            <div className="gsp-summary-card">
-              <span className="gsp-summary-blob gsp-summary-blob--top" aria-hidden="true" />
-              <span className="gsp-summary-blob gsp-summary-blob--bottom" aria-hidden="true" />
-
-              <div className="gsp-summary-content">
-                <h3 className="gsp-summary-heading">Order Summary</h3>
-
-                <div className="gsp-summary-lines">
-                  <div className="gsp-summary-row">
-                    <div>
-                      <p className="gsp-summary-label">{planName}</p>
-                      <p className="gsp-summary-value">{planPrice}/mo</p>
-                    </div>
-                    <WalletIcon />
-                  </div>
-
-                  <div className="gsp-summary-row gsp-summary-row--divider">
-                    <span className="gsp-summary-label gsp-summary-label--light">
-                      Subtotal
-                    </span>
-                    <span className="gsp-summary-value gsp-summary-value--light">
-                      {subtotal}
-                    </span>
-                  </div>
-
-                  <div className="gsp-summary-row">
-                    <span className="gsp-summary-label gsp-summary-label--light">
-                      Discount
-                    </span>
-                    <span className="gsp-summary-value gsp-summary-value--light">
-                      {discount}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="gsp-summary-note">
-                  <LockIcon />
-                  <p className="gsp-summary-note-text">
-                    Your payment is encrypted and processed securely. We never
-                    store your full card details.
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  className="gsp-complete-btn"
-                  onClick={handleComplete}
+      <div className="gsf-stepper-wrapper">
+        <div className="gsf-stepper-row">
+          {steps.map((step, index) => (
+            <React.Fragment key={step.number}>
+              <div className="gsf-step">
+                <div
+                  className={`
+                    gsf-step-circle
+                    ${currentStep === step.number ? "active" : ""}
+                    ${currentStep > step.number ? "completed" : ""}
+                  `}
                 >
-                  Complete
-                </button>
-
-                <p className="gsp-secure-text">
-                  By completing this purchase, you agree to IMBIL's Terms of
-                  Service and Privacy Policy.
-                </p>
+                  <span className="gsf-step-number">{step.number}</span>
+                </div>
+                <div className="gsf-step-label-wrap">
+                  <span className={`gsf-step-label ${currentStep === step.number ? "active" : ""}`}>
+                    {step.label}
+                  </span>
+                </div>
               </div>
+
+              {index < steps.length - 1 && (
+                <div className="gsf-step-track">
+                  <div className={`gsf-step-track-fill ${currentStep > step.number ? "filled" : ""}`} />
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      <header className="gsp-header">
+        <h1 className="gsp-title">Step 3: Payment Summary</h1>
+        <p className="gsp-subtitle">
+          Finalize your subscription to activate your high-speed connectivity.
+        </p>
+      </header>
+
+      <div className="gsp-card">
+        <div className="gsp-card__row">
+          <div className="gsp-card__row-top">
+            <span className="gsp-eyebrow">Order Summary</span>
+            <div className="gsp-icon-badge" aria-hidden="true">
+              <img src={speedIcon} alt="Speed" />
             </div>
+          </div>
+
+          <div className="gsp-plan-line">
+            <div className="gsp-plan-line__col">
+              <span className="gsp-eyebrow">ISP Package</span>
+              <span className="gsp-plan-name">{paymentData.planName || "Loading..."}</span>
+            </div>
+            <div className="gsp-plan-line__col gsp-plan-line__col--right">
+              <span className="gsp-eyebrow">Amount</span>
+              <span className="gsp-plan-amount">{paymentData.amount || "Loading..."}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gsp-card__row gsp-card__row--split">
+          <div className="gsp-field">
+            <span className="gsp-eyebrow">Customer Name</span>
+            <span className="gsp-value">{paymentData.customerName || "Loading..."}</span>
+          </div>
+          <div className="gsp-field">
+            <span className="gsp-eyebrow">Preferred Installation Date</span>
+            <span className="gsp-value">{paymentData.installationDate || "Loading..."}</span>
+          </div>
+        </div>
+
+        <div className="gsp-card__row">
+          <span className="gsp-eyebrow">Contact Details</span>
+          <div className="gsp-contact">
+            <div className="gsp-contact__item">
+              <span className="gsp-value">{paymentData.email || "Loading..."}</span>
+            </div>
+            <div className="gsp-contact__item">
+              <span className="gsp-value">{paymentData.phone || "Loading..."}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gsp-notice-wrap">
+          <div className="gsp-notice">
+            <p className="gsp-notice__text">
+              Your subscription will renew automatically each billing cycle. You can cancel
+              anytime from your dashboard.
+            </p>
           </div>
         </div>
       </div>
+
+      <div className="gsp-submit">
+        {submitError && (
+          <div className="gsf-error-message" role="alert">{submitError}</div>
+        )}
+
+        <button
+          type="button"
+          className="gsp-pay-button"
+          onClick={handleCompletePayment}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Processing…" : "Complete Payment"}
+        </button>
+
+        <p className="gsp-fineprint">
+          By completing payment, you agree to IMBIL's Terms of Service and Privacy Policy.
+        </p>
+      </div>
+
     </div>
   );
 }
+
+export default GetStartedPayment;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import './WalletPopup.css';
 import bankWallet from '../assets/Bank wallet.png';
 import walletSolution from '../assets/walletsolution.png';
@@ -12,7 +13,7 @@ const WalletPopup = ({ isOpen, onClose, accountNumber, accountName, bankName }) 
     alert("Account number copied!");
   };
 
-  return (
+  return createPortal (
     <div className="wallet-overlay" onClick={onClose}>
       <div className="fund-wallet" onClick={e => e.stopPropagation()}>
 
@@ -76,7 +77,8 @@ const WalletPopup = ({ isOpen, onClose, accountNumber, accountName, bankName }) 
         </div>
 
       </div>  
-    </div>    
+    </div>,
+    document.body    
   );
 };
 

@@ -1,0 +1,44 @@
+/* NinVerification.css */
+.nin-verification {
+  max-width: 420px;
+}
+
+.nin-loading {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.nin-error {
+  color: #d92d20;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.nin-success {
+  color: #12b76a;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nin-retry-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.nin-retry-btn {
+  padding: 0.65rem 1.5rem;
+  border: 1px solid #1a3a8f;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #1a3a8f;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.nin-retry-btn:hover {
+  background-color: #1a3a8f;
+  color: #fff;
+}

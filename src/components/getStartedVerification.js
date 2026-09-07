@@ -1,28 +1,31 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useOnboarding } from '../context/OnboardingContext';
 import './getStartedVerification.css';
 import phoneIcon from '../assets/veriphone.png';
-import fingerprintIcon from '../assets/fingerprint.png';
 import encryptionIcon from '../assets/encryption.png';
 import uploadIcon from '../assets/uploadIcon.png';
 import checkIcon from '../assets/vectorcheck.png';
-import { verifyAddressAndGetPaymentLink } from '../api/authService';
 
-function GetStartedVerification({ onBack, onContinue }) {
-  const [nin, setNin] = useState('');
-  const [phone, setPhone] = useState('');
-  const [uploadedFile, setUploadedFile] = useState(null);
+
+function GetStartedVerification({ onContinue }) {
+  const {
+    availabilityDate: availability_date,
+    setAvailabilityDate,
+    installationPhone: phone,
+    setInstallationPhone: setPhone,
+    uploadedFile,
+    setUploadedFile,
+    requestId,
+    selectedPlan,
+    serviceForm,
+  } = useOnboarding();
+
   const [isDragging, setIsDragging] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
 
-  const handleNinChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 11);
-    setNin(value);
-  };
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleFileSelect = (file) => {
     if (!file) return;
@@ -45,100 +48,41 @@ const navigate = useNavigate();
     handleFileSelect(e.dataTransfer.files[0]);
   };
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     const newErrors = {};
 
-    if (nin.length !== 11) newErrors.nin = 'Enter a valid 11-digit NIN.';
-    if (!phone.trim()) newErrors.phone = 'Phone number is required.';
+    if (!availability_date) newErrors.availability_date = 'Enter a valid Installation Date.';
+    if (!phone?.trim()) newErrors.phone = 'Phone number is required.';
     if (!uploadedFile) newErrors.file = 'Please upload a utility bill.';
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    setIsVerifying(true);
-
-    try {
-      const requestId = localStorage.getItem('requestId');
-      const address = localStorage.getItem('requestAddress');
-      const selectedPlan = JSON.parse(
-        localStorage.getItem('selectedPlan') || 'null'
-      );
-
-      console.log('Selected plan from localStorage:', selectedPlan);
-      console.log('Selected plan ID:', selectedPlan?.id);
-      console.log('Plan being sent:', selectedPlan?.id?.toUpperCase());
-
-
-      if (!requestId || !address || !selectedPlan) {
-        setErrors((prev) => ({
-          ...prev,
-          general: 'Missing request info. Please restart from Step 1.',
-        }));
-        return;
-      }
-          const payload = {
-        address,
-        planType: selectedPlan.id.toUpperCase(), // "classic" -> "CLASSIC"
-      };
-
-      console.log('Verifying address with payload:', payload);
-
-     const response = await verifyAddressAndGetPaymentLink(
-  requestId,
-  payload
-);
-
-console.log(
-  'Full response from verifyAddressAndGetPaymentLink:',
-  response
-);
-
-const { matched, paymentUrl } = response;
-
-console.log('Verify-address response:', response);
-
-if (matched && paymentUrl) {
-  localStorage.setItem('paymentUrl', paymentUrl);
-
-  if (onContinue) {
-    onContinue({ nin, phone, uploadedFile });
-  }
-
-  navigate('/verifypayment/');
-} else {
-  setErrors((prev) => ({
-    ...prev,
-    general:
-      "We couldn't match this address to your request. Please check it and try again.",
-  }));
-}
-
-    } catch (error) {
-      console.error('Address verification failed:', error);
-      console.error('Backend response:', error.response?.data);  
+    if (!requestId || !serviceForm?.address || !selectedPlan) {
       setErrors((prev) => ({
         ...prev,
-        general:
-          error.response?.data?.message ||
-          'Something went wrong verifying your address. Please try again.',
+        general: 'Missing request info. Please restart from Step 1.',
       }));
-    } finally {
-      setIsVerifying(false);
+      return;
     }
+
+    if (onContinue) {
+      onContinue({ availability_date, phone, uploadedFile });
+    }
+
+    navigate('/verifynin/');
   };
-    
 
   return (
     <div className="gsf-page">
       <div className="gsf-canvas">
 
-      
         <div className="gsf-stepper-wrapper">
           <div className="gsf-stepper-row">
 
             <div className="gsf-step">
               <div className="gsf-step-circle completed">
-                  <img src={checkIcon} alt="Completed" className="gsf-step-check" />
+                <img src={checkIcon} alt="Completed" className="gsf-step-check" />
               </div>
               <div className="gsf-step-label-wrap">
                 <span className="gsf-step-label completed">Select Plan</span>
@@ -172,7 +116,6 @@ if (matched && paymentUrl) {
           </div>
         </div>
 
-        {/* Heading */}
         <div className="gsf-heading-container">
           <h1 className="gsf-heading">Step 2: Identity &amp; Address Verification</h1>
           <p className="gsf-subheading">
@@ -180,42 +123,34 @@ if (matched && paymentUrl) {
           </p>
         </div>
 
-        {/* Verification Card */}
         <div className="gsf-card">
           <div className="gsf-form">
 
-            {/* NIN + Phone grid */}
             <div className="gsf-form-grid">
               <div className="gsf-field">
-                <label className="gsf-field-label">National Identity Number (NIN)</label>
+                <label className="gsf-field-label">Preffered Installation Date </label>
                 <div className="gsf-input-wrapper">
-                  <div className="gsf-input-icon nin-icon">
-                     <img src={fingerprintIcon} alt="Name" className="fingerprinticon" />
-                  </div>
                   <input
-                    type="text"
-                    inputMode="numeric"
+                    type="date"
                     className="gsf-input"
-                    placeholder="Enter your 11-digit NIN"
-                    value={nin}
-                    onChange={handleNinChange}
+                    value={availability_date}
+                    onChange={(e) => setAvailabilityDate(e.target.value)}
                   />
                 </div>
-                {errors.nin && <span className="gsf-error">{errors.nin}</span>}
-                <p className="gsf-field-hint">* We verify your identity via NIMC secure gateway.</p>
+                {errors.availability_date && <span className="gsf-error">{errors.availability_date}</span>}
               </div>
 
               <div className="gsf-field">
                 <label className="gsf-field-label">Mobile Contact</label>
                 <div className="gsf-input-wrapper">
                   <div className="gsf-input-icon phone-icon">
-                      <img src={phoneIcon} alt="Name" className="phoneicon" />
+                    <img src={phoneIcon} alt="Name" className="phoneicon" />
                   </div>
                   <input
                     type="tel"
                     className="gsf-input"
                     placeholder="e.g. +234 800 000 0000"
-                    value={phone}
+                    value={phone || ''}
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
@@ -223,7 +158,6 @@ if (matched && paymentUrl) {
               </div>
             </div>
 
-            {/* Upload zone */}
             <div className="gsf-upload-section">
               <label className="gsf-field-label">Address Verification Document</label>
 
@@ -246,7 +180,7 @@ if (matched && paymentUrl) {
                   <>
                     <div className="gsf-upload-icon-wrap">
                       <div className="gsf-upload-icon">
-                          <img src={uploadIcon} alt="Name" className="uploadicon" />
+                        <img src={uploadIcon} alt="Name" className="uploadicon" />
                       </div>
                     </div>
                     <h3 className="gsf-upload-title">Upload Utility Bill</h3>
@@ -274,7 +208,6 @@ if (matched && paymentUrl) {
               {errors.file && <span className="gsf-error">{errors.file}</span>}
             </div>
 
-            {/* Actions */}
             <div className="gsf-verify-actions">
               <div className="gsf-security-note">
                 <div className="gsf-security-icon">

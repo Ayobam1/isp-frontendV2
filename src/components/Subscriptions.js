@@ -364,7 +364,7 @@ const daysRemaining = currentSubscription?.nextPaymentDate
                     <div className="frame2-plan-icon"><img src={tagicon} alt="tag"/></div>
                     <div className="frame2-plan-info">
                       <h3 className="frame2-plan-name">Imbil Connect Standard</h3>
-                      <p className="frame2-plan-description">Unlimited Data for N84,387.50/month</p>
+                      <p className="frame2-plan-description">Unlimited Data for N48,387.50/month</p>
                     </div>
                   </div>
                   <div className="features-list">

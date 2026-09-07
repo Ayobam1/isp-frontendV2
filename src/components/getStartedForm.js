@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./getStartedForm.css";
 import { useNavigate } from "react-router-dom";
-
+import { useOnboarding } from '../context/OnboardingContext';
 import streamingIcon from "../assets/streamingIcon.png";
 import speedIcon from "../assets/speedIcon.png";
 import securityIcon from "../assets/securityIcon.png";
@@ -84,7 +84,12 @@ function GetStartedForm() {
 
   const [currentStep] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState("standard");
+
+
+// inside the component:
+const { serviceForm, selectedPlan: contextSelectedPlan, setSelectedPlan, setRequestId, requestId } = useOnboarding();
+console.log('requestId on mount:', requestId);
+const [selectedPlanId, setSelectedPlanId] = useState(contextSelectedPlan?.id || "standard");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -95,11 +100,17 @@ function GetStartedForm() {
   );
 
 
-  const handleSelectPlan = (id) => {
-    setSelectedPlanId(id);
-    setDropdownOpen(false);
-  };
+const handleSelectPlan = (id) => {
+  setSelectedPlanId(id);
+  setSelectedPlan(plans.find((p) => p.id === id));
+  setDropdownOpen(false);
+};
 
+useEffect(() => {
+  if (!contextSelectedPlan) {
+    setSelectedPlan(plans.find((p) => p.id === selectedPlanId));
+  }
+}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
 const handleverifyPaymentClick = async () => {
@@ -107,25 +118,21 @@ const handleverifyPaymentClick = async () => {
   setSubmitError("");
 
   try {
-    const savedData = localStorage.getItem(
-      "serviceRequestData"
-    );
-
-    if (!savedData) {
-      setSubmitError(
-        "Your form information was not found. Please complete the form again."
-      );
+    // Already created a request earlier this session (e.g. user went
+    // back from Verification and is just continuing again) — don't
+    // create a duplicate, just move forward.
+    if (requestId) {
+      navigate("/verification");
       return;
     }
 
-    const savedRequest = JSON.parse(savedData);
+    const savedRequest = serviceForm;
+    if (!savedRequest?.name) {
+      setSubmitError("Your form information was not found. Please complete the form again.");
+      return;
+    }
 
-    // Check exactly what was saved from Started.js
-    console.log(
-      "Saved request data:",
-      savedRequest
-    );
-
+   
     const fullName = savedRequest.name
       ?.trim()
       .split(/\s+/) || [];
@@ -215,10 +222,9 @@ const handleverifyPaymentClick = async () => {
 console.log("API response:", response.data);
 
 
-localStorage.setItem("requestId", response.data.id);
-localStorage.setItem("requestAddress", savedRequest.address);
-localStorage.setItem("selectedPlan", JSON.stringify(selectedPlan));
-localStorage.removeItem("serviceRequestData");
+setRequestId(response.data.id);
+// selectedPlan and serviceForm (name/email/phone/address) are already
+// in Context — no separate localStorage writes needed anymore.
 
 navigate("/verification");
 
@@ -633,6 +639,13 @@ navigate("/verification");
 
             {/* Footer */}
         <div className="gsf-actions-footer">
+
+          {submitError && (
+    <div className="gsf-error-message" role="alert">
+      {submitError}
+    </div>
+  )}
+
 
   {/* Summary */}
   <div className="gsf-summary">

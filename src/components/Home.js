@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import heroimage from '../assets/heroimage1.png';
@@ -17,21 +17,143 @@ import supportIcon from '../assets/customersupport.png';
 import coverageIcon from '../assets/nationwide.png';
 import setupIcon from '../assets/installation.png';
 import speed from '../assets/internetspeed.png';
+import contactSupport from '../assets/Contactsupportagent.png';
 import OurPlans from './OurPlans';
 import Header from './Header';
 import Footer from './Footer';
+import { createSupportTicket } from '../api/authService';
+import * as turf from '@turf/turf';
 import './Home.css';
 
+const fiberZones = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [3.3626802, 6.6219016],
+            [3.331557, 6.606374],
+            [3.341858, 6.5885071],
+            [3.3636948, 6.5898596],
+            [3.3754378, 6.6051903],
+            [3.3708114, 6.6110393],
+            [3.3626802, 6.6219016],
+          ],
+        ],
+      },
+    },
+  ],
+};
 
 const Home = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-
+     const [currentSlide, setCurrentSlide] = useState(0);
      const navigate = useNavigate();
+     const [query, setQuery] = useState('');
+     const [suggestions, setSuggestions] = useState([]);
+     const [isFetchingSuggestions, setIsFetchingSuggestions] = useState(false);
+     const [hasSearchedSuggestions, setHasSearchedSuggestions] = useState(false);
+     const [selectedPlace, setSelectedPlace] = useState(null);
+     const [result, setResult] = useState(null);
+     const [isChecking, setIsChecking] = useState(false);
+   
+     const debounceTimer = useRef(null);
+     const wrapperRef = useRef(null);
+     const [contactForm, setContactForm] = useState({ fullName: '', email: '', message: '' });
+     const [contactSubmitting, setContactSubmitting] = useState(false);
+     const [contactSubmitted, setContactSubmitted] = useState(false);
+     const [contactError, setContactError] = useState(null); // ← new
+
+
+
+  // Close dropdown when clicking outside the widget
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setSuggestions([]);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+
+const fetchSuggestions = async (searchQuery) => {
+  setIsFetchingSuggestions(true);
+  try {
+    const q = encodeURIComponent(searchQuery + ', Nigeria');
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=5&addressdetails=1`
+    );
+    const data = await res.json();
+    setSuggestions(data);
+  } catch (err) {
+    console.error('Error fetching suggestions:', err);
+    setSuggestions([]);
+  } finally {
+    setIsFetchingSuggestions(false);
+    setHasSearchedSuggestions(true);
+  }
+};
+
+ const handleInputChange = (e) => {
+  const value = e.target.value;
+  setQuery(value);
+  setSelectedPlace(null);
+  setResult(null);
+  setHasSearchedSuggestions(false); // ← reset on every keystroke
+
+  clearTimeout(debounceTimer.current);
+
+  if (value.trim().length < 3) {
+    setSuggestions([]);
+    return;
+  }
+
+  debounceTimer.current = setTimeout(() => fetchSuggestions(value.trim()), 400);
+};
+
+const handleSelectPlace = (place) => {
+  setQuery(place.display_name);
+  setSelectedPlace(place);
+  setSuggestions([]);
+  setHasSearchedSuggestions(false); // ← add this
+};
+
+const checkZone = (userLat, userLng) => {
+  const userPoint = turf.point([userLng, userLat]);
+  const matchedZone = fiberZones.features.find((zone) =>
+    turf.booleanPointInPolygon(userPoint, zone)
+  );
+
+  if (matchedZone) {
+    setResult({ available: true, message: 'We are available in your area!' });
+  } else {
+    setResult({ available: false, message: 'We are not available yet in your location.' });
+  }
+};
+
+  const handleCheckAvailability = () => {
+    if (!selectedPlace) {
+      setResult({ available: false, message: 'Please select an address from the suggestions.' });
+      return;
+    }
+
+    setIsChecking(true);
+    checkZone(parseFloat(selectedPlace.lat), parseFloat(selectedPlace.lon));
+    setIsChecking(false);
+  };
+
+
 
      const handleNavigation = (path) => {
     // setMenuOpen(false);
     navigate(path);
   };
+
 
    const [menuOpen, setMenuOpen] = useState(false);
     const heroImages = [
@@ -236,7 +358,34 @@ const goToTestimonialSlide = (index) => {
   
   const totalSlides = Math.ceil(testimonials.length / 2);
 
+const handleContactChange = (e) => {
+  const { name, value } = e.target;
+  setContactForm((prev) => ({ ...prev, [name]: value }));
+};
 
+const handleContactSubmit = async (e) => {
+  e.preventDefault();
+  setContactSubmitting(true);
+  setContactError(null);
+
+  try {
+    await createSupportTicket({
+      name: contactForm.fullName,
+      email: contactForm.email,
+      message: contactForm.message,
+    });
+
+    setContactSubmitted(true);
+    setContactForm({ fullName: '', email: '', message: '' });
+  } catch (err) {
+    console.error('Contact form submission failed:', err);
+    setContactError(
+      err.response?.data?.message || 'Something went wrong — please try again.'
+    );
+  } finally {
+    setContactSubmitting(false);
+  }
+};
 
   return (
     <div className="page-container">
@@ -278,40 +427,77 @@ const goToTestimonialSlide = (index) => {
 </div>
 </div> 
 
-<div className="check-availability-wrapper section-spacer"> 
-        <div className="check-availability">
+ <div className="check-availability-wrapper section-spacer">
+      <div className="check-availability" ref={wrapperRef}>
         <div className="left-content">
-            <div className="frame-6home">
+          <div className="frame-6home">
             <img src={locationIcon} alt="Icon" className="location-iconhome" />
-            </div>
-        
-          </div>
-          
-<div className="middle-content">
-  <div className="frame-210">
-
-    {/* Icon + label row — shows on mobile above the input */}
-    <div className="location-label-row">
-      <div className="frame-6home">
-        <img src={locationIcon} alt="Icon" className="location-iconhome" />
-      </div>
-      <div className="location-label">LOCATION</div>
-    </div>
-
-    {/* Input box */}
-    <div className="frame-160">
-      <div className="location-placeholder">Enter your Location</div>
-      <img src={locationDropdown} alt="dropdown" className="locationdropdown-icon" />
-    </div>
-
-  </div>
-</div>
-
-          <div className="right-content">
-            <button className="availability-button">Check Availability</button>
           </div>
         </div>
+
+        <div className="middle-content">
+          <div className="frame-210">
+            <div className="location-label-row">
+              <div className="frame-6home">
+                <img src={locationIcon} alt="Icon" className="location-iconhome" />
+              </div>
+              <div className="location-label">LOCATION</div>
+            </div>
+
+            <div className="frame-160">
+              <input
+                type="text"
+                className="location-placeholder-input"
+                placeholder="Enter your Location"
+                value={query}
+                onChange={handleInputChange}
+              />
+              {/* <img src={locationDropdown} alt="dropdown" className="locationdropdown-icon" /> */}
+            </div>
+
+         {suggestions.length > 0 && (
+  <ul className="location-suggestions">
+    {suggestions.map((place) => (
+      <li key={place.place_id} onClick={() => handleSelectPlace(place)}>
+        {place.display_name}
+      </li>
+    ))}
+  </ul>
+)}
+
+{isFetchingSuggestions && (
+  <div className="location-suggestions-status">Searching…</div>
+)}
+
+{!isFetchingSuggestions &&
+  hasSearchedSuggestions &&
+  suggestions.length === 0 &&
+  query.trim().length >= 3 && (
+    <div className="location-suggestions-status">
+      No matching address found — try a different search.
+    </div>
+  )}
+          </div>
+        </div>
+
+        <div className="right-content">
+          <button
+            className="availability-button"
+            onClick={handleCheckAvailability}
+            disabled={isChecking}
+          >
+            {isChecking ? 'Checking...' : 'Check Availability'}
+          </button>
+        </div>
       </div>
+
+      {result && (
+        <div className={`availability-result ${result.available ? 'success' : 'waitlist'}`}>
+          {result.message}
+          {result.available && <a href="/signup"> Click Get Started to sign up</a>}
+        </div>
+      )}
+    </div>
 
 
       <div className="service-container section-spacer clearfix"> 
@@ -596,6 +782,66 @@ const goToTestimonialSlide = (index) => {
         </div>
       </div>
       </div>
+
+
+            {/* Contact Us - directly under FAQ */}
+      <div className="contact-us-container section-spacer clearfix" id="contact-us-002">
+        <div className="contact-us-image-wrapper">
+          <img src={contactSupport} alt="Support agent" className="contact-us-image" />
+        </div>
+
+        <div className="contact-us-form-wrapper">
+          <h2 className="contact-us-heading">
+            Have Questions?<br />We're Here To Help.
+          </h2>
+
+          <form className="contact-us-form" onSubmit={handleContactSubmit}>
+            <div className="contact-us-field">
+              <label htmlFor="fullName">Full Name</label>
+              <input
+                id="fullName"
+                name="fullName"
+                type="text"
+                value={contactForm.fullName}
+                onChange={handleContactChange}
+                required
+              />
+            </div>
+
+            <div className="contact-us-field">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={contactForm.email}
+                onChange={handleContactChange}
+                required
+              />
+            </div>
+
+            <div className="contact-us-field">
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                value={contactForm.message}
+                onChange={handleContactChange}
+                required
+              />
+            </div>
+
+            {contactSubmitted && (
+              <p className="contact-us-success">Thanks — we'll get back to you shortly.</p>
+            )}
+
+            <button type="submit" className="contact-us-submit" disabled={contactSubmitting}>
+              {contactSubmitting ? 'Sending...' : 'Submit'}
+            </button>
+          </form>
+        </div>
+      </div>
   
     </div>
    
@@ -606,3 +852,5 @@ const goToTestimonialSlide = (index) => {
 }
 
 export default Home;
+
+

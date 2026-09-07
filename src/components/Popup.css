@@ -110,3 +110,42 @@
     box-shadow: (2px 2px 4px rgba(0, 0, 0, 0.25));
     color: #E5E7E6;
   }
+
+  @media (max-width: 768px) {
+  .logout-overlay {
+    padding: 16px;
+  }
+
+  .logout-popup-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px 20px 28px;
+  }
+
+  .logout-popup-title,
+  .logout-popup-subtitle,
+  .logout-popup-actions {
+    width: 100%;
+  }
+
+  .logout-popup-title {
+    font-size: 20px;
+    height: auto;
+  }
+
+  .logout-popup-subtitle {
+    font-size: 14px;
+    height: auto;
+    line-height: 20px;
+  }
+
+  .logout-popup-actions {
+    height: auto;
+    gap: 12px;
+  }
+
+  .btn {
+    width: 100%;
+    height: 50px;
+  }
+}

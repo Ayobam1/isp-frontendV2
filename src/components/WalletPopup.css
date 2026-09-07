@@ -2,11 +2,11 @@
   max-width: 448px;
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(25, 28, 29, 0.12);
-  overflow: hidden;
   font-family: Inter, sans-serif;
 }
 
@@ -189,4 +189,84 @@
 
 .done-btn:hover {
   opacity: 0.95;
+}
+
+/* TABLET (iPad) */
+@media (max-width: 768px) {
+  .fund-wallet {
+    max-width: 400px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .wallet-overlay {
+    align-items: flex-end;   /* turn it into a bottom sheet on mobile */
+    padding: 0;
+  }
+
+  .fund-wallet {
+    max-width: 100%;
+    width: 100%;
+    max-height: 85vh;
+    border-radius: 16px 16px 0 0;  /* rounded top corners only */
+  }
+
+  .wallet-header {
+    padding: 20px 16px 8px;
+  }
+
+  .wallet-header h2 {
+    font-size: 18px;
+  }
+
+  .wallet-header p {
+    font-size: 13px;
+  }
+
+  .body {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .info-alert {
+    padding: 12px;
+  }
+
+  .info-alert p {
+    font-size: 11px;
+    line-height: 18px;
+  }
+
+  /* Account number row: stack instead of squeezing side by side */
+  .account-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .account-number {
+    font-size: 16px;
+    letter-spacing: 1px;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    align-self: flex-end;
+    padding: 8px 16px;
+  }
+
+  .detail-box {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .illustration {
+    height: 72px;
+  }
+
+  .done-btn {
+    height: 48px;
+    font-size: 15px;
+  }
 }

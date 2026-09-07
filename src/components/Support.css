@@ -1215,8 +1215,8 @@
 
   .sp-faq-list {
     padding: 0;
-    max-height: 280px;
-    overflow-y: auto;
+    /* max-height: 280px;
+    overflow-y: auto; */
   }
 
   .sp-faq-question {

@@ -232,9 +232,11 @@ main {
   width: 100%;
   padding: var(--space-md) clamp(12px, 3vw, 24px);
   display: flex;
+  flex-direction: column;   /* ← add this */
   justify-content: center;
   align-items: center;
   min-height: clamp(100px, 15vw, 250px);
+  gap: var(--space-xs);    
 }
 
 .check-availability {
@@ -330,6 +332,16 @@ main {
   white-space: nowrap;
 }
 
+.location-suggestions-status {
+  padding: 10px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--fs-sm);
+  color: #6b7280;
+  background: #ffffff;
+  border-radius: 5px;
+  margin-top: 4px;
+}
+
 .locationdropdown-icon {
   width: 16px;
   height: 16px;
@@ -374,6 +386,107 @@ main {
   transform: translateY(-2px);
 }
 
+.contact-us-container {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+  max-width: 1445px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.contact-us-image-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-us-image {
+  width: 100%;
+  height: auto;
+  max-height: 640px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.contact-us-form-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-us-heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 2rem;
+  color: #1a1a2e;
+}
+
+.contact-us-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-us-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-us-field label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+}
+
+.contact-us-field input,
+.contact-us-field textarea {
+  width: 627px;
+  max-width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #c9ccd6;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.contact-us-field input:focus,
+.contact-us-field textarea:focus {
+  outline: none;
+  border-color: #1a3a8f;
+}
+
+.contact-us-success {
+  color: #12b76a;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.contact-us-submit {
+  width: 627px;
+  max-width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #1a3a8f;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.contact-us-submit:hover {
+  opacity: 0.9;
+}
+
+.contact-us-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 /* ── Laptop (1024px and below) ── */
 @media (max-width: 1024px) {
   .check-availability {
@@ -1826,5 +1939,15 @@ h3.plan-title {
     width: 100% !important;
     order: 1;
     padding: 24px 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .contact-us-container {
+    flex-direction: column;
+  }
+
+  .contact-us-heading {
+    font-size: 1.9rem;
   }
 }

@@ -1,0 +1,20 @@
+
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Ikeja Test Zone" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [3.3350, 6.5900],
+          [3.3550, 6.5900],
+          [3.3550, 6.6100],
+          [3.3350, 6.6100],
+          [3.3350, 6.5900]
+        ]]
+      }
+    }
+  ]
+}
