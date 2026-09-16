@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import Ninverification from './Ninverification';
 import checkIcon from '../assets/vectorcheck.png';
 import { useOnboarding } from '../context/OnboardingContext';
-import './getStartedVerification.css'; // reuse the same stepper/card styles
+import './getStartedVerification.css'; 
 
 function NinVerificationPage() {
   const navigate = useNavigate();
-  const { ninVerification, setNinVerification } = useOnboarding();
+  const { ninVerification, setNinVerification, requestId } = useOnboarding();
   const [ninError, setNinError] = useState('');
-  const requestId = localStorage.getItem('requestId');
 
   const handleNinVerified = useCallback((result) => {
     if (result.verdict === 'approved') {
@@ -21,8 +20,7 @@ function NinVerificationPage() {
     }
   }, [navigate, setNinVerification]);
 
-  // Already verified (either earlier this session, or restored from
-  // localStorage after a reload) — skip mounting the paid widget entirely.
+  
   if (ninVerification?.verdict === 'approved') {
     return (
       <div className="gsf-page">

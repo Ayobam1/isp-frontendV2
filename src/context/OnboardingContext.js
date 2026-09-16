@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 const OnboardingContext = createContext(null);
+const STORAGE_KEY = 'imbil_onboarding_state';
 
 const emptyServiceForm = {
   name: '',
@@ -14,15 +15,47 @@ const emptyServiceForm = {
   termsAgreed: false,
 };
 
+function loadPersisted() {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function OnboardingProvider({ children }) {
-  const [serviceForm, setServiceForm] = useState(emptyServiceForm);
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [requestId, setRequestId] = useState(null);
-  const [availabilityDate, setAvailabilityDate] = useState('');
-  const [installationPhone, setInstallationPhone] = useState('');
+  const persisted = loadPersisted();
+
+  const [serviceForm, setServiceForm] = useState(persisted?.serviceForm ?? emptyServiceForm);
+  const [selectedPlan, setSelectedPlan] = useState(persisted?.selectedPlan ?? null);
+  const [requestId, setRequestId] = useState(persisted?.requestId ?? null);
+  const [availabilityDate, setAvailabilityDate] = useState(persisted?.availabilityDate ?? '');
+  const [installationPhone, setInstallationPhone] = useState(persisted?.installationPhone ?? '');
+  // uploadedFile itself is never restored — File objects can't survive serialization
   const [uploadedFile, setUploadedFileState] = useState(null);
-  const [uploadedFileName, setUploadedFileName] = useState('');
-  const [ninVerification, setNinVerification] = useState(null);
+  const [uploadedFileName, setUploadedFileName] = useState(persisted?.uploadedFileName ?? '');
+  const [ninVerification, setNinVerification] = useState(persisted?.ninVerification ?? null);
+
+  // Mirror every serializable field into sessionStorage on change
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          serviceForm,
+          selectedPlan,
+          requestId,
+          availabilityDate,
+          installationPhone,
+          uploadedFileName,
+          ninVerification,
+        })
+      );
+    } catch {
+      // e.g. private/incognito mode blocking storage — don't crash the flow
+    }
+  }, [serviceForm, selectedPlan, requestId, availabilityDate, installationPhone, uploadedFileName, ninVerification]);
 
   const updateServiceForm = useCallback((updates) => {
     setServiceForm((prev) => ({ ...prev, ...updates }));
@@ -42,6 +75,11 @@ export function OnboardingProvider({ children }) {
     setUploadedFileState(null);
     setUploadedFileName('');
     setNinVerification(null);
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore
+    }
   }, []);
 
   return (

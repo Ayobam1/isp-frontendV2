@@ -236,7 +236,7 @@ const handleSignInClick = () => {
       firstName: "Test",
       lastName: "User",
       email: "test@example.com",
-      name: "Test User" // Buybundle.js uses userData.name, not firstName/lastName
+      name: "Test User" 
     })
   );
   localStorage.setItem("authToken", "mock-token-for-testing");
@@ -383,7 +383,7 @@ const handleSignInClick = () => {
                   </div>
                 </div>
               
-                  {/* how did you hear about us  */}
+                 
                {/* How did you hear about us */}
 <div
   className="text-field-dropdown"
