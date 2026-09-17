@@ -2,21 +2,21 @@ import react, {useEffect} from 'react';
 import './SuccessPopup.css';
 import successlogo from '../assets/sucess.png';
 
-const SuccessPopup = ({ isOpen, onClose, navigateToSignin }) => {
+const SuccessPopup = ({ isOpen, onClose }) => {
     useEffect(() => {
-      let navigationTimer;
+      let closeTimer;
       
       if (isOpen) {
-        navigationTimer = setTimeout(() => {
-          navigateToSignin();
+        closeTimer = setTimeout(() => {
+          onClose();
         }, 5000);
       }
       
 
       return () => {
-        if (navigationTimer) clearTimeout(navigationTimer);
+        if (closeTimer) clearTimeout(closeTimer);
       };
-    }, [isOpen, navigateToSignin]);
+    }, [isOpen, onClose]);
   
     if (!isOpen) return null;
   
@@ -29,9 +29,9 @@ const SuccessPopup = ({ isOpen, onClose, navigateToSignin }) => {
             <img src={successlogo} alt="Success" />
             </div>
             <div className="popup-text-container">
-              <h2 className="popup-title">Thanks for signing up!</h2>
+              <h2 className="popup-title">Request Submitted Successfully</h2>
               <p className="popup-message">
-                We've received your details. A member of our team will be in touch shortly.
+                Thank you for contacting us, We will reach out to you soon.
               </p>
             </div>
           </div>

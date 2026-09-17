@@ -1,13 +1,13 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./getStartedForm.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useOnboarding } from '../context/OnboardingContext';
 import streamingIcon from "../assets/streamingIcon.png";
 import speedIcon from "../assets/speedIcon.png";
 import securityIcon from "../assets/securityIcon.png";
 import backIcon from "../assets/backIcon.png";
-
-import { createRequest } from "../api/authService";
+import { verifyPayment } from "../api/authService";
+import PaymentSuccess from "./PaymentSuccess";
 
 
 const plans = [
@@ -78,26 +78,86 @@ const plans = [
   },
 ];
 
+// Statuses the verify-payment endpoint can report when paid is false
+const FAILED_STATUSES = ["failed", "abandoned", "reversed"];
+
 
 function GetStartedForm() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const idParam = searchParams.get("id");
 
   const [currentStep] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
 // inside the component:
-const { serviceForm, selectedPlan: contextSelectedPlan, setSelectedPlan, setRequestId, requestId } = useOnboarding();
+const { selectedPlan: contextSelectedPlan, setSelectedPlan, requestId, setRequestId } = useOnboarding();
 console.log('requestId on mount:', requestId);
 const [selectedPlanId, setSelectedPlanId] = useState(contextSelectedPlan?.id || "standard");
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
+  // "idle" = show the normal plan-picker (no ?id, or payment not yet
+  // started for this request). Other states replace the page content
+  // while we're checking, or once we know the outcome.
+  const [verifyStatus, setVerifyStatus] = useState(idParam ? "checking" : "idle");
+  const [verifyError, setVerifyError] = useState("");
 
-  const selectedPlan = plans.find(
-    (plan) => plan.id === selectedPlanId
-  );
+  const checkPayment = useCallback(async () => {
+    if (!idParam) return;
+
+    setVerifyStatus("checking");
+    setVerifyError("");
+
+    try {
+      const data = await verifyPayment(idParam);
+
+      if (data.paid) {
+        setRequestId(idParam);
+        setVerifyStatus("paid");
+        return;
+      }
+
+      if (data.status === "not_initiated") {
+        // They haven't started payment yet — just resume the flow at
+        // this request rather than showing any status message.
+        setRequestId(idParam);
+        setVerifyStatus("idle");
+        return;
+      }
+
+      setRequestId(idParam);
+      setVerifyStatus(FAILED_STATUSES.includes(data.status) ? "failed" : "pending");
+    } catch (error) {
+      const response = error?.response;
+      const code = response?.data?.code;
+
+      if (response?.status === 404 || code === "RESOURCE_001") {
+        setVerifyError("We couldn't find a request matching this link.");
+      } else if (response?.status === 409 || code === "RESOURCE_002") {
+        setVerifyError(
+          "There's a mismatch with this payment. Please contact support."
+        );
+      } else if (response?.status === 502 || code === "EXTERNAL_001") {
+        setVerifyError(
+          "We couldn't reach Paystack to confirm your payment. Please try again."
+        );
+      } else if (response?.status === 429) {
+        setVerifyError(
+          "Too many verification attempts. Please wait a few minutes and try again."
+        );
+      } else {
+        setVerifyError("Something went wrong while checking your payment.");
+      }
+      setVerifyStatus("error");
+    }
+  }, [idParam, setRequestId]);
+
+  useEffect(() => {
+    checkPayment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idParam]);
 
 
 const handleSelectPlan = (id) => {
@@ -113,143 +173,27 @@ useEffect(() => {
 }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-const handleverifyPaymentClick = async () => {
-  setIsSubmitting(true);
+const handleverifyPaymentClick = () => {
   setSubmitError("");
 
-  try {
-    // Already created a request earlier this session (e.g. user went
-    // back from Verification and is just continuing again) — don't
-    // create a duplicate, just move forward.
-    if (requestId) {
-      navigate("/verification");
-      return;
-    }
-
-    const savedRequest = serviceForm;
-    if (!savedRequest?.name) {
-      setSubmitError("Your form information was not found. Please complete the form again.");
-      return;
-    }
-
-   
-    const fullName = savedRequest.name
-      ?.trim()
-      .split(/\s+/) || [];
-
-    const payload = {
-      firstName: fullName[0] || "",
-
-      lastName:
-        fullName.slice(1).join(" ") || "",
-
-      email:
-        savedRequest.email?.trim() || "",
-
-      phone_number:
-        savedRequest.phone?.trim() || "",
-
-      address:
-        savedRequest.address?.trim() || "",
-
-      location:
-        savedRequest.preferredarea || "",
-
-      heard_about_us:
-        savedRequest.heardAboutUsValue || "",
-
-     sales_agent_name:
-  savedRequest.heardAboutUsValue === "SALES_AGENT"
-    ? savedRequest.salesAgentName?.trim() || ""   
-    : null,
-      status:
-        "PENDING",
-
-  property_type: savedRequest.residence || "RESIDENTIAL",
-    };
-
-    // Check the exact JSON being sent
-    console.log(
-      "Sending API payload:",
-      payload
-    );
-
-    // Check for empty required values before calling the API
-    const requiredFields = [
-      "firstName",
-      "lastName",
-      "email",
-      "phone_number",
-      "address",
-      "location",
-      "heard_about_us",
-      "status",
-      "property_type"
-    ];
-
-    const missingFields =
-      requiredFields.filter(
-        (field) =>
-          !payload[field] ||
-          payload[field]
-            .toString()
-            .trim() === ""
-      );
-
-   if (
-  payload.heard_about_us === "SALES_AGENT" &&
-  !payload.sales_agent_name
-) {
-  missingFields.push("sales_agent_name");
-}
-
-    if (missingFields.length > 0) {
-      console.error(
-        "Missing fields:",
-        missingFields
-      );
-
-      setSubmitError(
-        `Missing required fields: ${missingFields.join(
-          ", "
-        )}`
-      );
-
-      return;
-    }
-
-   const response = await createRequest(payload);
-console.log("API response:", response.data);
-
-
-setRequestId(response.data.id);
-// selectedPlan and serviceForm (name/email/phone/address) are already
-// in Context — no separate localStorage writes needed anymore.
-
-navigate("/verification");
-
-  } catch (error) {
-    console.error(
-      "Error creating request:",
-      error
-    );
-
-    console.error(
-      "Backend response:",
-      error.response?.data
-    );
-
+  // The request itself is now created earlier, on the Service Request
+  // Form step (Started / getStarted.js). By the time the user gets here,
+  // requestId should already be set — this page just needs to record
+  // the chosen plan (already done via setSelectedPlan above) and move on.
+  if (!requestId) {
     setSubmitError(
-      error.response?.data?.message ||
-      "An error occurred while submitting your request. Please try again."
+      "Your request information was not found. Please start again from the beginning."
     );
-
-  } finally {
-    setIsSubmitting(false);
+    return;
   }
+
+  navigate("/verification");
 };
 
 
+  const selectedPlan = plans.find(
+    (plan) => plan.id === selectedPlanId
+  );
 
   const steps = [
     {
@@ -266,7 +210,87 @@ navigate("/verification");
     },
   ];
 
+  // --- Payment already succeeded: show the success popup, nothing else ---
+  if (verifyStatus === "paid") {
+    return (
+      <PaymentSuccess
+        isOpen={true}
+        onClose={() => navigate("/dashboard")}
+      />
+    );
+  }
 
+  // --- Still checking, or checking failed, or payment is pending/failed ---
+  if (verifyStatus === "checking") {
+    return (
+      <div className="gsf-page">
+        <div className="gsf-canvas">
+          <div className="gsf-heading-container">
+            <h1 className="gsf-heading">Checking your payment...</h1>
+            <p className="gsf-subheading">This will only take a moment.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (verifyStatus === "pending") {
+    return (
+      <div className="gsf-page">
+        <div className="gsf-canvas">
+          <div className="gsf-heading-container">
+            <h1 className="gsf-heading">Still confirming your payment</h1>
+            <p className="gsf-subheading">
+              This can take a moment on Paystack's end. You can check again below.
+            </p>
+          </div>
+          <button type="button" className="gsf-continue-button" onClick={checkPayment}>
+            <span>Check again</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (verifyStatus === "failed") {
+    return (
+      <div className="gsf-page">
+        <div className="gsf-canvas">
+          <div className="gsf-heading-container">
+            <h1 className="gsf-heading">Payment not completed</h1>
+            <p className="gsf-subheading">
+              Your payment may have been cancelled or declined. You can try again below.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="gsf-continue-button"
+            onClick={() => navigate("/verifypayment")}
+          >
+            <span>Try payment again</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (verifyStatus === "error") {
+    return (
+      <div className="gsf-page">
+        <div className="gsf-canvas">
+          <div className="gsf-heading-container">
+            <h1 className="gsf-heading">We couldn't check your payment</h1>
+            <p className="gsf-subheading">{verifyError}</p>
+          </div>
+          <button type="button" className="gsf-continue-button" onClick={checkPayment}>
+            <span>Try again</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- verifyStatus === "idle": the normal plan-picker page ---
   return (
     <div className="gsf-page">
       <div className="gsf-canvas">
@@ -681,11 +705,8 @@ navigate("/verification");
       type="button"
       className="gsf-continue-button"
       onClick={handleverifyPaymentClick}
-      disabled={isSubmitting}
     >
-      <span>
-        {isSubmitting ? "Submitting..." : "Continue"}
-      </span>
+      <span>Continue</span>
     </button>
 
   </div>

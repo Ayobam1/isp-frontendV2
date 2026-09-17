@@ -12,6 +12,7 @@ import GetStartedForm from './components/getStartedForm';
 import GetStartedVerification from './components/getStartedVerification';
 import GetStartedPayment from './components/getStartedPayment';
 import NinVerificationPage from './components/NinVerificationPage';
+import PaymentVerificationPage from './components/PaymentVerificationPage';
 import { OnboardingProvider } from './context/OnboardingContext';
 // import Payments from './components/Payments';
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/verification" element={<GetStartedVerification />} />
           <Route path="/verifypayment" element={<GetStartedPayment />} />
           <Route path="/verifynin/" element={<NinVerificationPage />} />
+          <Route path="/payment-callback" element={<PaymentVerificationPage />} />
 
           {/* <Route path="/payments" element={<Payments />} /> */}
         </Routes>

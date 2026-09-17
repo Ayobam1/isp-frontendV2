@@ -9,6 +9,7 @@ import residenceIcon from '../assets/residence.png';
 import expandArrow from '../assets/Expand Arrow.png';
 import { useOnboarding } from '../context/OnboardingContext';
 import { useNavigate } from 'react-router-dom';
+import { createRequest } from '../api/authService';
 
 
 
@@ -17,7 +18,7 @@ const Started = () => {
 
   const navigate = useNavigate();
 
-const { serviceForm: formData, updateServiceForm } = useOnboarding();
+const { serviceForm: formData, updateServiceForm, setRequestId, requestId, clearOnboardingData } = useOnboarding();
 const termsAgreed = formData.termsAgreed;
 const setTermsAgreed = (value) => updateServiceForm({ termsAgreed: value });
  
@@ -193,34 +194,57 @@ const handleSubmit = async (e) => {
   // Stop submission if validation fails
   if (!validateForm()) return;
 
+  // Already created a request earlier this session (e.g. user went back
+  // from a later step and is just continuing again) — don't create a
+  // duplicate, just move on to plan selection.
+  if (requestId) {
+    navigate("/getstartedform");
+    return;
+  }
+
   setIsSubmitting(true);
 
   try {
-  
-    // localStorage.setItem(
-    //   "serviceRequestData",
-    //   JSON.stringify(formData)
-    // );
+    const fullName = formData.name?.trim().split(/\s+/) || [];
 
-  
-    console.log(
-      "Form data saved successfully:",
-      JSON.parse(
-        localStorage.getItem("serviceRequestData")
-      )
-    );
+    const payload = {
+      firstName: fullName[0] || "",
+      lastName: fullName.slice(1).join(" ") || "",
+      email: formData.email?.trim() || "",
+      phone_number: formData.phone?.trim() || "",
+      address: formData.address?.trim() || "",
+      location: formData.preferredarea || "",
+      heard_about_us: formData.heardAboutUsValue || "",
+      sales_agent_name:
+        formData.heardAboutUsValue === "SALES_AGENT"
+          ? formData.salesAgentName?.trim() || ""
+          : null,
+      status: "PENDING",
+      property_type: formData.residence || "RESIDENTIAL",
+    };
 
+    console.log("Sending API payload:", payload);
 
-    navigate("/getstartedform");
+    const response = await createRequest(payload);
+    console.log("API response:", response.data);
+
+    setRequestId(response.data.id);
+    setShowPopup(true);
 
   } catch (error) {
     console.error(
-      "Error saving form information:",
+      "Error creating request:",
       error
+    );
+
+    console.error(
+      "Backend response:",
+      error.response?.data
     );
 
     setErrors({
       submit:
+        error.response?.data?.message ||
         "An error occurred. Please try again."
     });
 
@@ -244,17 +268,8 @@ const handleSignInClick = () => {
 };
       const handleClosePopup = () => {
         setShowPopup(false);
+        clearOnboardingData();
       };
-
-      const navigateToSignin = () => {
-        console.log('Navigating to signin...');
-       
-        navigate("/dashboard");
-        
-      
-        setShowPopup(false);
-      }; 
-       
 
     return (
 
@@ -318,7 +333,7 @@ const handleSignInClick = () => {
     <input 
       type="tel"
       name="phone"
-      placeholder="800 000 0000"
+      placeholder="0800 000 0000"
       value={formData.phone}
       onChange={handleInputChange}
       className="startedinput-field"
@@ -518,7 +533,6 @@ const handleSignInClick = () => {
             <SuccessPopup 
         isOpen={showPopup} 
         onClose={handleClosePopup} 
-        navigateToSignin={navigateToSignin}
       />
         </div>
 

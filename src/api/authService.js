@@ -60,3 +60,8 @@ export const getPaymentLink = async (requestId, payload) => {
   const response = await axiosInstance.post(`/requests/${requestId}/get-payment-link`, payload);
   return response.data; 
 };
+
+export const verifyPayment = async (requestId) => {
+  const response = await axiosInstance.post("/requests/verify-payment", { requestId });
+  return response.data;
+};

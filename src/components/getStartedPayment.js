@@ -49,7 +49,7 @@ function GetStartedPayment() {
         return;
       }
 
-      window.location.href = paymentUrl; // hands off to Paystack's hosted checkout
+      window.location.href = paymentUrl; 
     } catch (error) {
       console.error("Error getting payment link:", error);
       setSubmitError(
