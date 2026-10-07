@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Manrope:wght@400;700;800&display=swap');
+
+/* Page + card */
+.if-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 24px);
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.if-card {
+  width: 100%;
+  max-width: 848px;
+  padding: clamp(20px, 4vw, 48px);
+  background: #ffffff;
+  box-shadow: 0px 8px 24px rgba(25, 28, 29, 0.06);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.if-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header */
+
+.if-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.if-title {
+  margin: 0;
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 36px;
+  color: #0c4381;
+}
+
+.if-subtitle {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: #434750;
+}
+
+/* Form layout */
+
+.if-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.if-row {
+  display: flex;
+  gap: 24px;
+}
+
+.if-row > .if-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.if-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.if-label {
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #191c1d;
+}
+
+/* Inputs */
+
+.if-input-wrap {
+  position: relative;
+}
+
+.if-input {
+  width: 100%;
+  height: 55px;
+  padding: 18px 48px 18px 16px;
+  box-sizing: border-box;
+  background: #ffffff;
+  /* Not in the Figma export: without a border the white inputs vanish on the white card */
+  border: 1px solid #e1e3e8;
+  border-radius: 12px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 19px;
+  color: #191c1d;
+}
+
+.if-input::placeholder {
+  color: #c3c6d2;
+}
+
+.if-input:focus {
+  outline: none;
+  border-color: #0c4381;
+  box-shadow: 0 0 0 3px rgba(12, 67, 129, 0.15);
+}
+
+.if-input-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #c3c6d2;
+  pointer-events: none;
+}
+
+.if-input-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Selects (Service Area, How did you hear about us) */
+
+.if-select {
+  height: 56px;
+  padding: 16px 48px 16px 16px;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 24px;
+}
+
+.if-select.is-placeholder {
+  color: #c3c6d2;
+}
+
+.if-select option {
+  color: #191c1d;
+}
+
+/* Coverage radios */
+
+.if-coverage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0 0 16px;
+  border: none;
+}
+
+.if-coverage legend {
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+.if-radio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 19px;
+  color: #000000;
+  cursor: pointer;
+}
+
+.if-radio input {
+  position: absolute;
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.if-radio-mark {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border: 2px solid #808080;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.if-radio input:checked + .if-radio-mark {
+  border-color: #0c4381;
+}
+
+.if-radio input:checked + .if-radio-mark::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: 50%;
+  background: #0c4381;
+}
+
+.if-radio input:focus-visible + .if-radio-mark {
+  outline: 2px solid #0c4381;
+  outline-offset: 2px;
+}
+
+.if-link {
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #0c4381;
+  text-decoration: none;
+}
+
+.if-link:hover,
+.if-link:focus-visible {
+  text-decoration: underline;
+}
+
+/* Terms */
+
+.if-terms-wrap {
+  padding: 8px 0 24px;
+}
+
+.if-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.if-checkbox {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 4px 0 0;
+  accent-color: #0c4381;
+  cursor: pointer;
+}
+
+.if-terms-text {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 23px;
+  color: #434750;
+}
+
+.if-terms-link {
+  color: #0c4381;
+}
+
+/* Button */
+
+.if-button {
+  width: 100%;
+  height: 68px;
+  padding: 20px 0;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #0c4381 0%, #2e5b9a 100%);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 28px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.if-button:focus-visible {
+  outline: 3px solid #2e5b9a;
+  outline-offset: 3px;
+}
+
+/* Errors */
+
+.if-error {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  color: #c62828;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .if-page {
+    padding: 0;
+  }
+
+  .if-card {
+    padding: 16px;
+  }
+
+  .if-container {
+    padding: 8px;
+  }
+
+ .if-title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .if-row {
+    flex-direction: column;
+  }
+}

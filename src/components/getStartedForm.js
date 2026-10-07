@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import "./getStartedForm.css";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useOnboarding } from '../context/OnboardingContext';
+import { useNavigate } from "react-router-dom";
+import { useOnboarding } from "../context/OnboardingContext";
+import { ROUTES } from "../constants/routes";
 import streamingIcon from "../assets/streamingIcon.png";
 import speedIcon from "../assets/speedIcon.png";
 import securityIcon from "../assets/securityIcon.png";
 import backIcon from "../assets/backIcon.png";
-import { verifyPayment } from "../api/authService";
-import PaymentSuccess from "./PaymentSuccess";
 
 
 const plans = [
   {
     id: "basic",
+    code: "BASIC",
     name: "IMBIL Connect Basic",
     price: "26,875",
     badge: null,
@@ -23,6 +23,7 @@ const plans = [
   },
   {
     id: "classic",
+    code: "CLASSIC",
     name: "IMBIL Connect Classic",
     price: "37,625",
     badge: "MOST POPULAR",
@@ -34,6 +35,7 @@ const plans = [
   },
   {
     id: "standard",
+    code: "STANDARD",
     name: "IMBIL Connect Standard",
     price: "48,375",
     badge: null,
@@ -45,6 +47,7 @@ const plans = [
   },
   {
     id: "premium",
+    code: "PREMIUM",
     name: "IMBIL Connect Premium",
     price: "64,500",
     badge: null,
@@ -56,6 +59,7 @@ const plans = [
   },
   {
     id: "supreme",
+    code: "SUPREME",
     name: "IMBIL Connect Supreme",
     price: "84,387.50",
     badge: null,
@@ -67,6 +71,7 @@ const plans = [
   },
   {
     id: "platinum",
+    code: "PLATINUM",
     name: "IMBIL Connect Platinum",
     price: "97,610",
     badge: null,
@@ -78,219 +83,56 @@ const plans = [
   },
 ];
 
-// Statuses the verify-payment endpoint can report when paid is false
-const FAILED_STATUSES = ["failed", "abandoned", "reversed"];
-
+const steps = [
+  { number: 1, label: "Choose Plan" },
+  { number: 2, label: "Verification" },
+  { number: 3, label: "Payment" },
+];
 
 function GetStartedForm() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const idParam = searchParams.get("id");
-
-  const [currentStep] = useState(1);
+  const currentStep = 1;
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-
-// inside the component:
-const { selectedPlan: contextSelectedPlan, setSelectedPlan, requestId, setRequestId } = useOnboarding();
-console.log('requestId on mount:', requestId);
-const [selectedPlanId, setSelectedPlanId] = useState(contextSelectedPlan?.id || "standard");
-
   const [submitError, setSubmitError] = useState("");
 
-  // "idle" = show the normal plan-picker (no ?id, or payment not yet
-  // started for this request). Other states replace the page content
-  // while we're checking, or once we know the outcome.
-  const [verifyStatus, setVerifyStatus] = useState(idParam ? "checking" : "idle");
-  const [verifyError, setVerifyError] = useState("");
+  const { selectedPlan: contextSelectedPlan, setSelectedPlan, serviceForm } = useOnboarding();
+  const [selectedPlanId, setSelectedPlanId] = useState(contextSelectedPlan?.id || "standard");
 
-  const checkPayment = useCallback(async () => {
-    if (!idParam) return;
+  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId);
 
-    setVerifyStatus("checking");
-    setVerifyError("");
-
-    try {
-      const data = await verifyPayment(idParam);
-
-      if (data.paid) {
-        setRequestId(idParam);
-        setVerifyStatus("paid");
-        return;
-      }
-
-      if (data.status === "not_initiated") {
-        // They haven't started payment yet — just resume the flow at
-        // this request rather than showing any status message.
-        setRequestId(idParam);
-        setVerifyStatus("idle");
-        return;
-      }
-
-      setRequestId(idParam);
-      setVerifyStatus(FAILED_STATUSES.includes(data.status) ? "failed" : "pending");
-    } catch (error) {
-      const response = error?.response;
-      const code = response?.data?.code;
-
-      if (response?.status === 404 || code === "RESOURCE_001") {
-        setVerifyError("We couldn't find a request matching this link.");
-      } else if (response?.status === 409 || code === "RESOURCE_002") {
-        setVerifyError(
-          "There's a mismatch with this payment. Please contact support."
-        );
-      } else if (response?.status === 502 || code === "EXTERNAL_001") {
-        setVerifyError(
-          "We couldn't reach Paystack to confirm your payment. Please try again."
-        );
-      } else if (response?.status === 429) {
-        setVerifyError(
-          "Too many verification attempts. Please wait a few minutes and try again."
-        );
-      } else {
-        setVerifyError("Something went wrong while checking your payment.");
-      }
-      setVerifyStatus("error");
-    }
-  }, [idParam, setRequestId]);
-
+  // Save the default plan to context so the later steps have it even if the user doesn't change it.
+  // Also refreshes plans saved before `code` was added.
   useEffect(() => {
-    checkPayment();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idParam]);
+    if (!contextSelectedPlan || !contextSelectedPlan.code) {
+      setSelectedPlan(selectedPlan);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleSelectPlan = (id) => {
+    setSelectedPlanId(id);
+    setSelectedPlan(plans.find((p) => p.id === id));
+    setDropdownOpen(false);
+    setSubmitError("");
+  };
 
-const handleSelectPlan = (id) => {
-  setSelectedPlanId(id);
-  setSelectedPlan(plans.find((p) => p.id === id));
-  setDropdownOpen(false);
-};
+  const handleContinue = () => {
+    setSubmitError("");
 
-useEffect(() => {
-  if (!contextSelectedPlan) {
-    setSelectedPlan(plans.find((p) => p.id === selectedPlanId));
-  }
-}, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // The customer's details come from the Information Form (/information)
+    const hasDetails =
+      serviceForm?.firstName?.trim() &&
+      serviceForm?.lastName?.trim() &&
+      serviceForm?.email?.trim() &&
+      serviceForm?.address?.trim();
 
+    if (!hasDetails) {
+      setSubmitError("Your details are missing. Please fill in the information form first.");
+      return;
+    }
 
-const handleverifyPaymentClick = () => {
-  setSubmitError("");
+    navigate(ROUTES.VERIFICATION);
+  };
 
-  // The request itself is now created earlier, on the Service Request
-  // Form step (Started / getStarted.js). By the time the user gets here,
-  // requestId should already be set — this page just needs to record
-  // the chosen plan (already done via setSelectedPlan above) and move on.
-  if (!requestId) {
-    setSubmitError(
-      "Your request information was not found. Please start again from the beginning."
-    );
-    return;
-  }
-
-  navigate("/verification");
-};
-
-
-  const selectedPlan = plans.find(
-    (plan) => plan.id === selectedPlanId
-  );
-
-  const steps = [
-    {
-      number: 1,
-      label: "Choose Plan",
-    },
-    {
-      number: 2,
-      label: "Verification",
-    },
-    {
-      number: 3,
-      label: "Payment",
-    },
-  ];
-
-  // --- Payment already succeeded: show the success popup, nothing else ---
-  if (verifyStatus === "paid") {
-    return (
-      <PaymentSuccess
-        isOpen={true}
-        onClose={() => navigate("/dashboard")}
-      />
-    );
-  }
-
-  // --- Still checking, or checking failed, or payment is pending/failed ---
-  if (verifyStatus === "checking") {
-    return (
-      <div className="gsf-page">
-        <div className="gsf-canvas">
-          <div className="gsf-heading-container">
-            <h1 className="gsf-heading">Checking your payment...</h1>
-            <p className="gsf-subheading">This will only take a moment.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (verifyStatus === "pending") {
-    return (
-      <div className="gsf-page">
-        <div className="gsf-canvas">
-          <div className="gsf-heading-container">
-            <h1 className="gsf-heading">Still confirming your payment</h1>
-            <p className="gsf-subheading">
-              This can take a moment on Paystack's end. You can check again below.
-            </p>
-          </div>
-          <button type="button" className="gsf-continue-button" onClick={checkPayment}>
-            <span>Check again</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (verifyStatus === "failed") {
-    return (
-      <div className="gsf-page">
-        <div className="gsf-canvas">
-          <div className="gsf-heading-container">
-            <h1 className="gsf-heading">Payment not completed</h1>
-            <p className="gsf-subheading">
-              Your payment may have been cancelled or declined. You can try again below.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="gsf-continue-button"
-            onClick={() => navigate("/verifypayment")}
-          >
-            <span>Try payment again</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (verifyStatus === "error") {
-    return (
-      <div className="gsf-page">
-        <div className="gsf-canvas">
-          <div className="gsf-heading-container">
-            <h1 className="gsf-heading">We couldn't check your payment</h1>
-            <p className="gsf-subheading">{verifyError}</p>
-          </div>
-          <button type="button" className="gsf-continue-button" onClick={checkPayment}>
-            <span>Try again</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // --- verifyStatus === "idle": the normal plan-picker page ---
   return (
     <div className="gsf-page">
       <div className="gsf-canvas">
@@ -298,153 +140,67 @@ const handleverifyPaymentClick = () => {
         {/* Stepper */}
         <div className="gsf-stepper-wrapper">
           <div className="gsf-stepper-row">
-
             {steps.map((step, index) => (
-              <React.Fragment
-                key={step.number}
-              >
-
+              <React.Fragment key={step.number}>
                 <div className="gsf-step">
-
                   <div
-                    className={`
-                      gsf-step-circle
-                      ${
-                        currentStep ===
-                        step.number
-                          ? "active"
-                          : ""
-                      }
-                      ${
-                        currentStep >
-                        step.number
-                          ? "completed"
-                          : ""
-                      }
-                    `}
+                    className={`gsf-step-circle ${currentStep === step.number ? "active" : ""} ${
+                      currentStep > step.number ? "completed" : ""
+                    }`}
                   >
-                    <span className="gsf-step-number">
-                      {step.number}
-                    </span>
+                    <span className="gsf-step-number">{step.number}</span>
                   </div>
-
-
                   <div className="gsf-step-label-wrap">
-
-                    <span
-                      className={`
-                        gsf-step-label
-                        ${
-                          currentStep ===
-                          step.number
-                            ? "active"
-                            : ""
-                        }
-                      `}
-                    >
+                    <span className={`gsf-step-label ${currentStep === step.number ? "active" : ""}`}>
                       {step.label}
                     </span>
-
                   </div>
-
                 </div>
 
-
-                {index <
-                  steps.length - 1 && (
-
+                {index < steps.length - 1 && (
                   <div className="gsf-step-track">
-
-                    <div
-                      className={`
-                        gsf-step-track-fill
-                        ${
-                          currentStep >
-                          step.number
-                            ? "filled"
-                            : ""
-                        }
-                      `}
-                    />
-
+                    <div className={`gsf-step-track-fill ${currentStep > step.number ? "filled" : ""}`} />
                   </div>
-
                 )}
-
               </React.Fragment>
             ))}
-
           </div>
         </div>
 
-
         {/* Heading */}
         <div className="gsf-heading-container">
-
-          <h1 className="gsf-heading">
-            Step 1: Choose your Plan
-          </h1>
-
+          <h1 className="gsf-heading">Step 1: Choose your Plan</h1>
           <p className="gsf-subheading">
-            Precision connectivity tailored for
-            your lifestyle. Select the high-speed
-            tier that aligns with your digital
-            footprint.
+            Precision connectivity tailored for your lifestyle. Select the high-speed tier that
+            aligns with your digital footprint.
           </p>
-
         </div>
-
 
         {/* Main Card */}
         <div className="gsf-card">
-
           <div className="gsf-form">
-
 
             {/* Plan Dropdown */}
             <div className="gsf-dropdown-container">
-
-              <label className="gsf-label">
-                Select Your Plan
-              </label>
-
+              <label className="gsf-label">Select Your Plan</label>
 
               <div className="gsf-select-wrapper">
-
                 <button
                   type="button"
                   className="gsf-select-trigger"
-                  onClick={() =>
-                    setDropdownOpen(
-                      !dropdownOpen
-                    )
-                  }
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-
                   <span className="gsf-select-value">
-
-                    {selectedPlan.name}
-                    {" - "}
-                    N{selectedPlan.price}/mo
-
+                    {selectedPlan.name} - N{selectedPlan.price}/mo
                   </span>
 
-
                   <svg
-                    className={`
-                      gsf-select-chevron
-                      ${
-                        dropdownOpen
-                          ? "open"
-                          : ""
-                      }
-                    `}
+                    className={`gsf-select-chevron ${dropdownOpen ? "open" : ""}`}
                     width="12"
                     height="8"
                     viewBox="0 0 12 8"
                     fill="none"
                   >
-
                     <path
                       d="M1 1L6 6L11 1"
                       stroke="#0C4381"
@@ -452,266 +208,111 @@ const handleverifyPaymentClick = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-
                   </svg>
-
                 </button>
 
-
                 {dropdownOpen && (
-
                   <div className="gsf-select-options">
-
                     {plans.map((plan) => (
-
                       <div
                         key={plan.id}
-                        className={`
-                          gsf-select-option
-                          ${
-                            plan.id ===
-                            selectedPlanId
-                              ? "selected"
-                              : ""
-                          }
-                        `}
-                        onClick={() =>
-                          handleSelectPlan(
-                            plan.id
-                          )
-                        }
+                        className={`gsf-select-option ${plan.id === selectedPlanId ? "selected" : ""}`}
+                        onClick={() => handleSelectPlan(plan.id)}
                       >
-
-                        {plan.name}
-                        {" - "}
-                        N{plan.price}/mo
-
+                        {plan.name} - N{plan.price}/mo
                       </div>
-
                     ))}
-
                   </div>
-
                 )}
-
               </div>
-
             </div>
-
 
             {/* Selected Plan Details */}
             <div className="gsf-details-area">
-
               <div className="gsf-details-top">
-
                 <div className="gsf-details-info">
-
                   <div className="gsf-details-title-row">
-
                     <h2 className="gsf-plan-name">
-
-                      {selectedPlan.name.replace(
-                        "IMBIL Connect ",
-                        ""
-                      )}
-
+                      {selectedPlan.name.replace("IMBIL Connect ", "")}
                     </h2>
-
-
-                    {selectedPlan.badge && (
-
-                      <span className="gsf-badge">
-
-                        {selectedPlan.badge}
-
-                      </span>
-
-                    )}
-
+                    {selectedPlan.badge && <span className="gsf-badge">{selectedPlan.badge}</span>}
                   </div>
-
-
-                  <p className="gsf-plan-description">
-
-                    {selectedPlan.description}
-
-                  </p>
-
+                  <p className="gsf-plan-description">{selectedPlan.description}</p>
                 </div>
-
 
                 <div className="gsf-price">
-
-                  <span className="gsf-price-amount">
-
-                    N{selectedPlan.price}
-
-                  </span>
-
-                  <span className="gsf-price-period">
-
-                    /mo
-
-                  </span>
-
+                  <span className="gsf-price-amount">N{selectedPlan.price}</span>
+                  <span className="gsf-price-period">/mo</span>
                 </div>
-
               </div>
-
 
               {/* Plan Statistics */}
               <div className="gsf-stats-row">
-
-
                 <div className="gsf-stat-box">
-
                   <div className="gsf-stat-icon speed-icon">
-
-                    <img
-                      src={speedIcon}
-                      alt="Speed"
-                    />
-
+                    <img src={speedIcon} alt="" />
                   </div>
-
-
                   <div className="gsf-stat-text">
-
-                    <span className="gsf-stat-label">
-
-                      Speed
-
-                    </span>
-
-                    <span className="gsf-stat-value">
-
-                      {selectedPlan.speed}
-
-                    </span>
-
+                    <span className="gsf-stat-label">Speed</span>
+                    <span className="gsf-stat-value">{selectedPlan.speed}</span>
                   </div>
-
                 </div>
 
-
                 <div className="gsf-stat-box">
-
                   <div className="gsf-stat-icon data-icon">
-
-                    <img
-                      src={streamingIcon}
-                      alt="Streaming"
-                    />
-
+                    <img src={streamingIcon} alt="" />
                   </div>
-
-
                   <div className="gsf-stat-text">
-
-                    <span className="gsf-stat-label">
-
-                      Streaming
-
-                    </span>
-
-                    <span className="gsf-stat-value">
-
-                      {selectedPlan.streaming}
-
-                    </span>
-
+                    <span className="gsf-stat-label">Streaming</span>
+                    <span className="gsf-stat-value">{selectedPlan.streaming}</span>
                   </div>
-
                 </div>
-
 
                 <div className="gsf-stat-box">
-
                   <div className="gsf-stat-icon devices-icon">
-
-                    <img
-                      src={securityIcon}
-                      alt="Security"
-                    />
-
+                    <img src={securityIcon} alt="" />
                   </div>
-
-
                   <div className="gsf-stat-text">
-
-                    <span className="gsf-stat-label">
-
-                      Security
-
-                    </span>
-
-                    <span className="gsf-stat-value">
-
-                      {selectedPlan.security}
-
-                    </span>
-
+                    <span className="gsf-stat-label">Security</span>
+                    <span className="gsf-stat-value">{selectedPlan.security}</span>
                   </div>
-
                 </div>
-
-
               </div>
-
             </div>
 
-
             {/* Footer */}
-        <div className="gsf-actions-footer">
+            <div className="gsf-actions-footer">
+              {submitError && (
+                <div className="gsf-error-message" role="alert">
+                  {submitError}
+                </div>
+              )}
 
-          {submitError && (
-    <div className="gsf-error-message" role="alert">
-      {submitError}
-    </div>
-  )}
+              <div className="gsf-summary">
+                <span className="gsf-summary-label">Summary</span>
+                <span className="gsf-summary-value">
+                  {selectedPlan.name.replace("IMBIL Connect ", "Imbil ")} - N{selectedPlan.price}
+                </span>
+              </div>
 
+              <div className="gsf-bottom-row">
+                <button
+                  type="button"
+                  className="gsf-back-button"
+                  onClick={() => navigate(ROUTES.INFO)}
+                >
+                  <div className="gsf-back-icon">
+                    <img src={backIcon} alt="" />
+                  </div>
+                  <span>Back</span>
+                </button>
 
-  {/* Summary */}
-  <div className="gsf-summary">
+                <button type="button" className="gsf-continue-button" onClick={handleContinue}>
+                  <span>Continue</span>
+                </button>
+              </div>
+            </div>
 
-    <span className="gsf-summary-label">
-      Summary
-    </span>
-
-    <span className="gsf-summary-value">
-      {selectedPlan.name.replace("IMBIL Connect ", "Imbil ")}
-      {" - "}
-      N{selectedPlan.price}
-    </span>
-
-  </div>
-
-  {/* Back Button + Continue Button on same row */}
-  <div className="gsf-bottom-row">
-
-    <button
-      type="button"
-      className="gsf-back-button"
-      onClick={() => navigate("/started")}
-    >
-      <div className="gsf-back-icon">
-        <img src={backIcon} alt="Back" />
-      </div>
-
-      <span>Back</span>
-    </button>
-
-    <button
-      type="button"
-      className="gsf-continue-button"
-      onClick={handleverifyPaymentClick}
-    >
-      <span>Continue</span>
-    </button>
-
-  </div>
-
-</div>
           </div>
         </div>
 
@@ -719,6 +320,5 @@ const handleverifyPaymentClick = () => {
     </div>
   );
 }
-
 
 export default GetStartedForm;

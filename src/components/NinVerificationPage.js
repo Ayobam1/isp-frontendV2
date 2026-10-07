@@ -3,24 +3,51 @@ import { useNavigate } from 'react-router-dom';
 import Ninverification from './Ninverification';
 import checkIcon from '../assets/vectorcheck.png';
 import { useOnboarding } from '../context/OnboardingContext';
-import './getStartedVerification.css'; 
+import { ROUTES } from '../constants/routes';
+import './getStartedVerification.css';
 
 function NinVerificationPage() {
   const navigate = useNavigate();
-  const { ninVerification, setNinVerification, requestId } = useOnboarding();
+  const {
+    ninVerification,
+    setNinVerification,
+    serviceForm,
+    selectedPlan,
+    availabilityDate,
+    installationPhone,
+  } = useOnboarding();
   const [ninError, setNinError] = useState('');
 
-  const handleNinVerified = useCallback((result) => {
-    if (result.verdict === 'approved') {
-      setNinVerification(result);
-      setNinError('');
-      navigate('/verifypayment/');
-    } else {
-      setNinError('NIN verification did not pass. Please check the number and try again.');
-    }
-  }, [navigate, setNinVerification]);
+  const handleNinVerified = useCallback(
+    (result) => {
+      if (result.verdict === 'approved') {
+        setNinVerification(result);
+        setNinError('');
+        navigate(ROUTES.SUMMARY);
+      } else {
+        setNinError('NIN verification did not pass. Please check the number and try again.');
+      }
+    },
+    [navigate, setNinVerification]
+  );
 
-  
+  // Work out whether an earlier step is incomplete, and where to send the user to fix it
+  const getMissingStep = () => {
+    if (!serviceForm?.firstName?.trim() || !serviceForm?.email?.trim()) {
+      return { message: 'Your details are missing. Please fill in the information form first.', step: ROUTES.INFO };
+    }
+    if (!selectedPlan) {
+      return { message: 'Please select a plan first.', step: ROUTES.PLAN };
+    }
+    if (!availabilityDate || !installationPhone) {
+      return { message: 'Please complete your installation details first.', step: ROUTES.VERIFICATION };
+    }
+    return null;
+  };
+
+  const missingStep = getMissingStep();
+
+  // Already verified (e.g. the user came back to this page): skip straight to the summary
   if (ninVerification?.verdict === 'approved') {
     return (
       <div className="gsf-page">
@@ -31,7 +58,7 @@ function NinVerificationPage() {
               <button
                 type="button"
                 className="gsf-verify-continue"
-                onClick={() => navigate('/verifypayment/')}
+                onClick={() => navigate(ROUTES.SUMMARY)}
               >
                 Continue to Payment
               </button>
@@ -41,7 +68,6 @@ function NinVerificationPage() {
       </div>
     );
   }
-
 
   return (
     <div className="gsf-page">
@@ -107,16 +133,27 @@ function NinVerificationPage() {
 
         <div className="gsf-card">
           <div className="gsf-form">
-            {requestId ? (
-  <Ninverification
-    userId={requestId}
-    onVerified={handleNinVerified}
-    onRetry={() => setNinError('')}
-  />
-) : (
-  <span className="gsf-error">Missing request info. Please restart from Step 1.</span>
-)}
-{ninError && <span className="gsf-error">{ninError}</span>}
+            {missingStep ? (
+              <>
+                <span className="gsf-error">{missingStep.message}</span>
+                <button
+                  type="button"
+                  className="gsf-verify-continue"
+                  onClick={() => navigate(missingStep.step)}
+                >
+                  Go back
+                </button>
+              </>
+            ) : (
+              <Ninverification
+                // No request id exists in the new flow. The email is unique per account
+                // (POST /checkout creates the account with it), so it identifies this customer.
+                userId={serviceForm.email.trim().toLowerCase()}
+                onVerified={handleNinVerified}
+                onRetry={() => setNinError('')}
+              />
+            )}
+            {ninError && <span className="gsf-error">{ninError}</span>}
           </div>
         </div>
 

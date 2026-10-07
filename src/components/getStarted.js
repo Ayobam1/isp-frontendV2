@@ -1,544 +1,414 @@
-import React,{useState, useRef, useEffect} from 'react';
-import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react';
 import './getStarted.css';
 import SuccessPopup from './SuccessPopup';
 import nameIcon from '../assets/peopleVector.png';
 import emailIcon from '../assets/startedemail.png';
 import numberIcon from '../assets/startedcall.png';
-import residenceIcon from '../assets/residence.png';
 import expandArrow from '../assets/Expand Arrow.png';
 import { useOnboarding } from '../context/OnboardingContext';
 import { useNavigate } from 'react-router-dom';
 import { createRequest } from '../api/authService';
+import { AREA_OPTIONS, AREA_PLACEHOLDER } from '../constants/areas';
+import { ROUTES } from '../constants/routes';
+import { normalizeNigerianPhone } from '../utils/phone';
 
-
-
-
-const Started = () => {
-
-  const navigate = useNavigate();
-
-const { serviceForm: formData, updateServiceForm, setRequestId, requestId, clearOnboardingData } = useOnboarding();
-const termsAgreed = formData.termsAgreed;
-const setTermsAgreed = (value) => updateServiceForm({ termsAgreed: value });
- 
-    
-      // const [termsAgreed, setTermsAgreed] = useState(false);
-      const [areaDropdownOpen, setareaDropdownOpen] = useState(false);
-       const [aboutusDropdownOpen, setaboutusDropdownOpen] = useState(false);
-      const [isSubmitting, setIsSubmitting] = useState(false);
-      const [errors, setErrors] = useState({});
-      const [showPopup, setShowPopup] = useState(false);
-      const areaDropdownRef = useRef(null);
-      const aboutusDropdownRef = useRef(null);
-      
-      const areaOptions = [
-        'Agege',
-        'Ajeromi-Ifelodun',
-        'Alimosho',
-        'Amuwo-Odofin',
-        'Apapa',
-        'Badagry',
-        'Epe',
-        'Eti-Osa',
-        'Ibeju-Lekki',
-        'Ifako-Ijaiye',
-        'Ikeja',
-        'Ikorodu',
-        'Kosofe',
-        'Lagos Island',
-        'Lagos Mainland',
-        'Mushin',
-        'Ojo',
-        'Oshodi-Isolo',
-        'Shomolu',
-        'Surulere'
-        
-      ];
-
-const aboutusOptions = [
-  {
-    label: 'Social Media',
-    value: 'SOCIAL_MEDIA'
-  },
-  {
-    label: 'Website',
-    value: 'WEBSITE'
-  },
-  {
-    label: 'Friend',
-    value: 'FRIEND'
-  },
-  {
-    label: 'Estate Manager',
-    value: 'ESTATE_MANAGER'
-  },
-  {
-    label: 'Sales Agent',
-    value: 'SALES_AGENT'
-  }
+const ABOUT_US_OPTIONS = [
+  { label: 'Social Media', value: 'SOCIAL_MEDIA' },
+  { label: 'Website', value: 'WEBSITE' },
+  { label: 'Friend', value: 'FRIEND' },
+  { label: 'Estate Manager', value: 'ESTATE_MANAGER' },
+  { label: 'Sales Agent', value: 'SALES_AGENT' },
 ];
 
-      useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (areaDropdownRef.current && !areaDropdownRef.current.contains(event.target)) {
-            setareaDropdownOpen(false);
-          }
-        };
-      
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      }, []);
+const API_ERRORS = {
+  VALIDATION_002: { field: 'submit', message: 'Please fill in all required fields.' },
+  VALIDATION_003: { field: 'email', message: 'Please enter a valid email address.' },
+  VALIDATION_004: { field: 'phone', message: 'Please enter a valid phone number.' },
+  VALIDATION_005: { field: 'email', message: 'A request with this email already exists.' },
+  VALIDATION_008: { field: 'preferredaboutus', message: 'Please select how you heard about us.' },
+};
 
+const mapApiError = (error) => {
+  if (error.response?.status === 429) {
+    return { submit: 'Too many submissions. Please wait a few minutes and try again.' };
+  }
+  const data = error.response?.data;
+  const code = data?.code || data?.error?.code;
+  const known = API_ERRORS[code];
+  if (known) return { [known.field]: known.message };
+  return { submit: data?.message || 'An error occurred. Please try again.' };
+};
+
+const Started = () => {
+  const navigate = useNavigate();
+  const { serviceForm: formData, updateServiceForm } = useOnboarding();
+
+  const termsAgreed = formData.termsAgreed;
+  const setTermsAgreed = (value) => updateServiceForm({ termsAgreed: value });
+
+  const [areaDropdownOpen, setAreaDropdownOpen] = useState(false);
+  const [aboutusDropdownOpen, setAboutusDropdownOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showPopup, setShowPopup] = useState(false);
+  const areaDropdownRef = useRef(null);
+  const aboutusDropdownRef = useRef(null);
+
+  // Close either dropdown when clicking outside it
   useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (aboutusDropdownRef.current && !aboutusDropdownRef.current.contains(event.target)) {
-            setaboutusDropdownOpen(false);
-          }
-        };
-      
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      }, []);
-
-   const handleInputChange = (e) => {
-  const { name, value } = e.target;
-  updateServiceForm({ [name]: value });
-
-  if (errors[name]) {
-    setErrors({ ...errors, [name]: '' });
-  }
-};
-
-    
-    
-  const handleareaSelect = (area) => {
-  updateServiceForm({ preferredarea: area });
-  setareaDropdownOpen(false);
-};
-
-const handleaboutusSelect = (aboutus) => {
-  updateServiceForm({
-    preferredaboutus: aboutus.label,
-    heardAboutUsValue: aboutus.value,
-    salesAgentName: aboutus.value === 'SALES_AGENT' ? formData.salesAgentName : '',
-  });
-  setaboutusDropdownOpen(false);
-};
-
-   
-      const toggleareaopdown = () => {
-        setareaDropdownOpen(!areaDropdownOpen);
-        
-        if (areaDropdownOpen) setareaDropdownOpen(false);
-      };
-
-       const toggleaboutusdropdown = () => {
-        setaboutusDropdownOpen(!aboutusDropdownOpen);
-        
-        if (aboutusDropdownOpen) setaboutusDropdownOpen(false);
-      };
-
-      const validateForm = () => {
-        const newErrors = {};
-        
-        console.log("Name:", formData.name);
-        if (!formData.name.trim()) newErrors.name = 'Full name is required';
-        
-        console.log("Phone:", formData.phone);
-        if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-        
-        
-        console.log("Email:", formData.email);
-        if (!formData.email.trim()) newErrors.email = 'Email is required';
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email address is invalid';
-
-        
-        console.log("Preferred Area:", formData.preferredarea);
-        if (!formData.preferredarea === 'Select Area') newErrors.preferredUsage = 'Please select Area';
-
-        console.log("Preferred Method of hearing:", formData.preferredaboutus);
-       if (!formData.heardAboutUsValue) {
-  newErrors.preferredaboutus =
-    'Please select how you heard about us';
-}
-
-if (
-  formData.heardAboutUsValue ===
-    'SALES_AGENT' &&
-  !formData.salesAgentName.trim()
-) {
-  newErrors.salesAgentName =
-    'Please enter the sales agent’s name';
-}
-
-        console.log("Preferred Plan:", formData.preferredPlan);
-        if (formData.preferredPlan === 'Select a plan') newErrors.preferredPlan = 'Please select a plan';
-        
-        console.log("Terms Agreed:", termsAgreed);
-        if (!termsAgreed) newErrors.terms = 'You must agree to the terms and conditions';
-        
-        setErrors(newErrors);
-        console.log("Validation errors:", newErrors);
-        return Object.keys(newErrors).length === 0;
-      };
-
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  // Stop submission if validation fails
-  if (!validateForm()) return;
-
-  // Already created a request earlier this session (e.g. user went back
-  // from a later step and is just continuing again) — don't create a
-  // duplicate, just move on to plan selection.
-  if (requestId) {
-    navigate("/getstartedform");
-    return;
-  }
-
-  setIsSubmitting(true);
-
-  try {
-    const fullName = formData.name?.trim().split(/\s+/) || [];
-
-    const payload = {
-      firstName: fullName[0] || "",
-      lastName: fullName.slice(1).join(" ") || "",
-      email: formData.email?.trim() || "",
-      phone_number: formData.phone?.trim() || "",
-      address: formData.address?.trim() || "",
-      location: formData.preferredarea || "",
-      heard_about_us: formData.heardAboutUsValue || "",
-      sales_agent_name:
-        formData.heardAboutUsValue === "SALES_AGENT"
-          ? formData.salesAgentName?.trim() || ""
-          : null,
-      status: "PENDING",
-      property_type: formData.residence || "RESIDENTIAL",
+    const handleClickOutside = (event) => {
+      if (areaDropdownRef.current && !areaDropdownRef.current.contains(event.target)) {
+        setAreaDropdownOpen(false);
+      }
+      if (aboutusDropdownRef.current && !aboutusDropdownRef.current.contains(event.target)) {
+        setAboutusDropdownOpen(false);
+      }
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-    console.log("Sending API payload:", payload);
+  const clearError = (field) => {
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }));
+  };
 
-    const response = await createRequest(payload);
-    console.log("API response:", response.data);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    updateServiceForm({ [name]: value });
+    clearError(name);
+  };
 
-    setRequestId(response.data.id);
-    setShowPopup(true);
+  const handleAreaSelect = (area) => {
+    updateServiceForm({ preferredarea: area });
+    setAreaDropdownOpen(false);
+    clearError('preferredarea');
+  };
 
-  } catch (error) {
-    console.error(
-      "Error creating request:",
-      error
-    );
+  const handleAboutusSelect = (aboutus) => {
+    updateServiceForm({
+      preferredaboutus: aboutus.label,
+      heardAboutUsValue: aboutus.value,
+      salesAgentName: aboutus.value === 'SALES_AGENT' ? formData.salesAgentName : '',
+    });
+    setAboutusDropdownOpen(false);
+    clearError('preferredaboutus');
+  };
 
-    console.error(
-      "Backend response:",
-      error.response?.data
-    );
+  const validateForm = () => {
+    const newErrors = {};
+    const nameParts = (formData.name || '').trim().split(/\s+/).filter(Boolean);
 
-    setErrors({
-      submit:
-        error.response?.data?.message ||
-        "An error occurred. Please try again."
+    if (nameParts.length === 0) newErrors.name = 'Full name is required';
+    else if (nameParts.length < 2) newErrors.name = 'Please enter your first and last name';
+
+    if (!formData.email?.trim()) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email address is invalid';
+
+    if (!formData.phone?.trim()) newErrors.phone = 'Phone number is required';
+
+    if (!formData.address?.trim()) newErrors.address = 'Address is required';
+
+    if (!formData.preferredarea || formData.preferredarea === AREA_PLACEHOLDER) {
+      newErrors.preferredarea = 'Please select your area';
+    }
+
+    if (!formData.heardAboutUsValue) {
+      newErrors.preferredaboutus = 'Please select how you heard about us';
+    }
+
+    if (formData.heardAboutUsValue === 'SALES_AGENT' && !formData.salesAgentName?.trim()) {
+      newErrors.salesAgentName = "Please enter the sales agent's name";
+    }
+
+    if (!termsAgreed) newErrors.terms = 'You must agree to the terms and conditions';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setErrors({});
+
+    try {
+      const nameParts = formData.name.trim().split(/\s+/);
+
+      const payload = {
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(' '),
+        email: formData.email.trim().toLowerCase(),
+        phone_number: normalizeNigerianPhone(formData.phone),
+        address: formData.address.trim(),
+        location: formData.preferredarea,
+        property_type: formData.residence || 'RESIDENTIAL',
+        heard_about_us: formData.heardAboutUsValue,
+      };
+
+      if (formData.heardAboutUsValue === 'SALES_AGENT') {
+        payload.sales_agent_name = formData.salesAgentName.trim();
+      }
+
+      // The backend stores the request and emails the customer about coverage
+      await createRequest(payload);
+      setShowPopup(true);
+    } catch (error) {
+      console.error('Backend response:', error.response?.data);
+      setErrors(mapApiError(error));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSignInClick = () => {
+    navigate(ROUTES.SIGN_IN);
+  };
+
+  // Runs when the popup auto-closes (after 8s) or the user clicks ×
+  const handleClosePopup = () => {
+    setShowPopup(false);
+
+    // Carry the details over so the Information Form opens pre-filled
+    const nameParts = (formData.name || '').trim().split(/\s+/);
+    updateServiceForm({
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' '),
+      termsAgreed: false,
     });
 
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    navigate(ROUTES.INFO);
+  };
 
-const handleSignInClick = () => {
-  localStorage.setItem(
-    "currentUser",
-    JSON.stringify({
-      firstName: "Test",
-      lastName: "User",
-      email: "test@example.com",
-      name: "Test User" 
-    })
-  );
-  localStorage.setItem("authToken", "mock-token-for-testing");
-  navigate("/dashboard");
-};
-      const handleClosePopup = () => {
-        setShowPopup(false);
-        clearOnboardingData();
-      };
+  return (
+    <div className="get-started-container">
+      <div className="frame-168-mobile">
+        <button className="hero-close-btn" onClick={() => navigate(ROUTES.HOME)}>✕</button>
+      </div>
 
-    return (
+      <div className="frame-241">
+        <div className="frame-208">
+          <div className="frame-215">
+            <div className="frame-207">
+              <h1 className="get-started-title">Service Request Form</h1>
+            </div>
 
-        <div className='get-started-container'>
-            <div className="frame-168-mobile">
-      <button className="hero-close-btn" onClick={() => navigate('/home')}>✕</button>
-    </div>
-          <div className="frame-241">
-          <div className="frame-208">
-            <div className="frame-215">
-              <div className="frame-207">
-                <h1 className="get-started-title">Service Request Form </h1>
+            <div className="frame-169">
+              {/* Name field */}
+              <div className="text-field">
+                <label className="field-label">Full Name</label>
+                <div className="frame-163">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    value={formData.name || ''}
+                    onChange={handleInputChange}
+                    className="startedinput-field"
+                  />
+                  <div className="component-3">
+                    <img src={nameIcon} alt="" className="field-icon" />
+                  </div>
+                </div>
+                {errors.name && <div className="error-message">{errors.name}</div>}
               </div>
-              
-              <div className="frame-169">
-                {/* Name field */}
+
+              {/* Email field */}
+              <div className="text-field">
+                <label className="field-label">Email</label>
+                <div className="frame-163">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="email@example.com"
+                    value={formData.email || ''}
+                    onChange={handleInputChange}
+                    className="startedinput-field"
+                  />
+                  <div className="component-3">
+                    <img src={emailIcon} alt="" className="field-icon" />
+                  </div>
+                </div>
+                {errors.email && <div className="error-message">{errors.email}</div>}
+              </div>
+
+              {/* Phone Number field */}
+              <div className="text-field">
+                <label className="field-label">Phone Number</label>
+                <div className="frame-163">
+                  <div className="country-code">
+                    <span className="country-code-text">+234</span>
+                  </div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="0800 000 0000"
+                    value={formData.phone || ''}
+                    onChange={handleInputChange}
+                    className="startedinput-field"
+                  />
+                  <div className="component-3">
+                    <img src={numberIcon} alt="" className="field-icon" />
+                  </div>
+                </div>
+                {errors.phone && <div className="error-message">{errors.phone}</div>}
+              </div>
+
+              {/* Address field */}
+              <div className="text-field">
+                <label className="field-label">Address</label>
+                <div className="frame-163">
+                  <input
+                    type="text"
+                    name="address"
+                    placeholder="12 Allen Avenue"
+                    value={formData.address || ''}
+                    onChange={handleInputChange}
+                    className="startedinput-field"
+                  />
+                  <div className="component-3">
+                    <img src={nameIcon} alt="" className="field-icon" />
+                  </div>
+                </div>
+                {errors.address && <div className="error-message">{errors.address}</div>}
+              </div>
+
+              {/* Area dropdown */}
+              <div className="text-field-dropdown" ref={areaDropdownRef}>
                 <div className="text-field">
-                  <label className="field-label"> Full Name</label>
+                  <label className="field-label">Area</label>
+                  <div
+                    className="frame-163 dropdown-field"
+                    onClick={() => setAreaDropdownOpen((open) => !open)}
+                  >
+                    <div className="preferred-plan-text">{formData.preferredarea}</div>
+                    <img
+                      src={expandArrow}
+                      alt=""
+                      className={`expand-arrow ${areaDropdownOpen ? 'rotate' : ''}`}
+                    />
+                  </div>
+
+                  {areaDropdownOpen && (
+                    <div className="dropdown-options">
+                      {AREA_OPTIONS.map((area) => (
+                        <div
+                          key={area}
+                          className={`dropdown-option ${formData.preferredarea === area ? 'selected' : ''}`}
+                          onClick={() => handleAreaSelect(area)}
+                        >
+                          {area}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {errors.preferredarea && <div className="error-message">{errors.preferredarea}</div>}
+                </div>
+              </div>
+
+              {/* How did you hear about us */}
+              <div className="text-field-dropdown" ref={aboutusDropdownRef}>
+                <div className="text-field">
+                  <label className="field-label">How did you hear about us</label>
+                  <div
+                    className="frame-163 dropdown-field"
+                    onClick={() => setAboutusDropdownOpen((open) => !open)}
+                  >
+                    <div className="preferred-plan-text">{formData.preferredaboutus}</div>
+                    <img
+                      src={expandArrow}
+                      alt=""
+                      className={`expand-arrow ${aboutusDropdownOpen ? 'rotate' : ''}`}
+                    />
+                  </div>
+
+                  {aboutusDropdownOpen && (
+                    <div className="dropdown-options">
+                      {ABOUT_US_OPTIONS.map((aboutus) => (
+                        <div
+                          key={aboutus.value}
+                          className={`dropdown-option ${
+                            formData.heardAboutUsValue === aboutus.value ? 'selected' : ''
+                          }`}
+                          onClick={() => handleAboutusSelect(aboutus)}
+                        >
+                          {aboutus.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {errors.preferredaboutus && (
+                    <div className="error-message">{errors.preferredaboutus}</div>
+                  )}
+                </div>
+              </div>
+
+              {/* Sales Agent */}
+              {formData.heardAboutUsValue === 'SALES_AGENT' && (
+                <div className="text-field">
+                  <label className="field-label">Sales Agent Name</label>
                   <div className="frame-163">
-                    <input 
+                    <input
                       type="text"
-                      name="name"
-                      placeholder='John Doe'
-                      value={formData.name}
+                      name="salesAgentName"
+                      placeholder="Enter the sales agent's name"
+                      value={formData.salesAgentName || ''}
                       onChange={handleInputChange}
                       className="startedinput-field"
                     />
-                     <div className="component-3">
-                      <img src={nameIcon} alt="Name" className="field-icon" />
-                    </div>
                   </div>
-                  {errors.name && <div className="error-message">{errors.name}</div>}
+                  {errors.salesAgentName && (
+                    <div className="error-message">{errors.salesAgentName}</div>
+                  )}
                 </div>
-                
-                {/* Email field */}
-                  <div className="text-field">
-                  <label className="field-label">Email</label>
-                  <div className="frame-163">
-                    <input 
-                      type="email"
-                      name="email"
-                      placeholder='email@example.com'
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="startedinput-field"
-                    />
-                    <div className="component-3">
-                      <img src={emailIcon} alt="Name" className="field-icon" />
-                    </div>
+              )}
+
+              {/* Terms agreement checkbox */}
+              <div className="check-agreement">
+                <div className="terms-row">
+                  <div
+                    className={`frame-167 ${termsAgreed ? 'checked' : ''}`}
+                    onClick={() => setTermsAgreed(!termsAgreed)}
+                  >
+                    <div className="done-check"></div>
                   </div>
-                  {errors.email && <div className="error-message">{errors.email}</div>}
+                  <div className="terms-text">I have agreed to the terms and condition.</div>
                 </div>
-            
-                {/* Phone Number field */}
-                <div className="text-field">
-                   <label className="field-label">Phone Number</label>
-                     <div className="frame-163">
-    <div className="country-code">
-      <span className="country-code-text">+234</span>
-    </div>
-    <input 
-      type="tel"
-      name="phone"
-      placeholder="0800 000 0000"
-      value={formData.phone}
-      onChange={handleInputChange}
-      className="startedinput-field"
-    />
-    <div className="component-3">
-      <img src={numberIcon} alt="phone" className="field-icon" />
-    </div>
-  </div>
-  {errors.phone && <div className="error-message">{errors.phone}</div>}
-</div>
-                
-                 {/* Address field */}
-                <div className="text-field">
-                  <label className="field-label">Address</label>
-                  <div className="frame-163">
-                    <input 
-                      type="address"
-                      name="address"
-                      placeholder='123 Innovation Drive'
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className="startedinput-field"
-                    />
-                    <div className="component-3">
-                      <img src={nameIcon} alt="Name" className="field-icon" />
-                    </div>
-                  </div>
-                  {errors.email && <div className="error-message">{errors.address}</div>}
-                </div>
-                      
-                      {/* area dropdown  */}
-                 <div className="text-field-dropdown" ref={areaDropdownRef}>
-                  <div className="text-field">
-                    <label className="field-label">Area</label>
-                    <div 
-                      className="frame-163 dropdown-field"
-                      onClick={toggleareaopdown}
-                    >
-                      <div className="preferred-plan-text">{formData.preferredarea}</div>
-                      <img 
-                        src={expandArrow} 
-                        alt="Expand" 
-                        className={`expand-arrow ${areaDropdownOpen ? 'rotate' : ''}`} 
-                      />
-                    </div>
-                    
-                    {/* Dropdown options */}
-                    {areaDropdownOpen && (
-                      <div className="dropdown-options">
-                        {areaOptions.map((area, index) => (
-                          <div 
-                            key={index}
-                            className={`dropdown-option ${formData.preferredarea === area ? 'selected' : ''}`}
-                            onClick={() => handleareaSelect(area)}
-                          >
-                            {area}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                     {errors.preferredarea && <div className="error-message">{errors.preferredarea}</div>}
-                  </div>
-                </div>
-              
-                 
-               {/* How did you hear about us */}
-<div
-  className="text-field-dropdown"
-  ref={aboutusDropdownRef}
->
-  <div className="text-field">
-    <label className="field-label">
-      How did you hear about us
-    </label>
+                {errors.terms && <div className="error-message">{errors.terms}</div>}
+              </div>
 
-    <div
-      className="frame-163 dropdown-field"
-      onClick={toggleaboutusdropdown}
-    >
-      <div className="preferred-plan-text">
-        {formData.preferredaboutus}
-      </div>
+              {errors.submit && <div className="error-message submit-error">{errors.submit}</div>}
 
-      <img
-        src={expandArrow}
-        alt="Expand"
-        className={`expand-arrow ${
-          aboutusDropdownOpen ? 'rotate' : ''
-        }`}
-      />
-    </div>
-
-    {/* Dropdown options */}
-    {aboutusDropdownOpen && (
-      <div className="dropdown-options">
-        {aboutusOptions.map((aboutus) => (
-          <div
-            key={aboutus.value}
-            className={`dropdown-option ${
-              formData.heardAboutUsValue ===
-              aboutus.value
-                ? 'selected'
-                : ''
-            }`}
-            onClick={() =>
-              handleaboutusSelect(aboutus)
-            }
-          >
-            {aboutus.label}
-          </div>
-        ))}
-      </div>
-    )}
-
-    {errors.preferredaboutus && (
-      <div className="error-message">
-        {errors.preferredaboutus}
-      </div>
-    )}
-  </div>
-</div>
-                 
-                 {/* Sales Agent  */}
-                  {formData.preferredaboutus === 'Sales Agent' && (
-  <div className="text-field">
-    <label className="field-label">
-      Sales Agent Name
-    </label>
-
-    <div className="frame-163">
-      <input
-        type="text"
-        name="salesAgentName"
-        placeholder="Enter the sales agent's name"
-        value={formData.salesAgentName}
-        onChange={handleInputChange}
-        className="startedinput-field"
-      />
-    </div>
-
-    {errors.salesAgentName && (
-      <div className="error-message">
-        {errors.salesAgentName}
-      </div>
-    )}
-  </div>
-)}
-
-
-                
-                {/* Terms agreement checkbox */}
-                <div className="check-agreement">
-  <div className="terms-row">
-    <div 
-      className={`frame-167 ${termsAgreed ? 'checked' : ''}`}
-      onClick={() => setTermsAgreed(!termsAgreed)}
-    >
-      <div className="done-check"></div>
-    </div>
-    <div className="terms-text">I have agreed to the terms and condition.</div>
-  </div>
-  {errors.terms && <div className="error-message">{errors.terms}</div>}
-</div>
-
-                {errors.submit && <div className="error-message submit-error">{errors.submit}</div>}
-                <button 
-                className="large-button" 
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-              >
+              <button className="large-button" onClick={handleSubmit} disabled={isSubmitting}>
                 <span className="button-text">
                   {isSubmitting ? 'Processing...' : 'Submit Request'}
                 </span>
               </button>
-                {/* Sign up link */}
-               
-              </div>
-             
             </div>
-
           </div>
-          <div className="frame-240">
-  <div className="signup-text">
-    Already have an account? 
-    <span 
-      className="sign-in-link" 
-      onClick={handleSignInClick}
-    >
-      Sign in  
-    </span>
-  </div>
-</div>
         </div>
 
-              <div className="frame-168-desktop"></div>
+        <div className="frame-240">
+          <div className="signup-text">
+            Already have an account?{' '}
+            <span className="sign-in-link" onClick={handleSignInClick}>
+              Sign in
+            </span>
+          </div>
+        </div>
+      </div>
 
-            <SuccessPopup 
-        isOpen={showPopup} 
-        onClose={handleClosePopup} 
+      <div className="frame-168-desktop"></div>
+
+      <SuccessPopup
+        isOpen={showPopup}
+        onClose={handleClosePopup}
+        title="Request Submitted Successfully"
+        message="Thank you! We'll be in touch by email. Taking you to the next step now…"
       />
-        </div>
-
-
-       
-    );
+    </div>
+  );
 };
 
 export default Started;

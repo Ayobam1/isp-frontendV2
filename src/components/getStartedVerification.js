@@ -6,7 +6,8 @@ import phoneIcon from '../assets/veriphone.png';
 import encryptionIcon from '../assets/encryption.png';
 import uploadIcon from '../assets/uploadIcon.png';
 import checkIcon from '../assets/vectorcheck.png';
-
+import { getAvailabilityRange, isDateInRange } from '../utils/dateRange';
+import { ROUTES } from '../constants/routes';
 
 function GetStartedVerification({ onContinue }) {
   const {
@@ -16,16 +17,19 @@ function GetStartedVerification({ onContinue }) {
     setInstallationPhone: setPhone,
     uploadedFile,
     setUploadedFile,
-    requestId,
     selectedPlan,
-    serviceForm,
   } = useOnboarding();
 
   const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
-
   const navigate = useNavigate();
+
+  const { min: minDate, max: maxDate } = getAvailabilityRange();
+
+  const clearError = (field) => {
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
+  };
 
   const handleFileSelect = (file) => {
     if (!file) return;
@@ -38,7 +42,7 @@ function GetStartedVerification({ onContinue }) {
       setErrors((prev) => ({ ...prev, file: 'File must be under 5MB.' }));
       return;
     }
-    setErrors((prev) => ({ ...prev, file: null }));
+    clearError('file');
     setUploadedFile(file);
   };
 
@@ -51,18 +55,19 @@ function GetStartedVerification({ onContinue }) {
   const handleContinue = () => {
     const newErrors = {};
 
-    if (!availability_date) newErrors.availability_date = 'Enter a valid Installation Date.';
+    if (!availability_date) {
+      newErrors.availability_date = 'Please pick an installation date.';
+    } else if (!isDateInRange(availability_date)) {
+      newErrors.availability_date = 'Please pick a date between 2 days and 1 month from today.';
+    }
     if (!phone?.trim()) newErrors.phone = 'Phone number is required.';
     if (!uploadedFile) newErrors.file = 'Please upload a utility bill.';
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    if (!requestId || !serviceForm?.address || !selectedPlan) {
-      setErrors((prev) => ({
-        ...prev,
-        general: 'Missing request info. Please restart from Step 1.',
-      }));
+    if (!selectedPlan) {
+      setErrors({ general: 'Please select a plan first.' });
       return;
     }
 
@@ -70,7 +75,7 @@ function GetStartedVerification({ onContinue }) {
       onContinue({ availability_date, phone, uploadedFile });
     }
 
-    navigate('/verifynin/');
+    navigate(ROUTES.NIN);
   };
 
   return (
@@ -79,7 +84,6 @@ function GetStartedVerification({ onContinue }) {
 
         <div className="gsf-stepper-wrapper">
           <div className="gsf-stepper-row">
-
             <div className="gsf-step">
               <div className="gsf-step-circle completed">
                 <img src={checkIcon} alt="Completed" className="gsf-step-check" />
@@ -112,7 +116,6 @@ function GetStartedVerification({ onContinue }) {
                 <span className="gsf-step-label">Payment</span>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -128,13 +131,18 @@ function GetStartedVerification({ onContinue }) {
 
             <div className="gsf-form-grid">
               <div className="gsf-field">
-                <label className="gsf-field-label">Preffered Installation Date </label>
+                <label className="gsf-field-label">Preferred Installation Date</label>
                 <div className="gsf-input-wrapper">
                   <input
                     type="date"
                     className="gsf-input"
-                    value={availability_date}
-                    onChange={(e) => setAvailabilityDate(e.target.value)}
+                    value={availability_date || ''}
+                    min={minDate}
+                    max={maxDate}
+                    onChange={(e) => {
+                      setAvailabilityDate(e.target.value);
+                      clearError('availability_date');
+                    }}
                   />
                 </div>
                 {errors.availability_date && <span className="gsf-error">{errors.availability_date}</span>}
@@ -144,20 +152,24 @@ function GetStartedVerification({ onContinue }) {
                 <label className="gsf-field-label">Mobile Contact</label>
                 <div className="gsf-input-wrapper">
                   <div className="gsf-input-icon phone-icon">
-                    <img src={phoneIcon} alt="Name" className="phoneicon" />
+                    <img src={phoneIcon} alt="" className="phoneicon" />
                   </div>
                   <input
                     type="tel"
                     className="gsf-input"
-                    placeholder="e.g. +234 800 000 0000"
+                    placeholder="e.g. 0800 000 0000"
                     value={phone || ''}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => {
+                      setPhone(e.target.value);
+                      clearError('phone');
+                    }}
                   />
                 </div>
                 {errors.phone && <span className="gsf-error">{errors.phone}</span>}
               </div>
             </div>
 
+            {/* Utility bill upload */}
             <div className="gsf-upload-section">
               <label className="gsf-field-label">Address Verification Document</label>
 
@@ -180,7 +192,7 @@ function GetStartedVerification({ onContinue }) {
                   <>
                     <div className="gsf-upload-icon-wrap">
                       <div className="gsf-upload-icon">
-                        <img src={uploadIcon} alt="Name" className="uploadicon" />
+                        <img src={uploadIcon} alt="" className="uploadicon" />
                       </div>
                     </div>
                     <h3 className="gsf-upload-title">Upload Utility Bill</h3>
@@ -208,12 +220,14 @@ function GetStartedVerification({ onContinue }) {
               {errors.file && <span className="gsf-error">{errors.file}</span>}
             </div>
 
+            {errors.general && <span className="gsf-error">{errors.general}</span>}
+
             <div className="gsf-verify-actions">
               <div className="gsf-security-note">
                 <div className="gsf-security-icon">
-                  <img src={encryptionIcon} alt="Name" className="encryptionicon" />
+                  <img src={encryptionIcon} alt="" className="encryptionicon" />
                 </div>
-                <span>End-to-end encrypted 256-bit connection </span>
+                <span>End-to-end encrypted 256-bit connection</span>
               </div>
               <button type="button" className="gsf-verify-continue" onClick={handleContinue}>
                 Next

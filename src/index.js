@@ -4,6 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const paystackParams = new URLSearchParams(window.location.search);
+const paystackRef = paystackParams.get('reference');
+ 
+if (paystackRef) {
+  window.history.replaceState(
+    null,
+    '',
+    `${window.location.pathname}#/payment-callback?reference=${encodeURIComponent(paystackRef)}`
+  );
+}
+
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

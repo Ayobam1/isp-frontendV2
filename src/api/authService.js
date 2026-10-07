@@ -8,9 +8,9 @@ export const loginUser = async (username, password) => {
 
   const { accessToken, refreshToken, data } = response.data;
 
-  localStorage.setItem("token", response.data.accessToken);
+  localStorage.setItem("token", accessToken);
   localStorage.setItem("refreshToken", refreshToken);
-  localStorage.setItem("currentUser", JSON.stringify(response.data.data));
+  localStorage.setItem("currentUser", JSON.stringify(data));
 
   return response.data;
 };
@@ -25,16 +25,21 @@ export const getWalletBalance = async () => {
   return response.data;
 };
 
+// Service Request Form (getStarted.js)
 export const createRequest = async (payload) => {
   const response = await axiosInstance.post("/requests", payload);
   return response.data;
 };
 
-export const verifyAddressAndGetPaymentLink = async (requestId, payload) => {
-  const response = await axiosInstance.post(
-    `/requests/${requestId}/verify-address-get-payment-link`,
-    payload
-  );
+// Summary page (getStartedPayment.js) -> returns { reference, paymentUrl }
+export const startCheckout = async (payload) => {
+  const response = await axiosInstance.post("/checkout", payload);
+  return response.data;
+};
+
+// Payment callback page -> returns { paid, status, checkoutStatus, userId, ... }
+export const verifyCheckoutPayment = async (reference) => {
+  const response = await axiosInstance.post("/checkout/verify-payment", { reference });
   return response.data;
 };
 
@@ -43,25 +48,12 @@ export const createSupportTicket = async (payload) => {
   return response.data;
 };
 
-
-
 export const cancelSubscription = (subscriptionID, planType) => {
   return axiosInstance.post(`/subscription/${subscriptionID}/cancel`, { planType });
 };
 
-// authService.js
 export const reactivateSubscription = (subscriptionID, planType) => {
   return axiosInstance.post(`/subscription/${subscriptionID}/reactivate`, { planType });
 };
 
-export const syncWallet = () => axiosInstance.post('/users/wallet/sync');
-
-export const getPaymentLink = async (requestId, payload) => {
-  const response = await axiosInstance.post(`/requests/${requestId}/get-payment-link`, payload);
-  return response.data; 
-};
-
-export const verifyPayment = async (requestId) => {
-  const response = await axiosInstance.post("/requests/verify-payment", { requestId });
-  return response.data;
-};
+export const syncWallet = () => axiosInstance.post("/users/wallet/sync");
