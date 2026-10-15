@@ -1,47 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@800&display=swap');
+
+/* Page */
+
 .pv-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 24px 16px;
+  background: #f3f4f6;
+  box-sizing: border-box;
 }
 
-.pv-card {
+/* Modal Card (Figma: white, 12px radius, card is 32px + 294px + 32px wide) */
+
+.pv-modal {
+  position: relative;
   width: 100%;
-  max-width: 28rem;
-  padding: 2rem;
+  max-width: 358px;
+  padding: 99px 32px 64px;
+  background: #ffffff;
   border-radius: 12px;
-  background: #fff;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
   text-align: center;
 }
 
-.pv-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem;
+/* Button - Close modal */
+
+.pv-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: -9px; /* bigger tap target while the 14px icon stays 16px from the edges */
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
 }
 
-.pv-text {
-  font-size: 1rem;
-  line-height: 1.5;
-  margin: 0 0 1.5rem;
+.pv-close svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: #434750;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.pv-close:hover {
+  background: #f3f4f6;
+}
+
+.pv-close:focus-visible {
+  outline: 2px solid #0c4381;
+  outline-offset: 2px;
+}
+
+/* Frame 262 / Frame 261 */
+
+.pv-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 23px;
+}
+
+.pv-modal-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 280px;
+}
+
+/* Success Icon & Visual */
+
+.pv-icon-wrap {
+  padding-bottom: 32px;
+}
+
+.pv-icon {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.pv-icon-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  background: rgba(214, 227, 255, 0.2);
+  border-radius: 9999px;
+}
+
+.pv-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: #0c4381;
+  border-radius: 9999px;
+}
+
+.pv-icon-check {
+  width: 31.44px;
+  height: 31.44px;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pv-particle {
+  position: absolute;
+  border-radius: 9999px;
+}
+
+.pv-particle--top {
+  width: 16px;
+  height: 16px;
+  right: -8px;
+  top: -8px;
+  background: #a9c8ff;
+  opacity: 0.6;
+}
+
+.pv-particle--bottom {
+  width: 24px;
+  height: 24px;
+  left: -16px;
+  bottom: 8px;
+  background: #c4d4fd;
+  opacity: 0.4;
+}
+
+/* Content */
+
+.pv-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 40px;
+}
+
+.pv-modal-title {
+  max-width: 160px; /* Figma wraps the heading onto two lines */
+  margin: 0;
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.6px;
+  color: #191c1d;
+}
+
+.pv-modal-text {
+  max-width: 280px;
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: #434750;
+}
+
+/* Footer Meta */
+
+.pv-footer-meta {
+  min-width: 182px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(195, 198, 210, 0.1);
+}
+
+.pv-modal-reference {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #737781;
+}
+
+
+
+.pv-modal--status {
+  padding: 48px 32px;
+}
+
+.pv-modal > .pv-modal-title {
+  max-width: none;
+  margin-bottom: 16px;
+}
+
+.pv-modal > .pv-modal-text {
+  margin: 0 auto;
 }
 
 .pv-button {
-  padding: 0.75rem 1.5rem;
+  margin-top: 32px;
+  padding: 14px 32px;
   border: none;
-  border-radius: 8px;
-  font: inherit;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #0c4381 0%, #2e5b9a 100%);
+  font-family: 'Inter', system-ui, sans-serif;
   font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
   cursor: pointer;
 }
 
 .pv-button:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+  outline: 3px solid #2e5b9a;
+  outline-offset: 3px;
 }
 
-.pv-account-id {
-  font-size: 1.25rem;
-  letter-spacing: 0.05em;
+@media (max-width: 400px) {
+  .pv-modal {
+    padding: 80px 24px 48px;
+  }
 }

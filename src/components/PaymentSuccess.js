@@ -1,6 +1,6 @@
 import React from "react";
 import "./PaymentSuccess.css";
- import checkIcon from "../assets/paymentSuccessIcon.png";
+import checkIcon from "../assets/paymentSuccessIcon.png";
 import closeIcon from "../assets/paymentSuccessIcon.png";
 
 export default function PaymentSuccess({

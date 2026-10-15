@@ -3,10 +3,11 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { verifyCheckoutPayment } from '../api/authService';
 import { useOnboarding } from '../context/OnboardingContext';
 import { ROUTES } from '../constants/routes';
+import PaymentSuccess from './PaymentSuccess';
 import './PaymentVerificationPage.css';
 
-const POLL_INTERVAL_MS = 15000; // same as the backend's Postman runner
-const MAX_POLLS = 18;           // about 4.5 minutes
+const POLL_INTERVAL_MS = 15000;
+const MAX_POLLS = 18;
 const FAILED_STATUSES = ['failed', 'abandoned', 'reversed'];
 
 const PaymentVerificationPage = () => {
@@ -17,7 +18,6 @@ const PaymentVerificationPage = () => {
 
   // verifying | success | pending | duplicate | reversed | failed | error
   const [status, setStatus] = useState('verifying');
-  const [userId, setUserId] = useState(null);
   const [message, setMessage] = useState('');
 
   const pollCount = useRef(0);
@@ -29,7 +29,6 @@ const PaymentVerificationPage = () => {
       const data = await verifyCheckoutPayment(reference);
 
       if (data.checkoutStatus === 'COMPLETED') {
-        setUserId(data.userId);
         setStatus('success');
         clearOnboardingData();
         return;
@@ -103,6 +102,17 @@ const PaymentVerificationPage = () => {
     verify();
   };
 
+  // Success: show the styled PaymentSuccess modal (no account ID)
+  if (status === 'success') {
+    return (
+      <PaymentSuccess
+        isOpen={true}
+        onClose={() => navigate(ROUTES.HOME)}
+        referenceId={reference}
+      />
+    );
+  }
+
   return (
     <div className="pv-page">
       <div className="pv-card">
@@ -117,24 +127,6 @@ const PaymentVerificationPage = () => {
             {message && (
               <button type="button" className="pv-button" onClick={checkAgain}>Check again</button>
             )}
-          </>
-        )}
-
-        {status === 'success' && (
-          <>
-            <h2 className="pv-title">Payment successful</h2>
-            {userId && (
-              <p className="pv-text">
-                Your account ID is <strong className="pv-account-id">{userId}</strong>
-              </p>
-            )}
-            <p className="pv-text">
-              Your installation is booked and we've emailed you your account ID. Once your router
-              is installed, we'll email you a temporary password and a link to sign in.
-            </p>
-            <button type="button" className="pv-button" onClick={() => navigate(ROUTES.HOME)}>
-              Back to home
-            </button>
           </>
         )}
 

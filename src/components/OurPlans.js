@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 import './OurPlans.css';
 import tvIcon from '../assets/TV Show 2.png';
 import smartphoneIcon from '../assets/Smartphone 2.png';
 import laptopIcon from '../assets/Laptop 2.png';
 import checkIcon from '../assets/planVector.png';
+
 
 
 const plans = [
@@ -102,7 +104,7 @@ const OurPlans = () => {
               <div className="plan-card-price">
                 <p className="plan-price-text">{plan.price}</p>
                 <button className="plan-buy-btn"
-                onClick={() => handleNavigation('/started')}
+                onClick={() => handleNavigation('/information')}
                 >Buy
                 </button>
               </div>
